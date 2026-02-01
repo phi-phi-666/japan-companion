@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Icons</title>
+</head>
+<body>
+    <h1>Icon Generator</h1>
+    <p>Right-click each icon and "Save image as..." to save:</p>
+
+    <h2>192x192</h2>
+    <canvas id="icon192" width="192" height="192"></canvas>
+
+    <h2>512x512</h2>
+    <canvas id="icon512" width="512" height="512"></canvas>
+
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const scale = size / 512;
+
+            // Background with rounded corners
+            ctx.fillStyle = '#dc2626';
+            ctx.beginPath();
+            const radius = 96 * scale;
+            ctx.roundRect(0, 0, size, size, radius);
+            ctx.fill();
+
+            // Japanese flag circle (sun)
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(256 * scale, 180 * scale, 80 * scale, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Mount Fuji shape
+            ctx.beginPath();
+            ctx.moveTo(100 * scale, 380 * scale);
+            ctx.quadraticCurveTo(256 * scale, 280 * scale, 412 * scale, 380 * scale);
+            ctx.lineTo(380 * scale, 450 * scale);
+            ctx.quadraticCurveTo(256 * scale, 480 * scale, 132 * scale, 450 * scale);
+            ctx.closePath();
+            ctx.fill();
+
+            // Yen symbol
+            ctx.font = `bold ${56 * scale}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('¥', 256 * scale, 420 * scale);
+        }
+
+        // Draw both sizes
+        drawIcon(document.getElementById('icon192'));
+        drawIcon(document.getElementById('icon512'));
+
+        // Convert to downloadable links
+        ['192', '512'].forEach(size => {
+            const canvas = document.getElementById('icon' + size);
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.textContent = `Download icon-${size}.png`;
+            link.style.display = 'block';
+            link.style.marginTop = '10px';
+            canvas.parentNode.insertBefore(link, canvas.nextSibling);
+        });
+    </script>
+</body>
+</html>
