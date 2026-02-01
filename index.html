@@ -867,6 +867,231 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
+
+        /* Location Filter */
+        .location-filter {
+            padding: 0 16px 16px;
+        }
+
+        .location-filter select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        /* Photo Capture */
+        .photo-capture {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .photo-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: var(--surface-2);
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .photo-btn:active {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .photo-btn.has-photo {
+            border: none;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .photo-btn.has-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-input {
+            display: none;
+        }
+
+        .photo-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .photo-remove {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Expense Photo Thumbnail */
+        .expense-photo-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+            cursor: pointer;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Photo View Modal */
+        .photo-view-modal {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-view-content {
+            max-width: 95vw;
+            max-height: 85vh;
+            background: transparent;
+        }
+
+        .photo-view-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+        }
+
+        .photo-view-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--surface);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Currency Calculator Tab */
+        .calculator-section {
+            padding: 24px 16px;
+        }
+
+        .calculator-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .calculator-title {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .calculator-row {
+            margin-bottom: 20px;
+        }
+
+        .calculator-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calculator-label .flag {
+            font-size: 20px;
+        }
+
+        .calculator-input {
+            width: 100%;
+            padding: 20px;
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .calculator-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .calculator-rate {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .calculator-swap {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .swap-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Storage Warning */
+        .storage-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 16px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .storage-warning.show {
+            display: block;
+        }
+
+        /* Location badge on expense */
+        .expense-location {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--surface-2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
@@ -915,6 +1140,26 @@
             <div id="chart-bars"></div>
         </div>
 
+        <!-- Location Filter -->
+        <div class="location-filter">
+            <select id="location-filter">
+                <option value="all">All Locations</option>
+                <option value="Nagoya">Nagoya</option>
+                <option value="Kyoto">Kyoto</option>
+                <option value="Nara">Nara</option>
+                <option value="Osaka">Osaka</option>
+                <option value="Hiroshima">Hiroshima</option>
+                <option value="Takayama">Takayama</option>
+                <option value="Tokyo">Tokyo</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Storage Warning -->
+        <div class="storage-warning" id="storage-warning">
+            ⚠️ Storage is nearly full. Consider exporting and clearing old receipts.
+        </div>
+
         <div id="expense-list" class="expense-list">
             <div class="empty-state">
                 <div class="empty-state-icon">💴</div>
@@ -933,6 +1178,33 @@
         <div id="phrase-list" class="phrase-list"></div>
     </div>
 
+    <!-- Calculator Tab -->
+    <div id="calculator-tab" class="tab-content">
+        <div class="calculator-section">
+            <div class="calculator-card">
+                <div class="calculator-title">💱 Currency Calculator</div>
+                <div class="calculator-row">
+                    <div class="calculator-label">
+                        <span class="flag">🇯🇵</span> Japanese Yen
+                    </div>
+                    <input type="number" class="calculator-input" id="calc-jpy" placeholder="0" inputmode="decimal">
+                </div>
+                <div class="calculator-swap">
+                    <button class="swap-btn" id="calc-swap">⇅</button>
+                </div>
+                <div class="calculator-row">
+                    <div class="calculator-label">
+                        <span class="flag">🇵🇱</span> Polish Zloty
+                    </div>
+                    <input type="number" class="calculator-input" id="calc-pln" placeholder="0" inputmode="decimal">
+                </div>
+                <div class="calculator-rate" id="calc-rate">
+                    Rate: 1 PLN = 43.3 JPY
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Tab -->
     <div id="settings-tab" class="tab-content">
         <div class="settings-section">
@@ -949,16 +1221,29 @@
             </div>
 
             <div class="settings-group">
+                <div class="settings-group-title">Export</div>
+                <button class="settings-btn" id="export-btn">📥 Export to CSV</button>
+                <button class="settings-btn" id="notion-export-btn">📋 Copy Notion Summary</button>
+            </div>
+
+            <div class="settings-group">
                 <div class="settings-group-title">Data</div>
-                <button class="settings-btn" id="export-btn">📥 Export Expenses to CSV</button>
                 <button class="settings-btn danger" id="clear-btn">🗑️ Clear All Data</button>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-group-title">Storage</div>
+                <div class="settings-item">
+                    <span>Used</span>
+                    <span id="storage-used" style="color: var(--text-secondary)">0 KB</span>
+                </div>
             </div>
 
             <div class="settings-group">
                 <div class="settings-group-title">About</div>
                 <div class="settings-item">
                     <span>Version</span>
-                    <span style="color: var(--text-secondary)">1.0.0</span>
+                    <span style="color: var(--text-secondary)">2.0.0</span>
                 </div>
                 <div class="settings-item">
                     <span>Trip Duration</span>
@@ -981,6 +1266,18 @@
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
             Phrases
+        </button>
+        <button class="tab-btn" data-tab="calculator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <line x1="8" y1="6" x2="16" y2="6"/>
+                <line x1="8" y1="10" x2="10" y2="10"/>
+                <line x1="14" y1="10" x2="16" y2="10"/>
+                <line x1="8" y1="14" x2="10" y2="14"/>
+                <line x1="14" y1="14" x2="16" y2="14"/>
+                <line x1="8" y1="18" x2="16" y2="18"/>
+            </svg>
+            Calc
         </button>
         <button class="tab-btn" data-tab="settings">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1043,12 +1340,38 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Location</label>
+                    <select id="expense-location" required>
+                        <option value="Nagoya">Nagoya</option>
+                        <option value="Kyoto">Kyoto</option>
+                        <option value="Nara">Nara</option>
+                        <option value="Osaka">Osaka</option>
+                        <option value="Hiroshima">Hiroshima</option>
+                        <option value="Takayama">Takayama</option>
+                        <option value="Tokyo">Tokyo</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Date</label>
                     <input type="date" id="expense-date" required>
                 </div>
                 <div class="form-group">
                     <label>Note (optional)</label>
                     <textarea id="expense-note" placeholder="What was this for?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Receipt Photo (optional)</label>
+                    <div class="photo-capture">
+                        <button type="button" class="photo-btn" id="photo-btn">📷</button>
+                        <input type="file" accept="image/*" capture="environment" class="photo-input" id="photo-input">
+                        <div>
+                            <div class="photo-hint" id="photo-hint">Tap to capture receipt</div>
+                            <div class="photo-actions" id="photo-actions" style="display:none;">
+                                <button type="button" class="photo-remove" id="photo-remove">Remove</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Expense</button>
             </form>
@@ -1067,6 +1390,14 @@
         </div>
     </div>
 
+    <!-- Photo View Modal -->
+    <div class="modal-overlay photo-view-modal" id="photo-view-modal">
+        <button class="photo-view-close" id="photo-view-close">&times;</button>
+        <div class="photo-view-content">
+            <img id="photo-view-img" src="" alt="Receipt">
+        </div>
+    </div>
+
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
@@ -1078,13 +1409,21 @@
             expenses: 'japan_expenses',
             settings: 'japan_settings',
             phrases: 'japan_phrases',
-            favorites: 'japan_favorites'
+            favorites: 'japan_favorites',
+            lastLocation: 'japan_last_location'
         };
 
         const DEFAULT_SETTINGS = {
             exchangeRate: 43.3,
             budget: 40000
         };
+
+        const LOCATIONS = ['Nagoya', 'Kyoto', 'Nara', 'Osaka', 'Hiroshima', 'Takayama', 'Tokyo', 'Other'];
+
+        // Max image size (compressed) ~200KB
+        const MAX_IMAGE_SIZE = 200 * 1024;
+        // Storage warning threshold ~4MB
+        const STORAGE_WARNING_THRESHOLD = 4 * 1024 * 1024;
 
         // Trip configuration
         const TRIP_CONFIG = {
@@ -1220,7 +1559,10 @@
             expenses: [],
             settings: { ...DEFAULT_SETTINGS },
             phrases: [...DEFAULT_PHRASES],
-            favorites: [] // Array of phrase indices/ids
+            favorites: [],
+            locationFilter: 'all',
+            lastLocation: 'Tokyo',
+            currentPhoto: null // Temporary photo for form
         };
 
         // ============================================
@@ -1232,18 +1574,26 @@
                 const settings = localStorage.getItem(STORAGE_KEYS.settings);
                 const phrases = localStorage.getItem(STORAGE_KEYS.phrases);
                 const favorites = localStorage.getItem(STORAGE_KEYS.favorites);
+                const lastLocation = localStorage.getItem(STORAGE_KEYS.lastLocation);
 
                 if (expenses) state.expenses = JSON.parse(expenses);
                 if (settings) state.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(settings) };
                 if (phrases) state.phrases = JSON.parse(phrases);
                 if (favorites) state.favorites = JSON.parse(favorites);
+                if (lastLocation) state.lastLocation = lastLocation;
             } catch (e) {
                 console.error('Error loading data:', e);
             }
+            checkStorageUsage();
         }
 
         function saveFavorites() {
             localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favorites));
+        }
+
+        function saveLastLocation(location) {
+            state.lastLocation = location;
+            localStorage.setItem(STORAGE_KEYS.lastLocation, location);
         }
 
         function saveExpenses() {
@@ -1288,6 +1638,77 @@
 
         function getPhraseId(phrase) {
             return `${phrase.japanese}-${phrase.romaji}`;
+        }
+
+        // ============================================
+        // Storage & Image Functions
+        // ============================================
+        function checkStorageUsage() {
+            let totalSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    totalSize += localStorage[key].length * 2; // UTF-16
+                }
+            }
+            const usedKB = Math.round(totalSize / 1024);
+            const storageEl = document.getElementById('storage-used');
+            if (storageEl) {
+                storageEl.textContent = usedKB > 1024 ? `${(usedKB / 1024).toFixed(1)} MB` : `${usedKB} KB`;
+            }
+
+            const warningEl = document.getElementById('storage-warning');
+            if (warningEl) {
+                if (totalSize > STORAGE_WARNING_THRESHOLD) {
+                    warningEl.classList.add('show');
+                } else {
+                    warningEl.classList.remove('show');
+                }
+            }
+            return totalSize;
+        }
+
+        function compressImage(file, maxSize = MAX_IMAGE_SIZE) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        // Scale down if needed
+                        const maxDim = 800;
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = (height / width) * maxDim;
+                                width = maxDim;
+                            } else {
+                                width = (width / height) * maxDim;
+                                height = maxDim;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Try different quality levels
+                        let quality = 0.7;
+                        let result = canvas.toDataURL('image/jpeg', quality);
+
+                        while (result.length > maxSize && quality > 0.1) {
+                            quality -= 0.1;
+                            result = canvas.toDataURL('image/jpeg', quality);
+                        }
+
+                        resolve(result);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
         // ============================================
@@ -1374,15 +1795,23 @@
         // ============================================
         // Category Chart Functions
         // ============================================
+        function getFilteredExpenses() {
+            if (state.locationFilter === 'all') {
+                return state.expenses;
+            }
+            return state.expenses.filter(e => e.location === state.locationFilter);
+        }
+
         function updateCategoryChart() {
             const chartContainer = document.getElementById('chart-bars');
             const chartSection = document.getElementById('category-chart');
+            const filteredExpenses = getFilteredExpenses();
 
             // Calculate totals by category
             const categoryTotals = {};
             Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = 0);
 
-            state.expenses.forEach(e => {
+            filteredExpenses.forEach(e => {
                 categoryTotals[e.category] += e.amount;
             });
 
@@ -1451,12 +1880,16 @@
         // ============================================
         function renderExpenses() {
             const container = document.getElementById('expense-list');
+            const filteredExpenses = getFilteredExpenses();
 
-            if (state.expenses.length === 0) {
+            if (filteredExpenses.length === 0) {
+                const message = state.locationFilter === 'all'
+                    ? 'No expenses yet.<br>Tap + to add one!'
+                    : `No expenses in ${state.locationFilter}`;
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">💴</div>
-                        <div class="empty-state-text">No expenses yet.<br>Tap + to add one!</div>
+                        <div class="empty-state-text">${message}</div>
                     </div>
                 `;
                 return;
@@ -1464,7 +1897,7 @@
 
             // Group by date
             const grouped = {};
-            state.expenses.forEach(expense => {
+            filteredExpenses.forEach(expense => {
                 if (!grouped[expense.date]) grouped[expense.date] = [];
                 grouped[expense.date].push(expense);
             });
@@ -1489,13 +1922,19 @@
                 dayExpenses.forEach(expense => {
                     const cat = CATEGORIES[expense.category];
                     const pln = jpyToPln(expense.amount);
+                    const photoThumb = expense.photo
+                        ? `<img class="expense-photo-thumb" src="${expense.photo}" onclick="viewPhoto('${expense.id}')" alt="Receipt">`
+                        : '';
+                    const locationBadge = expense.location
+                        ? `<span class="expense-location">${expense.location}</span>`
+                        : '';
 
                     html += `
                         <div class="expense-item" data-id="${expense.id}">
                             <div class="expense-info">
                                 <div class="expense-category">
                                     <span class="category-icon ${cat.class}">${cat.icon}</span>
-                                    ${cat.label}
+                                    ${cat.label}${locationBadge}
                                 </div>
                                 ${expense.note ? `<div class="expense-note">${expense.note}</div>` : ''}
                             </div>
@@ -1503,6 +1942,7 @@
                                 <div class="expense-jpy">¥${formatNumber(expense.amount)}</div>
                                 <div class="expense-pln">${pln.toFixed(2)} PLN</div>
                             </div>
+                            ${photoThumb}
                             <button class="expense-delete" onclick="deleteExpense('${expense.id}')">🗑️</button>
                         </div>
                     `;
@@ -1512,6 +1952,14 @@
             });
 
             container.innerHTML = html;
+        }
+
+        function viewPhoto(expenseId) {
+            const expense = state.expenses.find(e => e.id === expenseId);
+            if (expense && expense.photo) {
+                document.getElementById('photo-view-img').src = expense.photo;
+                document.getElementById('photo-view-modal').classList.add('active');
+            }
         }
 
         function updateBudgetSummary() {
@@ -1565,31 +2013,83 @@
             const form = document.getElementById('expense-form');
             const amountInput = document.getElementById('expense-amount');
             const dateInput = document.getElementById('expense-date');
+            const locationInput = document.getElementById('expense-location');
             const conversionEl = document.getElementById('amount-conversion');
             const quickAmountBtns = document.querySelectorAll('.quick-amount-btn');
 
-            // Set default date to today
+            // Photo capture elements
+            const photoBtn = document.getElementById('photo-btn');
+            const photoInput = document.getElementById('photo-input');
+            const photoHint = document.getElementById('photo-hint');
+            const photoActions = document.getElementById('photo-actions');
+            const photoRemove = document.getElementById('photo-remove');
+
+            function resetForm() {
+                form.reset();
+                dateInput.value = new Date().toISOString().split('T')[0];
+                locationInput.value = state.lastLocation;
+                conversionEl.textContent = '';
+                state.currentPhoto = null;
+                photoBtn.innerHTML = '📷';
+                photoBtn.classList.remove('has-photo');
+                photoHint.textContent = 'Tap to capture receipt';
+                photoActions.style.display = 'none';
+            }
+
+            // Set defaults
             dateInput.value = new Date().toISOString().split('T')[0];
+            locationInput.value = state.lastLocation;
 
             addBtn.addEventListener('click', () => {
+                locationInput.value = state.lastLocation;
                 modal.classList.add('active');
                 amountInput.focus();
             });
 
             closeBtn.addEventListener('click', () => {
                 modal.classList.remove('active');
-                form.reset();
-                dateInput.value = new Date().toISOString().split('T')[0];
-                conversionEl.textContent = '';
+                resetForm();
             });
 
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.classList.remove('active');
-                    form.reset();
-                    dateInput.value = new Date().toISOString().split('T')[0];
-                    conversionEl.textContent = '';
+                    resetForm();
                 }
+            });
+
+            // Photo capture
+            photoBtn.addEventListener('click', () => {
+                if (!state.currentPhoto) {
+                    photoInput.click();
+                }
+            });
+
+            photoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    photoHint.textContent = 'Processing...';
+                    try {
+                        const compressed = await compressImage(file);
+                        state.currentPhoto = compressed;
+                        photoBtn.innerHTML = `<img src="${compressed}" alt="Receipt">`;
+                        photoBtn.classList.add('has-photo');
+                        photoHint.textContent = 'Photo captured';
+                        photoActions.style.display = 'flex';
+                    } catch (err) {
+                        showToast('Failed to process image');
+                        photoHint.textContent = 'Tap to capture receipt';
+                    }
+                }
+            });
+
+            photoRemove.addEventListener('click', () => {
+                state.currentPhoto = null;
+                photoBtn.innerHTML = '📷';
+                photoBtn.classList.remove('has-photo');
+                photoHint.textContent = 'Tap to capture receipt';
+                photoActions.style.display = 'none';
+                photoInput.value = '';
             });
 
             // Quick amount buttons
@@ -1612,20 +2112,47 @@
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
+                const location = locationInput.value;
                 const expense = {
                     id: generateId(),
                     amount: parseFloat(amountInput.value),
                     category: document.getElementById('expense-category').value,
+                    location: location,
                     date: dateInput.value,
-                    note: document.getElementById('expense-note').value.trim()
+                    note: document.getElementById('expense-note').value.trim(),
+                    photo: state.currentPhoto
                 };
 
+                saveLastLocation(location);
                 addExpense(expense);
                 modal.classList.remove('active');
-                form.reset();
-                dateInput.value = new Date().toISOString().split('T')[0];
-                conversionEl.textContent = '';
+                resetForm();
                 showToast('Expense added');
+                checkStorageUsage();
+            });
+        }
+
+        function setupPhotoViewModal() {
+            const modal = document.getElementById('photo-view-modal');
+            const closeBtn = document.getElementById('photo-view-close');
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        function setupLocationFilter() {
+            const filter = document.getElementById('location-filter');
+            filter.addEventListener('change', () => {
+                state.locationFilter = filter.value;
+                renderExpenses();
+                updateCategoryChart();
             });
         }
 
@@ -1784,6 +2311,7 @@
             const rateInput = document.getElementById('exchange-rate');
             const budgetInput = document.getElementById('budget-input');
             const exportBtn = document.getElementById('export-btn');
+            const notionBtn = document.getElementById('notion-export-btn');
             const clearBtn = document.getElementById('clear-btn');
 
             // Load current values
@@ -1795,6 +2323,7 @@
                 saveSettings();
                 renderExpenses();
                 updateBudgetSummary();
+                updateCalculatorRate();
                 showToast('Exchange rate updated');
             });
 
@@ -1806,14 +2335,123 @@
             });
 
             exportBtn.addEventListener('click', exportToCSV);
+            notionBtn.addEventListener('click', exportToNotion);
             clearBtn.addEventListener('click', () => {
-                showConfirm('Clear All Data', 'This will delete all expenses. This cannot be undone.', () => {
+                showConfirm('Clear All Data', 'This will delete all expenses and photos. This cannot be undone.', () => {
                     state.expenses = [];
                     saveExpenses();
                     renderExpenses();
                     updateBudgetSummary();
+                    checkStorageUsage();
                     showToast('All data cleared');
                 });
+            });
+        }
+
+        function setupCalculator() {
+            const jpyInput = document.getElementById('calc-jpy');
+            const plnInput = document.getElementById('calc-pln');
+            const swapBtn = document.getElementById('calc-swap');
+
+            updateCalculatorRate();
+
+            jpyInput.addEventListener('input', () => {
+                const jpy = parseFloat(jpyInput.value) || 0;
+                const pln = jpyToPln(jpy);
+                plnInput.value = jpy > 0 ? pln.toFixed(2) : '';
+            });
+
+            plnInput.addEventListener('input', () => {
+                const pln = parseFloat(plnInput.value) || 0;
+                const jpy = pln * state.settings.exchangeRate;
+                jpyInput.value = pln > 0 ? Math.round(jpy) : '';
+            });
+
+            swapBtn.addEventListener('click', () => {
+                const jpyVal = jpyInput.value;
+                const plnVal = plnInput.value;
+                jpyInput.value = plnVal ? Math.round(parseFloat(plnVal) * state.settings.exchangeRate) : '';
+                plnInput.value = jpyVal ? jpyToPln(parseFloat(jpyVal)).toFixed(2) : '';
+            });
+        }
+
+        function updateCalculatorRate() {
+            const rateEl = document.getElementById('calc-rate');
+            if (rateEl) {
+                rateEl.textContent = `Rate: 1 PLN = ${state.settings.exchangeRate} JPY`;
+            }
+        }
+
+        function exportToNotion() {
+            if (state.expenses.length === 0) {
+                showToast('No expenses to export');
+                return;
+            }
+
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalPln = jpyToPln(totalJpy);
+
+            // Category breakdown
+            const categoryTotals = {};
+            Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = 0);
+            state.expenses.forEach(e => categoryTotals[e.category] += e.amount);
+
+            // Location breakdown
+            const locationTotals = {};
+            state.expenses.forEach(e => {
+                const loc = e.location || 'Unknown';
+                if (!locationTotals[loc]) locationTotals[loc] = 0;
+                locationTotals[loc] += e.amount;
+            });
+
+            // Daily breakdown
+            const dailyTotals = {};
+            state.expenses.forEach(e => {
+                if (!dailyTotals[e.date]) dailyTotals[e.date] = 0;
+                dailyTotals[e.date] += e.amount;
+            });
+
+            let markdown = `# Japan Trip Expenses Summary\n\n`;
+            markdown += `**Trip Dates:** ${TRIP_CONFIG.startDate} to ${TRIP_CONFIG.endDate}\n`;
+            markdown += `**Budget:** ${formatNumber(state.settings.budget)} PLN\n`;
+            markdown += `**Exchange Rate:** 1 PLN = ${state.settings.exchangeRate} JPY\n\n`;
+
+            markdown += `## Totals\n`;
+            markdown += `- **Total Spent:** ¥${formatNumber(totalJpy)} (${formatNumber(Math.round(totalPln))} PLN)\n`;
+            markdown += `- **Remaining:** ${formatNumber(Math.round(state.settings.budget - totalPln))} PLN\n\n`;
+
+            markdown += `## By Category\n`;
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const amount = categoryTotals[key];
+                const pln = jpyToPln(amount);
+                if (amount > 0) {
+                    markdown += `- ${cat.icon} **${cat.label}:** ¥${formatNumber(amount)} (${formatNumber(Math.round(pln))} PLN)\n`;
+                }
+            });
+
+            markdown += `\n## By Location\n`;
+            Object.entries(locationTotals)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([loc, amount]) => {
+                    const pln = jpyToPln(amount);
+                    markdown += `- **${loc}:** ¥${formatNumber(amount)} (${formatNumber(Math.round(pln))} PLN)\n`;
+                });
+
+            markdown += `\n## Daily Spending\n`;
+            Object.keys(dailyTotals)
+                .sort((a, b) => new Date(a) - new Date(b))
+                .forEach(date => {
+                    const amount = dailyTotals[date];
+                    const pln = jpyToPln(amount);
+                    markdown += `- **${formatDate(date)}:** ¥${formatNumber(amount)} (${formatNumber(Math.round(pln))} PLN)\n`;
+                });
+
+            markdown += `\n---\n_Generated by Japan Companion_`;
+
+            navigator.clipboard.writeText(markdown).then(() => {
+                showToast('Copied to clipboard! Paste in Notion.');
+            }).catch(() => {
+                showToast('Failed to copy');
             });
         }
 
@@ -1823,9 +2461,10 @@
                 return;
             }
 
-            const headers = ['Date', 'Category', 'Amount (JPY)', 'Amount (PLN)', 'Note'];
+            const headers = ['Date', 'Location', 'Category', 'Amount (JPY)', 'Amount (PLN)', 'Note'];
             const rows = state.expenses.map(e => [
                 e.date,
+                e.location || 'Unknown',
                 CATEGORIES[e.category].label,
                 e.amount,
                 jpyToPln(e.amount).toFixed(2),
@@ -1853,6 +2492,9 @@
             setupTabs();
             setupExpenseModal();
             setupConfirmModal();
+            setupPhotoViewModal();
+            setupLocationFilter();
+            setupCalculator();
             setupPhraseSearch();
             setupSettings();
             renderExpenses();
