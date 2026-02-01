@@ -124,6 +124,200 @@
             color: var(--text-secondary);
         }
 
+        /* Daily Budget Indicator */
+        .daily-budget {
+            background: var(--surface);
+            margin: 0 16px 16px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .daily-budget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .trip-day {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .trip-day-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .trip-day-badge.before {
+            background: var(--surface-2);
+            color: var(--text-secondary);
+        }
+
+        .trip-day-badge.after {
+            background: var(--text-secondary);
+        }
+
+        .daily-budget-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .daily-stat {
+            text-align: center;
+            padding: 12px;
+            background: var(--surface-2);
+            border-radius: 8px;
+        }
+
+        .daily-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .daily-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .daily-stat-value.under {
+            color: var(--success);
+        }
+
+        .daily-stat-value.over {
+            color: var(--primary);
+        }
+
+        .daily-difference {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .daily-difference.under {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+
+        .daily-difference.over {
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--primary);
+        }
+
+        /* Category Chart */
+        .category-chart {
+            background: var(--surface);
+            margin: 0 16px 16px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .category-chart-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .chart-bar-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-bar-label {
+            width: 90px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            height: 20px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .chart-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            min-width: 2px;
+        }
+
+        .chart-bar.food { background: #f59e0b; }
+        .chart-bar.transport { background: #3b82f6; }
+        .chart-bar.accommodation { background: #8b5cf6; }
+        .chart-bar.activities { background: #10b981; }
+        .chart-bar.misc { background: #6b7280; }
+
+        .chart-bar-value {
+            width: 70px;
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Quick Expense Buttons */
+        .quick-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .quick-amount-btn {
+            flex: 1;
+            min-width: calc(33% - 6px);
+            padding: 10px 8px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .quick-amount-btn:active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .quick-amount-btn .amount {
+            font-weight: 600;
+            display: block;
+        }
+
+        .quick-amount-btn .label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+        }
+
         /* Tab Navigation */
         .tab-nav {
             display: flex;
@@ -483,10 +677,36 @@
             border-color: var(--primary);
         }
 
+        .phrase-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
         .phrase-japanese {
             font-size: 20px;
             font-weight: 500;
             margin-bottom: 8px;
+            flex: 1;
+        }
+
+        .phrase-favorite {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 8px;
+            opacity: 0.3;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .phrase-favorite.active {
+            opacity: 1;
+        }
+
+        .phrase-favorite:active {
+            transform: scale(1.2);
         }
 
         .phrase-details {
@@ -506,6 +726,17 @@
         .phrase-english {
             color: var(--text-secondary);
             font-size: 14px;
+        }
+
+        .favorites-section {
+            margin-bottom: 24px;
+        }
+
+        .favorites-section .phrase-category-title {
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         /* Settings */
@@ -659,6 +890,31 @@
             </div>
         </div>
 
+        <!-- Daily Budget Indicator -->
+        <div class="daily-budget" id="daily-budget">
+            <div class="daily-budget-header">
+                <span class="trip-day" id="trip-day">Day 1 of 24</span>
+                <span class="trip-day-badge" id="trip-status">On Trip</span>
+            </div>
+            <div class="daily-budget-stats">
+                <div class="daily-stat">
+                    <div class="daily-stat-label">Should have spent</div>
+                    <div class="daily-stat-value" id="should-spent">0 PLN</div>
+                </div>
+                <div class="daily-stat">
+                    <div class="daily-stat-label">Actually spent</div>
+                    <div class="daily-stat-value" id="actual-spent">0 PLN</div>
+                </div>
+            </div>
+            <div class="daily-difference under" id="daily-difference">On track!</div>
+        </div>
+
+        <!-- Category Chart -->
+        <div class="category-chart" id="category-chart">
+            <div class="category-chart-title">Spending by Category</div>
+            <div id="chart-bars"></div>
+        </div>
+
         <div id="expense-list" class="expense-list">
             <div class="empty-state">
                 <div class="empty-state-icon">💴</div>
@@ -744,6 +1000,31 @@
             </div>
             <form id="expense-form">
                 <div class="form-group">
+                    <label>Quick Amount</label>
+                    <div class="quick-amounts" id="quick-amounts">
+                        <button type="button" class="quick-amount-btn" data-amount="200">
+                            <span class="amount">¥200</span>
+                            <span class="label">Vending</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="500">
+                            <span class="amount">¥500</span>
+                            <span class="label">Konbini</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="1000">
+                            <span class="amount">¥1,000</span>
+                            <span class="label">Cheap meal</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="2000">
+                            <span class="amount">¥2,000</span>
+                            <span class="label">Restaurant</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="5000">
+                            <span class="amount">¥5,000</span>
+                            <span class="label">Nice dinner</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label>Amount</label>
                     <div class="amount-input-wrapper">
                         <span class="currency">¥</span>
@@ -796,12 +1077,21 @@
         const STORAGE_KEYS = {
             expenses: 'japan_expenses',
             settings: 'japan_settings',
-            phrases: 'japan_phrases'
+            phrases: 'japan_phrases',
+            favorites: 'japan_favorites'
         };
 
         const DEFAULT_SETTINGS = {
             exchangeRate: 43.3,
             budget: 40000
+        };
+
+        // Trip configuration
+        const TRIP_CONFIG = {
+            startDate: '2026-05-12',
+            endDate: '2026-06-05',
+            totalDays: 24,
+            dailyBudget: 40000 / 24 // ~1667 PLN
         };
 
         const CATEGORIES = {
@@ -929,7 +1219,8 @@
         let state = {
             expenses: [],
             settings: { ...DEFAULT_SETTINGS },
-            phrases: [...DEFAULT_PHRASES]
+            phrases: [...DEFAULT_PHRASES],
+            favorites: [] // Array of phrase indices/ids
         };
 
         // ============================================
@@ -940,13 +1231,19 @@
                 const expenses = localStorage.getItem(STORAGE_KEYS.expenses);
                 const settings = localStorage.getItem(STORAGE_KEYS.settings);
                 const phrases = localStorage.getItem(STORAGE_KEYS.phrases);
+                const favorites = localStorage.getItem(STORAGE_KEYS.favorites);
 
                 if (expenses) state.expenses = JSON.parse(expenses);
                 if (settings) state.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(settings) };
                 if (phrases) state.phrases = JSON.parse(phrases);
+                if (favorites) state.favorites = JSON.parse(favorites);
             } catch (e) {
                 console.error('Error loading data:', e);
             }
+        }
+
+        function saveFavorites() {
+            localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favorites));
         }
 
         function saveExpenses() {
@@ -987,6 +1284,141 @@
 
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function getPhraseId(phrase) {
+            return `${phrase.japanese}-${phrase.romaji}`;
+        }
+
+        // ============================================
+        // Daily Budget Functions
+        // ============================================
+        function getTripDayInfo() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const startDate = new Date(TRIP_CONFIG.startDate);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(TRIP_CONFIG.endDate);
+            endDate.setHours(0, 0, 0, 0);
+
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const daysSinceStart = Math.floor((today - startDate) / msPerDay) + 1;
+
+            if (today < startDate) {
+                const daysUntil = Math.ceil((startDate - today) / msPerDay);
+                return { status: 'before', dayNumber: 0, daysElapsed: 0, daysUntil };
+            } else if (today > endDate) {
+                return { status: 'after', dayNumber: TRIP_CONFIG.totalDays, daysElapsed: TRIP_CONFIG.totalDays };
+            } else {
+                return { status: 'during', dayNumber: daysSinceStart, daysElapsed: daysSinceStart };
+            }
+        }
+
+        function updateDailyBudget() {
+            const tripInfo = getTripDayInfo();
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalPln = jpyToPln(totalJpy);
+
+            const tripDayEl = document.getElementById('trip-day');
+            const tripStatusEl = document.getElementById('trip-status');
+            const shouldSpentEl = document.getElementById('should-spent');
+            const actualSpentEl = document.getElementById('actual-spent');
+            const differenceEl = document.getElementById('daily-difference');
+
+            if (tripInfo.status === 'before') {
+                tripDayEl.textContent = `${tripInfo.daysUntil} days until trip`;
+                tripStatusEl.textContent = 'Before Trip';
+                tripStatusEl.className = 'trip-day-badge before';
+                shouldSpentEl.textContent = '0 PLN';
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                differenceEl.textContent = 'Trip hasn\'t started yet';
+                differenceEl.className = 'daily-difference under';
+            } else if (tripInfo.status === 'after') {
+                tripDayEl.textContent = 'Trip Complete!';
+                tripStatusEl.textContent = 'Finished';
+                tripStatusEl.className = 'trip-day-badge after';
+                const shouldHaveSpent = state.settings.budget;
+                shouldSpentEl.textContent = `${formatNumber(Math.round(shouldHaveSpent))} PLN`;
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                const diff = totalPln - shouldHaveSpent;
+                if (diff <= 0) {
+                    differenceEl.textContent = `Under budget by ${formatNumber(Math.abs(Math.round(diff)))} PLN`;
+                    differenceEl.className = 'daily-difference under';
+                } else {
+                    differenceEl.textContent = `Over budget by ${formatNumber(Math.round(diff))} PLN`;
+                    differenceEl.className = 'daily-difference over';
+                }
+            } else {
+                tripDayEl.textContent = `Day ${tripInfo.dayNumber} of ${TRIP_CONFIG.totalDays}`;
+                tripStatusEl.textContent = 'On Trip';
+                tripStatusEl.className = 'trip-day-badge';
+
+                const dailyTarget = state.settings.budget / TRIP_CONFIG.totalDays;
+                const shouldHaveSpent = dailyTarget * tripInfo.daysElapsed;
+
+                shouldSpentEl.textContent = `${formatNumber(Math.round(shouldHaveSpent))} PLN`;
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                actualSpentEl.className = totalPln <= shouldHaveSpent ? 'daily-stat-value under' : 'daily-stat-value over';
+
+                const diff = totalPln - shouldHaveSpent;
+                if (diff <= 0) {
+                    differenceEl.textContent = `${formatNumber(Math.abs(Math.round(diff)))} PLN under target`;
+                    differenceEl.className = 'daily-difference under';
+                } else {
+                    differenceEl.textContent = `${formatNumber(Math.round(diff))} PLN over target`;
+                    differenceEl.className = 'daily-difference over';
+                }
+            }
+        }
+
+        // ============================================
+        // Category Chart Functions
+        // ============================================
+        function updateCategoryChart() {
+            const chartContainer = document.getElementById('chart-bars');
+            const chartSection = document.getElementById('category-chart');
+
+            // Calculate totals by category
+            const categoryTotals = {};
+            Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = 0);
+
+            state.expenses.forEach(e => {
+                categoryTotals[e.category] += e.amount;
+            });
+
+            const totalJpy = Object.values(categoryTotals).reduce((a, b) => a + b, 0);
+
+            // Hide chart if no expenses
+            if (totalJpy === 0) {
+                chartSection.style.display = 'none';
+                return;
+            }
+            chartSection.style.display = 'block';
+
+            // Find max for scaling
+            const maxAmount = Math.max(...Object.values(categoryTotals));
+
+            let html = '';
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const amount = categoryTotals[key];
+                const pln = jpyToPln(amount);
+                const percentage = maxAmount > 0 ? (amount / maxAmount) * 100 : 0;
+
+                html += `
+                    <div class="chart-bar-row">
+                        <div class="chart-bar-label">
+                            <span>${cat.icon}</span>
+                            <span>${cat.label}</span>
+                        </div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar ${key}" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="chart-bar-value">${formatNumber(Math.round(pln))} PLN</div>
+                    </div>
+                `;
+            });
+
+            chartContainer.innerHTML = html;
         }
 
         // ============================================
@@ -1100,6 +1532,10 @@
             progressBar.className = 'budget-progress-bar';
             if (percentage > 90) progressBar.classList.add('danger');
             else if (percentage > 70) progressBar.classList.add('warning');
+
+            // Update additional components
+            updateDailyBudget();
+            updateCategoryChart();
         }
 
         function addExpense(expense) {
@@ -1130,6 +1566,7 @@
             const amountInput = document.getElementById('expense-amount');
             const dateInput = document.getElementById('expense-date');
             const conversionEl = document.getElementById('amount-conversion');
+            const quickAmountBtns = document.querySelectorAll('.quick-amount-btn');
 
             // Set default date to today
             dateInput.value = new Date().toISOString().split('T')[0];
@@ -1153,6 +1590,17 @@
                     dateInput.value = new Date().toISOString().split('T')[0];
                     conversionEl.textContent = '';
                 }
+            });
+
+            // Quick amount buttons
+            quickAmountBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const amount = parseInt(btn.dataset.amount);
+                    amountInput.value = amount;
+                    const pln = jpyToPln(amount);
+                    conversionEl.textContent = `≈ ${pln.toFixed(2)} PLN`;
+                    amountInput.focus();
+                });
             });
 
             amountInput.addEventListener('input', () => {
@@ -1220,24 +1668,35 @@
         // ============================================
         // Phrase Functions
         // ============================================
+        function toggleFavorite(phraseId, event) {
+            event.stopPropagation();
+            const idx = state.favorites.indexOf(phraseId);
+            if (idx === -1) {
+                state.favorites.push(phraseId);
+            } else {
+                state.favorites.splice(idx, 1);
+            }
+            saveFavorites();
+            renderPhrases(document.getElementById('phrase-search').value);
+        }
+
         function renderPhrases(filter = '') {
             const container = document.getElementById('phrase-list');
             const filterLower = filter.toLowerCase();
 
-            // Group by category
-            const grouped = {};
-            state.phrases.forEach(phrase => {
-                if (filter && !phrase.japanese.includes(filter) &&
-                    !phrase.romaji.toLowerCase().includes(filterLower) &&
-                    !phrase.english.toLowerCase().includes(filterLower)) {
-                    return;
-                }
-
-                if (!grouped[phrase.category]) grouped[phrase.category] = [];
-                grouped[phrase.category].push(phrase);
+            // Filter phrases
+            const filteredPhrases = state.phrases.filter(phrase => {
+                if (!filter) return true;
+                return phrase.japanese.includes(filter) ||
+                    phrase.romaji.toLowerCase().includes(filterLower) ||
+                    phrase.english.toLowerCase().includes(filterLower);
             });
 
-            if (Object.keys(grouped).length === 0) {
+            // Separate favorites
+            const favorites = filteredPhrases.filter(p => state.favorites.includes(getPhraseId(p)));
+            const nonFavorites = filteredPhrases.filter(p => !state.favorites.includes(getPhraseId(p)));
+
+            if (filteredPhrases.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">🔍</div>
@@ -1248,28 +1707,62 @@
             }
 
             let html = '';
+
+            // Render favorites section first
+            if (favorites.length > 0) {
+                html += `
+                    <div class="phrase-category favorites-section">
+                        <div class="phrase-category-title">⭐ Favorites</div>
+                `;
+                favorites.forEach(phrase => {
+                    const phraseId = getPhraseId(phrase);
+                    html += renderPhraseItem(phrase, phraseId, true);
+                });
+                html += '</div>';
+            }
+
+            // Group non-favorites by category
+            const grouped = {};
+            nonFavorites.forEach(phrase => {
+                if (!grouped[phrase.category]) grouped[phrase.category] = [];
+                grouped[phrase.category].push(phrase);
+            });
+
             Object.keys(grouped).sort().forEach(category => {
                 html += `
                     <div class="phrase-category">
                         <div class="phrase-category-title">${category}</div>
                 `;
 
-                grouped[category].forEach((phrase, idx) => {
-                    html += `
-                        <div class="phrase-item" onclick="this.classList.toggle('expanded')">
-                            <div class="phrase-japanese">${phrase.japanese}</div>
-                            <div class="phrase-details">
-                                <div class="phrase-romaji">${phrase.romaji}</div>
-                                <div class="phrase-english">${phrase.english}</div>
-                            </div>
-                        </div>
-                    `;
+                grouped[category].forEach(phrase => {
+                    const phraseId = getPhraseId(phrase);
+                    const isFavorite = state.favorites.includes(phraseId);
+                    html += renderPhraseItem(phrase, phraseId, isFavorite);
                 });
 
                 html += '</div>';
             });
 
             container.innerHTML = html;
+        }
+
+        function renderPhraseItem(phrase, phraseId, isFavorite) {
+            const escapedId = phraseId.replace(/'/g, "\\'");
+            return `
+                <div class="phrase-item" onclick="this.classList.toggle('expanded')">
+                    <div class="phrase-item-header">
+                        <div class="phrase-japanese">${phrase.japanese}</div>
+                        <button class="phrase-favorite ${isFavorite ? 'active' : ''}"
+                                onclick="toggleFavorite('${escapedId}', event)">
+                            ${isFavorite ? '⭐' : '☆'}
+                        </button>
+                    </div>
+                    <div class="phrase-details">
+                        <div class="phrase-romaji">${phrase.romaji}</div>
+                        <div class="phrase-english">${phrase.english}</div>
+                    </div>
+                </div>
+            `;
         }
 
         function setupPhraseSearch() {
