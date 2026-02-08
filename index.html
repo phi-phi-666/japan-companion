@@ -1739,6 +1739,342 @@
         }
 
         /* ============================================
+           Info Tab - Emergency & Etiquette
+           ============================================ */
+        .info-section {
+            padding: var(--space-lg) 0;
+        }
+
+        .emergency-card {
+            background: linear-gradient(135deg, var(--shu-500), var(--shu-600));
+            border-radius: var(--radius-xl);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emergency-card::before {
+            content: '🆘';
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 100px;
+            opacity: 0.1;
+        }
+
+        .emergency-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-sm);
+        }
+
+        .emergency-item {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+
+        .emergency-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .emergency-item:active {
+            transform: scale(0.98);
+        }
+
+        .emergency-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .emergency-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+            margin-bottom: var(--space-xs);
+        }
+
+        .emergency-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+        }
+
+        .emergency-value.small {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+            margin-bottom: var(--space-lg);
+        }
+
+        .info-card-header {
+            padding: var(--space-md);
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .etiquette-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .etiquette-item {
+            padding: var(--space-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            gap: var(--space-md);
+            align-items: flex-start;
+        }
+
+        .etiquette-item:last-child {
+            border-bottom: none;
+        }
+
+        .etiquette-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            width: 32px;
+            text-align: center;
+        }
+
+        .etiquette-content {
+            flex: 1;
+        }
+
+        .etiquette-do {
+            color: var(--matcha-400);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .etiquette-dont {
+            color: var(--shu-400);
+            font-size: 0.85rem;
+        }
+
+        .etiquette-note {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: var(--space-xs);
+        }
+
+        /* ============================================
+           Plan Tab - Itinerary
+           ============================================ */
+        .plan-section {
+            padding: var(--space-lg) 0;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .plan-date-nav {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .plan-date-nav button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--duration-fast);
+        }
+
+        .plan-date-nav button:hover {
+            background: var(--sakura-400);
+        }
+
+        .plan-date-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .plan-current-date {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .plan-day-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+            margin-bottom: var(--space-md);
+        }
+
+        .plan-day-header {
+            padding: var(--space-md) var(--space-lg);
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .plan-day-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .plan-day-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: var(--space-xs);
+        }
+
+        .plan-items {
+            padding: var(--space-sm) 0;
+        }
+
+        .plan-item {
+            padding: var(--space-md) var(--space-lg);
+            display: flex;
+            gap: var(--space-md);
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .plan-item:last-child {
+            border-bottom: none;
+        }
+
+        .plan-time {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            min-width: 50px;
+        }
+
+        .plan-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .plan-icon.transport { background: rgba(74, 124, 155, 0.2); }
+        .plan-icon.food { background: rgba(244, 169, 38, 0.2); }
+        .plan-icon.activity { background: rgba(123, 196, 127, 0.2); }
+        .plan-icon.hotel { background: rgba(167, 139, 186, 0.2); }
+
+        .plan-details {
+            flex: 1;
+        }
+
+        .plan-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .plan-address {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .plan-address-jp {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .plan-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--duration-fast);
+        }
+
+        .plan-action:hover {
+            background: var(--ai-400);
+            color: white;
+        }
+
+        .plan-empty {
+            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--text-tertiary);
+        }
+
+        .plan-empty-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            opacity: 0.5;
+        }
+
+        .add-plan-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            width: 100%;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+
+        .add-plan-btn:hover {
+            border-color: var(--sakura-400);
+            color: var(--sakura-400);
+        }
+
+        /* ============================================
            Utility classes
            ============================================ */
         .hidden {
@@ -2418,6 +2754,140 @@
         </div>
     </div>
 
+    <!-- Info Tab - Emergency & Etiquette -->
+    <div id="info-tab" class="tab-content">
+        <div class="container">
+            <div class="info-section">
+                <!-- Emergency Card -->
+                <div class="emergency-card">
+                    <div class="emergency-title">🆘 Emergency Info</div>
+                    <div class="emergency-grid">
+                        <div class="emergency-item" data-action="call" data-number="110">
+                            <div class="emergency-label">Police</div>
+                            <div class="emergency-value">110</div>
+                        </div>
+                        <div class="emergency-item" data-action="call" data-number="119">
+                            <div class="emergency-label">Fire / Ambulance</div>
+                            <div class="emergency-value">119</div>
+                        </div>
+                        <div class="emergency-item" data-action="call" data-number="+81-3-3224-5500">
+                            <div class="emergency-label">Poland Embassy Tokyo</div>
+                            <div class="emergency-value small">+81-3-3224-5500</div>
+                        </div>
+                        <div class="emergency-item" data-action="copy" data-text="Travel Insurance Policy">
+                            <div class="emergency-label">Insurance</div>
+                            <div class="emergency-value small">Tap to copy #</div>
+                        </div>
+                        <div class="emergency-item full-width" id="hotel-address-btn" data-action="copy">
+                            <div class="emergency-label">Current Hotel (Japanese)</div>
+                            <div class="emergency-value small" id="hotel-address-jp">Tap to set hotel address</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etiquette Quick Reference -->
+                <div class="info-card">
+                    <div class="info-card-header">🎌 Etiquette Quick Reference</div>
+                    <ul class="etiquette-list">
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">🥢</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Rest chopsticks on holder or plate edge</div>
+                                <div class="etiquette-dont">✗ Never stick upright in rice (funeral ritual)</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">🚇</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Silence phones, no talking on train</div>
+                                <div class="etiquette-dont">✗ No eating or drinking on local trains</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">🏯</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Remove shoes at temples/homes (look for shoe shelf)</div>
+                                <div class="etiquette-dont">✗ Never step on tatami with slippers</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">⛩️</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Bow at shrine gate, wash hands at temizuya</div>
+                                <div class="etiquette-note">Rinse left hand, right hand, mouth (don't swallow), handle</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">♨️</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Wash thoroughly BEFORE entering onsen</div>
+                                <div class="etiquette-dont">✗ No towels in water, no swimsuits</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">💴</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Use tray for cash, no tipping anywhere</div>
+                                <div class="etiquette-dont">✗ Tipping can be seen as insulting</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">🚮</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Carry your trash, bins are rare</div>
+                                <div class="etiquette-note">Look for bins at konbini or stations</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">🚶</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Queue orderly, walk on left in stations</div>
+                                <div class="etiquette-dont">✗ No eating while walking (except festivals)</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">🎁</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Use both hands to give/receive items</div>
+                                <div class="etiquette-note">Especially business cards, gifts, money</div>
+                            </div>
+                        </li>
+                        <li class="etiquette-item">
+                            <span class="etiquette-icon">📸</span>
+                            <div class="etiquette-content">
+                                <div class="etiquette-do">✓ Ask before photographing people/geisha</div>
+                                <div class="etiquette-dont">✗ No photos where prohibited (many temples)</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan Tab - Itinerary -->
+    <div id="plan-tab" class="tab-content">
+        <div class="container">
+            <div class="plan-section">
+                <div class="plan-header">
+                    <div class="plan-date-nav">
+                        <button id="plan-prev" aria-label="Previous day">‹</button>
+                        <div class="plan-current-date" id="plan-date">May 12, 2026</div>
+                        <button id="plan-next" aria-label="Next day">›</button>
+                    </div>
+                </div>
+
+                <div id="plan-content">
+                    <!-- Dynamically populated -->
+                </div>
+
+                <button class="add-plan-btn" id="add-plan-btn">
+                    + Add to today's plan
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Tab Navigation -->
     <nav class="tab-nav">
         <button class="tab-btn active" data-tab="expenses" aria-label="Expenses">
@@ -2425,13 +2895,28 @@
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M12 6v6l4 2"/>
             </svg>
-            <span>Expenses</span>
+            <span>¥</span>
         </button>
         <button class="tab-btn" data-tab="phrases" aria-label="Phrases">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-            <span>Phrases</span>
+            <span>話す</span>
+        </button>
+        <button class="tab-btn" data-tab="plan" aria-label="Itinerary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                <path d="M16 2v4M8 2v4M3 10h18"/>
+                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+            </svg>
+            <span>Plan</span>
+        </button>
+        <button class="tab-btn" data-tab="info" aria-label="Info & Emergency">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4M12 8h.01"/>
+            </svg>
+            <span>Info</span>
         </button>
         <button class="tab-btn" data-tab="calculator" aria-label="Calculator">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -2445,7 +2930,7 @@
                 <circle cx="12" cy="12" r="3"/>
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
-            <span>Settings</span>
+            <span>⚙️</span>
         </button>
     </nav>
 
@@ -2585,7 +3070,9 @@
             settings: 'japan_settings',
             phrases: 'japan_phrases',
             favorites: 'japan_favorites',
-            lastLocation: 'japan_last_location'
+            lastLocation: 'japan_last_location',
+            itinerary: 'japan_itinerary',
+            emergencyInfo: 'japan_emergency_info'
         };
 
         const DEFAULT_SETTINGS = {
@@ -2685,7 +3172,14 @@
             currentPhoto: null,
             deletedExpense: null, // For undo functionality
             filteredExpensesCache: null, // Memoization cache
-            filterCacheKey: null
+            filterCacheKey: null,
+            itinerary: [], // Array of daily plans
+            currentPlanDate: TRIP_CONFIG.startDate,
+            emergencyInfo: {
+                hotelAddress: '',
+                hotelAddressJp: '',
+                insuranceNumber: ''
+            }
         };
 
         // ============================================
@@ -4107,6 +4601,247 @@
         }
 
         // ============================================
+        // Info Tab - Emergency & Etiquette
+        // ============================================
+        function setupInfoTab() {
+            // Load emergency info
+            const savedInfo = localStorage.getItem(STORAGE_KEYS.emergencyInfo);
+            if (savedInfo) {
+                state.emergencyInfo = JSON.parse(savedInfo);
+                updateEmergencyDisplay();
+            }
+
+            // Emergency card click handlers
+            const emergencyCard = document.querySelector('.emergency-card');
+            emergencyCard.addEventListener('click', (e) => {
+                const item = e.target.closest('.emergency-item');
+                if (!item) return;
+
+                const action = item.dataset.action;
+
+                if (action === 'call') {
+                    const number = item.dataset.number;
+                    window.location.href = `tel:${number}`;
+                    vibrate(10);
+                } else if (action === 'copy') {
+                    const text = item.dataset.text;
+                    if (text) {
+                        copyToClipboard(text);
+                    }
+                }
+            });
+
+            // Hotel address click - prompt to set
+            const hotelBtn = document.getElementById('hotel-address-btn');
+            hotelBtn.addEventListener('click', () => {
+                const currentAddress = state.emergencyInfo.hotelAddressJp || '';
+                const newAddress = prompt('Enter hotel address in Japanese (for taxi):', currentAddress);
+                if (newAddress !== null) {
+                    state.emergencyInfo.hotelAddressJp = newAddress;
+                    saveEmergencyInfo();
+                    updateEmergencyDisplay();
+                    if (newAddress) {
+                        copyToClipboard(newAddress);
+                        showToast('Hotel address saved & copied ✨');
+                    }
+                }
+            });
+        }
+
+        function saveEmergencyInfo() {
+            localStorage.setItem(STORAGE_KEYS.emergencyInfo, JSON.stringify(state.emergencyInfo));
+        }
+
+        function updateEmergencyDisplay() {
+            const hotelEl = document.getElementById('hotel-address-jp');
+            if (state.emergencyInfo.hotelAddressJp) {
+                hotelEl.textContent = state.emergencyInfo.hotelAddressJp;
+                document.getElementById('hotel-address-btn').dataset.text = state.emergencyInfo.hotelAddressJp;
+            } else {
+                hotelEl.textContent = 'Tap to set hotel address';
+            }
+        }
+
+        // ============================================
+        // Plan Tab - Itinerary
+        // ============================================
+        function setupPlanTab() {
+            // Load itinerary
+            const savedItinerary = localStorage.getItem(STORAGE_KEYS.itinerary);
+            if (savedItinerary) {
+                state.itinerary = JSON.parse(savedItinerary);
+            }
+
+            // Set initial date to today if within trip, otherwise trip start
+            const today = new Date().toISOString().split('T')[0];
+            if (today >= TRIP_CONFIG.startDate && today <= TRIP_CONFIG.endDate) {
+                state.currentPlanDate = today;
+            } else {
+                state.currentPlanDate = TRIP_CONFIG.startDate;
+            }
+
+            // Date navigation
+            document.getElementById('plan-prev').addEventListener('click', () => {
+                navigatePlanDate(-1);
+            });
+
+            document.getElementById('plan-next').addEventListener('click', () => {
+                navigatePlanDate(1);
+            });
+
+            // Add plan button
+            document.getElementById('add-plan-btn').addEventListener('click', () => {
+                showAddPlanPrompt();
+            });
+
+            renderPlanDay();
+        }
+
+        function navigatePlanDate(direction) {
+            const currentDate = new Date(state.currentPlanDate);
+            currentDate.setDate(currentDate.getDate() + direction);
+            const newDate = currentDate.toISOString().split('T')[0];
+
+            // Clamp to trip dates
+            if (newDate >= TRIP_CONFIG.startDate && newDate <= TRIP_CONFIG.endDate) {
+                state.currentPlanDate = newDate;
+                renderPlanDay();
+                vibrate(5);
+            }
+        }
+
+        function renderPlanDay() {
+            const dateEl = document.getElementById('plan-date');
+            const contentEl = document.getElementById('plan-content');
+            const prevBtn = document.getElementById('plan-prev');
+            const nextBtn = document.getElementById('plan-next');
+
+            // Update date display
+            const date = new Date(state.currentPlanDate);
+            dateEl.textContent = date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+
+            // Enable/disable nav buttons
+            prevBtn.disabled = state.currentPlanDate <= TRIP_CONFIG.startDate;
+            nextBtn.disabled = state.currentPlanDate >= TRIP_CONFIG.endDate;
+
+            // Get plans for this day
+            const dayPlans = state.itinerary.filter(p => p.date === state.currentPlanDate);
+
+            if (dayPlans.length === 0) {
+                contentEl.innerHTML = `
+                    <div class="plan-empty">
+                        <div class="plan-empty-icon">📅</div>
+                        <div>No plans for this day yet</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by time
+            dayPlans.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+            // Calculate day number
+            const startDate = new Date(TRIP_CONFIG.startDate);
+            const currentDate = new Date(state.currentPlanDate);
+            const dayNumber = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            contentEl.innerHTML = `
+                <div class="plan-day-card">
+                    <div class="plan-day-header">
+                        <div class="plan-day-title">Day ${dayNumber} of ${TRIP_CONFIG.totalDays}</div>
+                        <div class="plan-day-subtitle">${state.lastLocation || 'Japan'}</div>
+                    </div>
+                    <div class="plan-items">
+                        ${dayPlans.map(plan => renderPlanItem(plan)).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners for plan actions
+            contentEl.querySelectorAll('.plan-action').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const planId = btn.dataset.id;
+                    const action = btn.dataset.action;
+
+                    if (action === 'map' && btn.dataset.address) {
+                        const address = encodeURIComponent(btn.dataset.address);
+                        window.open(`https://www.google.com/maps/search/?api=1&query=${address}`, '_blank');
+                        vibrate(5);
+                    } else if (action === 'delete') {
+                        deletePlanItem(planId);
+                    }
+                });
+            });
+        }
+
+        function renderPlanItem(plan) {
+            const iconClass = plan.type || 'activity';
+            const icons = {
+                transport: '🚃',
+                food: '🍜',
+                activity: '⛩️',
+                hotel: '🏨'
+            };
+
+            return `
+                <div class="plan-item">
+                    <div class="plan-time">${plan.time || ''}</div>
+                    <div class="plan-icon ${iconClass}">${icons[iconClass] || '📍'}</div>
+                    <div class="plan-details">
+                        <div class="plan-name">${escapeHtml(plan.name)}</div>
+                        ${plan.address ? `<div class="plan-address">${escapeHtml(plan.address)}</div>` : ''}
+                        ${plan.addressJp ? `<div class="plan-address-jp">${escapeHtml(plan.addressJp)}</div>` : ''}
+                    </div>
+                    ${plan.address ? `
+                        <button class="plan-action" data-id="${plan.id}" data-action="map" data-address="${escapeHtml(plan.address)}" title="Open in Maps">
+                            📍
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function showAddPlanPrompt() {
+            const name = prompt('Activity/Place name:');
+            if (!name) return;
+
+            const time = prompt('Time (e.g., 09:00):', '');
+            const type = prompt('Type (transport/food/activity/hotel):', 'activity');
+            const address = prompt('Address (optional):');
+
+            const plan = {
+                id: generateId(),
+                date: state.currentPlanDate,
+                name: name,
+                time: time || '',
+                type: type || 'activity',
+                address: address || ''
+            };
+
+            state.itinerary.push(plan);
+            saveItinerary();
+            renderPlanDay();
+            vibrate(10);
+            showToast('Plan added ✨');
+        }
+
+        function deletePlanItem(planId) {
+            state.itinerary = state.itinerary.filter(p => p.id !== planId);
+            saveItinerary();
+            renderPlanDay();
+            vibrate(15);
+            showToast('Plan removed');
+        }
+
+        function saveItinerary() {
+            localStorage.setItem(STORAGE_KEYS.itinerary, JSON.stringify(state.itinerary));
+        }
+
+        // ============================================
         // Initialize
         // ============================================
         function init() {
@@ -4133,6 +4868,8 @@
             setupOfflineDetection();
             setupPullToRefresh();
             setupThemeToggle();
+            setupInfoTab();
+            setupPlanTab();
             renderExpenses();
             renderPhrases();
             updateBudgetSummary();
