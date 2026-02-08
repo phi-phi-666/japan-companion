@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Japan Companion</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --surface-2: #252525;
+            --text: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border: #333333;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header h1::before {
+            content: '🗾';
+        }
+
+        /* Budget Summary */
+        .budget-summary {
+            background: var(--surface);
+            margin: 16px;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .budget-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .budget-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .budget-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .budget-value.remaining {
+            color: var(--success);
+        }
+
+        .budget-value.over {
+            color: var(--primary);
+        }
+
+        .budget-progress {
+            height: 8px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .budget-progress-bar {
+            height: 100%;
+            background: var(--success);
+            border-radius: 4px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .budget-progress-bar.warning {
+            background: var(--warning);
+        }
+
+        .budget-progress-bar.danger {
+            background: var(--primary);
+        }
+
+        .budget-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Daily Budget Indicator */
+        .daily-budget {
+            background: var(--surface);
+            margin: 0 16px 16px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .daily-budget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .trip-day {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .trip-day-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .trip-day-badge.before {
+            background: var(--surface-2);
+            color: var(--text-secondary);
+        }
+
+        .trip-day-badge.after {
+            background: var(--text-secondary);
+        }
+
+        .daily-budget-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .daily-stat {
+            text-align: center;
+            padding: 12px;
+            background: var(--surface-2);
+            border-radius: 8px;
+        }
+
+        .daily-stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .daily-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .daily-stat-value.under {
+            color: var(--success);
+        }
+
+        .daily-stat-value.over {
+            color: var(--primary);
+        }
+
+        .daily-difference {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .daily-difference.under {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+
+        .daily-difference.over {
+            background: rgba(220, 38, 38, 0.15);
+            color: var(--primary);
+        }
+
+        /* Category Chart */
+        .category-chart {
+            background: var(--surface);
+            margin: 0 16px 16px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .category-chart-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .chart-bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .chart-bar-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-bar-label {
+            width: 90px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            height: 20px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .chart-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            min-width: 2px;
+        }
+
+        .chart-bar.food { background: #f59e0b; }
+        .chart-bar.transport { background: #3b82f6; }
+        .chart-bar.accommodation { background: #8b5cf6; }
+        .chart-bar.activities { background: #10b981; }
+        .chart-bar.misc { background: #6b7280; }
+
+        .chart-bar-value {
+            width: 70px;
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Quick Expense Buttons */
+        .quick-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .quick-amount-btn {
+            flex: 1;
+            min-width: calc(33% - 6px);
+            padding: 10px 8px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .quick-amount-btn:active {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .quick-amount-btn .amount {
+            font-weight: 600;
+            display: block;
+        }
+
+        .quick-amount-btn .label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 8px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Add Expense Form */
+        .add-expense-btn {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px 24px 0 0;
+            padding: 24px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .amount-input-wrapper {
+            position: relative;
+        }
+
+        .amount-input-wrapper input {
+            padding-left: 50px;
+        }
+
+        .amount-input-wrapper .currency {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .amount-conversion {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:active {
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            background: #7f1d1d;
+            color: white;
+        }
+
+        /* Expense List */
+        .expense-list {
+            padding: 0 16px;
+        }
+
+        .day-group {
+            margin-bottom: 24px;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .day-date {
+            font-weight: 600;
+        }
+
+        .day-total {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .expense-item {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+        }
+
+        .expense-info {
+            flex: 1;
+        }
+
+        .expense-category {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .expense-note {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .expense-amount {
+            text-align: right;
+        }
+
+        .expense-jpy {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .expense-pln {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .expense-delete {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 8px;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        /* Category Icons */
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .category-food { background: #fef3c7; }
+        .category-transport { background: #dbeafe; }
+        .category-accommodation { background: #ede9fe; }
+        .category-activities { background: #d1fae5; }
+        .category-misc { background: #f3f4f6; }
+
+        /* Phrase Bank */
+        .search-box {
+            padding: 16px;
+            position: sticky;
+            top: 56px;
+            background: var(--bg);
+            z-index: 50;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+
+        .phrase-list {
+            padding: 0 16px;
+        }
+
+        .phrase-category {
+            margin-bottom: 24px;
+        }
+
+        .phrase-category-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .phrase-item {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .phrase-item:active {
+            border-color: var(--primary);
+        }
+
+        .phrase-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .phrase-japanese {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            flex: 1;
+        }
+
+        .phrase-favorite {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 8px;
+            opacity: 0.3;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .phrase-favorite.active {
+            opacity: 1;
+        }
+
+        .phrase-favorite:active {
+            transform: scale(1.2);
+        }
+
+        .phrase-details {
+            display: none;
+        }
+
+        .phrase-item.expanded .phrase-details {
+            display: block;
+        }
+
+        .phrase-romaji {
+            color: var(--primary);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .phrase-english {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .favorites-section {
+            margin-bottom: 24px;
+        }
+
+        .favorites-section .phrase-category-title {
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Settings */
+        .settings-section {
+            padding: 16px;
+        }
+
+        .settings-group {
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .settings-group-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 16px 16px 8px;
+        }
+
+        .settings-item {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .settings-item:first-child {
+            border-top: none;
+        }
+
+        .settings-item label {
+            font-weight: 500;
+        }
+
+        .settings-item input {
+            width: 120px;
+            padding: 10px 12px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 16px;
+            text-align: right;
+        }
+
+        .settings-item input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .settings-btn {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .settings-btn.danger {
+            color: var(--primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+        }
+
+        /* Confirm Dialog */
+        .confirm-dialog {
+            background: var(--surface);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 320px;
+            margin: auto;
+        }
+
+        .confirm-dialog h3 {
+            margin-bottom: 12px;
+        }
+
+        .confirm-dialog p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .confirm-buttons .btn {
+            flex: 1;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--surface-2);
+            color: var(--text);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 300;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Location Filter */
+        .location-filter {
+            padding: 0 16px 16px;
+        }
+
+        .location-filter select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        /* Photo Capture */
+        .photo-capture {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .photo-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: var(--surface-2);
+            border: 2px dashed var(--border);
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .photo-btn:active {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .photo-btn.has-photo {
+            border: none;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .photo-btn.has-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-input {
+            display: none;
+        }
+
+        .photo-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .photo-remove {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Expense Photo Thumbnail */
+        .expense-photo-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            object-fit: cover;
+            cursor: pointer;
+            margin-left: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Photo View Modal */
+        .photo-view-modal {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-view-content {
+            max-width: 95vw;
+            max-height: 85vh;
+            background: transparent;
+        }
+
+        .photo-view-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 12px;
+        }
+
+        .photo-view-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--surface);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Currency Calculator Tab */
+        .calculator-section {
+            padding: 24px 16px;
+        }
+
+        .calculator-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .calculator-title {
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .calculator-row {
+            margin-bottom: 20px;
+        }
+
+        .calculator-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calculator-label .flag {
+            font-size: 20px;
+        }
+
+        .calculator-input {
+            width: 100%;
+            padding: 20px;
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .calculator-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .calculator-rate {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .calculator-swap {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .swap-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Storage Warning */
+        .storage-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 16px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .storage-warning.show {
+            display: block;
+        }
+
+        /* Location badge on expense */
+        .expense-location {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: var(--surface-2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Japan Companion</h1>
+    </header>
+
+    <!-- Expenses Tab -->
+    <div id="expenses-tab" class="tab-content active">
+        <div class="budget-summary">
+            <div class="budget-row">
+                <span class="budget-label">Remaining Budget</span>
+                <span id="remaining-budget" class="budget-value remaining">40,000 PLN</span>
+            </div>
+            <div class="budget-progress">
+                <div id="budget-progress-bar" class="budget-progress-bar" style="width: 0%"></div>
+            </div>
+            <div class="budget-details">
+                <span>Spent: <span id="total-spent">0</span> PLN</span>
+                <span>Budget: <span id="total-budget">40,000</span> PLN</span>
+            </div>
+        </div>
+
+        <!-- Daily Budget Indicator -->
+        <div class="daily-budget" id="daily-budget">
+            <div class="daily-budget-header">
+                <span class="trip-day" id="trip-day">Day 1 of 24</span>
+                <span class="trip-day-badge" id="trip-status">On Trip</span>
+            </div>
+            <div class="daily-budget-stats">
+                <div class="daily-stat">
+                    <div class="daily-stat-label">Should have spent</div>
+                    <div class="daily-stat-value" id="should-spent">0 PLN</div>
+                </div>
+                <div class="daily-stat">
+                    <div class="daily-stat-label">Actually spent</div>
+                    <div class="daily-stat-value" id="actual-spent">0 PLN</div>
+                </div>
+            </div>
+            <div class="daily-difference under" id="daily-difference">On track!</div>
+        </div>
+
+        <!-- Category Chart -->
+        <div class="category-chart" id="category-chart">
+            <div class="category-chart-title">Spending by Category</div>
+            <div id="chart-bars"></div>
+        </div>
+
+        <!-- Location Filter -->
+        <div class="location-filter">
+            <select id="location-filter">
+                <option value="all">All Locations</option>
+                <option value="Nagoya">Nagoya</option>
+                <option value="Kyoto">Kyoto</option>
+                <option value="Nara">Nara</option>
+                <option value="Osaka">Osaka</option>
+                <option value="Hiroshima">Hiroshima</option>
+                <option value="Takayama">Takayama</option>
+                <option value="Tokyo">Tokyo</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+
+        <!-- Storage Warning -->
+        <div class="storage-warning" id="storage-warning">
+            ⚠️ Storage is nearly full. Consider exporting and clearing old receipts.
+        </div>
+
+        <div id="expense-list" class="expense-list">
+            <div class="empty-state">
+                <div class="empty-state-icon">💴</div>
+                <div class="empty-state-text">No expenses yet.<br>Tap + to add one!</div>
+            </div>
+        </div>
+
+        <button class="add-expense-btn" id="add-expense-btn">+</button>
+    </div>
+
+    <!-- Phrases Tab -->
+    <div id="phrases-tab" class="tab-content">
+        <div class="search-box">
+            <input type="text" class="search-input" id="phrase-search" placeholder="Search phrases...">
+        </div>
+        <div id="phrase-list" class="phrase-list"></div>
+    </div>
+
+    <!-- Calculator Tab -->
+    <div id="calculator-tab" class="tab-content">
+        <div class="calculator-section">
+            <div class="calculator-card">
+                <div class="calculator-title">💱 Currency Calculator</div>
+                <div class="calculator-row">
+                    <div class="calculator-label">
+                        <span class="flag">🇯🇵</span> Japanese Yen
+                    </div>
+                    <input type="number" class="calculator-input" id="calc-jpy" placeholder="0" inputmode="decimal">
+                </div>
+                <div class="calculator-swap">
+                    <button class="swap-btn" id="calc-swap">⇅</button>
+                </div>
+                <div class="calculator-row">
+                    <div class="calculator-label">
+                        <span class="flag">🇵🇱</span> Polish Zloty
+                    </div>
+                    <input type="number" class="calculator-input" id="calc-pln" placeholder="0" inputmode="decimal">
+                </div>
+                <div class="calculator-rate" id="calc-rate">
+                    Rate: 1 PLN = 43.3 JPY
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settings-tab" class="tab-content">
+        <div class="settings-section">
+            <div class="settings-group">
+                <div class="settings-group-title">Currency & Budget</div>
+                <div class="settings-item">
+                    <label>Exchange Rate (JPY → PLN)</label>
+                    <input type="number" id="exchange-rate" step="0.1" value="43.3">
+                </div>
+                <div class="settings-item">
+                    <label>Total Budget (PLN)</label>
+                    <input type="number" id="budget-input" step="100" value="40000">
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-group-title">Export</div>
+                <button class="settings-btn" id="export-btn">📥 Export to CSV</button>
+                <button class="settings-btn" id="notion-export-btn">📋 Copy Notion Summary</button>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-group-title">Data</div>
+                <button class="settings-btn danger" id="clear-btn">🗑️ Clear All Data</button>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-group-title">Storage</div>
+                <div class="settings-item">
+                    <span>Used</span>
+                    <span id="storage-used" style="color: var(--text-secondary)">0 KB</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-group-title">About</div>
+                <div class="settings-item">
+                    <span>Version</span>
+                    <span style="color: var(--text-secondary)">2.0.0</span>
+                </div>
+                <div class="settings-item">
+                    <span>Trip Duration</span>
+                    <span style="color: var(--text-secondary)">24 days</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="expenses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+            Expenses
+        </button>
+        <button class="tab-btn" data-tab="phrases">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            Phrases
+        </button>
+        <button class="tab-btn" data-tab="calculator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <line x1="8" y1="6" x2="16" y2="6"/>
+                <line x1="8" y1="10" x2="10" y2="10"/>
+                <line x1="14" y1="10" x2="16" y2="10"/>
+                <line x1="8" y1="14" x2="10" y2="14"/>
+                <line x1="14" y1="14" x2="16" y2="14"/>
+                <line x1="8" y1="18" x2="16" y2="18"/>
+            </svg>
+            Calc
+        </button>
+        <button class="tab-btn" data-tab="settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m17.36-5.64l-4.24 4.24m-6.24 0L2.64 6.36m0 11.28l4.24-4.24m6.24 0l4.24 4.24"/>
+            </svg>
+            Settings
+        </button>
+    </nav>
+
+    <!-- Add Expense Modal -->
+    <div class="modal-overlay" id="expense-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Add Expense</h2>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <form id="expense-form">
+                <div class="form-group">
+                    <label>Quick Amount</label>
+                    <div class="quick-amounts" id="quick-amounts">
+                        <button type="button" class="quick-amount-btn" data-amount="200">
+                            <span class="amount">¥200</span>
+                            <span class="label">Vending</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="500">
+                            <span class="amount">¥500</span>
+                            <span class="label">Konbini</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="1000">
+                            <span class="amount">¥1,000</span>
+                            <span class="label">Cheap meal</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="2000">
+                            <span class="amount">¥2,000</span>
+                            <span class="label">Restaurant</span>
+                        </button>
+                        <button type="button" class="quick-amount-btn" data-amount="5000">
+                            <span class="amount">¥5,000</span>
+                            <span class="label">Nice dinner</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <div class="amount-input-wrapper">
+                        <span class="currency">¥</span>
+                        <input type="number" id="expense-amount" placeholder="0" required inputmode="numeric">
+                    </div>
+                    <div class="amount-conversion" id="amount-conversion"></div>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="expense-category" required>
+                        <option value="food">🍜 Food</option>
+                        <option value="transport">🚃 Transport</option>
+                        <option value="accommodation">🏨 Accommodation</option>
+                        <option value="activities">🎌 Activities</option>
+                        <option value="misc">📦 Misc</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <select id="expense-location" required>
+                        <option value="Nagoya">Nagoya</option>
+                        <option value="Kyoto">Kyoto</option>
+                        <option value="Nara">Nara</option>
+                        <option value="Osaka">Osaka</option>
+                        <option value="Hiroshima">Hiroshima</option>
+                        <option value="Takayama">Takayama</option>
+                        <option value="Tokyo">Tokyo</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="expense-date" required>
+                </div>
+                <div class="form-group">
+                    <label>Note (optional)</label>
+                    <textarea id="expense-note" placeholder="What was this for?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Receipt Photo (optional)</label>
+                    <div class="photo-capture">
+                        <button type="button" class="photo-btn" id="photo-btn">📷</button>
+                        <input type="file" accept="image/*" capture="environment" class="photo-input" id="photo-input">
+                        <div>
+                            <div class="photo-hint" id="photo-hint">Tap to capture receipt</div>
+                            <div class="photo-actions" id="photo-actions" style="display:none;">
+                                <button type="button" class="photo-remove" id="photo-remove">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="confirm-dialog">
+            <h3 id="confirm-title">Confirm</h3>
+            <p id="confirm-message">Are you sure?</p>
+            <div class="confirm-buttons">
+                <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+                <button class="btn btn-danger" id="confirm-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo View Modal -->
+    <div class="modal-overlay photo-view-modal" id="photo-view-modal">
+        <button class="photo-view-close" id="photo-view-close">&times;</button>
+        <div class="photo-view-content">
+            <img id="photo-view-img" src="" alt="Receipt">
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ============================================
+        // Data & State
+        // ============================================
+        const STORAGE_KEYS = {
+            expenses: 'japan_expenses',
+            settings: 'japan_settings',
+            phrases: 'japan_phrases',
+            favorites: 'japan_favorites',
+            lastLocation: 'japan_last_location'
+        };
+
+        const DEFAULT_SETTINGS = {
+            exchangeRate: 43.3,
+            budget: 40000
+        };
+
+        const LOCATIONS = ['Nagoya', 'Kyoto', 'Nara', 'Osaka', 'Hiroshima', 'Takayama', 'Tokyo', 'Other'];
+
+        // Max image size (compressed) ~200KB
+        const MAX_IMAGE_SIZE = 200 * 1024;
+        // Storage warning threshold ~4MB
+        const STORAGE_WARNING_THRESHOLD = 4 * 1024 * 1024;
+
+        // Trip configuration
+        const TRIP_CONFIG = {
+            startDate: '2026-05-12',
+            endDate: '2026-06-05',
+            totalDays: 24,
+            dailyBudget: 40000 / 24 // ~1667 PLN
+        };
+
+        const CATEGORIES = {
+            food: { icon: '🍜', label: 'Food', class: 'category-food' },
+            transport: { icon: '🚃', label: 'Transport', class: 'category-transport' },
+            accommodation: { icon: '🏨', label: 'Accommodation', class: 'category-accommodation' },
+            activities: { icon: '🎌', label: 'Activities', class: 'category-activities' },
+            misc: { icon: '📦', label: 'Misc', class: 'category-misc' }
+        };
+
+        // Default phrases
+        const DEFAULT_PHRASES = [
+            { category: "Vegetarian", japanese: "私はベジタリアンです。肉と魚が食べられません。", romaji: "Watashi wa bejitarian desu. Niku to sakana ga taberaremasen.", english: "I am vegetarian. I cannot eat meat or fish." },
+            { category: "Vegetarian", japanese: "鰹出汁の代わりに昆布出汁をお願いできますか？", romaji: "Katsuo dashi no kawari ni kombu dashi wo onegai dekimasu ka?", english: "Instead of bonito dashi, can I have kelp dashi?" },
+            { category: "Vegetarian", japanese: "この料理に肉・魚・鰹節は入っていますか？", romaji: "Kono ryouri ni niku, sakana, katsuobushi wa haitte imasu ka?", english: "Does this dish contain meat, fish, or bonito flakes?" },
+            { category: "Vegetarian", japanese: "肉なしでお願いできますか？", romaji: "Niku nashi de onegai dekimasu ka?", english: "Can I have this without meat?" },
+            { category: "Vegetarian", japanese: "野菜だけの料理はありますか？", romaji: "Yasai dake no ryouri wa arimasu ka?", english: "Do you have any vegetable-only dishes?" },
+            { category: "Vegetarian", japanese: "卵と乳製品は大丈夫です。", romaji: "Tamago to nyuuseihin wa daijoubu desu.", english: "Eggs and dairy are okay." },
+            { category: "Vegetarian", japanese: "ベジタリアンメニューはありますか？", romaji: "Bejitarian menyuu wa arimasu ka?", english: "Do you have a vegetarian menu?" },
+            { category: "Vegetarian", japanese: "豆腐料理はありますか？", romaji: "Toufu ryouri wa arimasu ka?", english: "Do you have tofu dishes?" },
+            { category: "Vegetarian", japanese: "精進料理はありますか？", romaji: "Shoujin ryouri wa arimasu ka?", english: "Do you have Buddhist vegetarian cuisine?" },
+            { category: "Restaurant", japanese: "二人です。", romaji: "Futari desu.", english: "Two people." },
+            { category: "Restaurant", japanese: "予約していません。", romaji: "Yoyaku shite imasen.", english: "I don't have a reservation." },
+            { category: "Restaurant", japanese: "予約があります。名前は＿＿です。", romaji: "Yoyaku ga arimasu. Namae wa ___ desu.", english: "I have a reservation. The name is ___." },
+            { category: "Restaurant", japanese: "メニューをお願いします。", romaji: "Menyuu wo onegai shimasu.", english: "Menu please." },
+            { category: "Restaurant", japanese: "おすすめは何ですか？", romaji: "Osusume wa nan desu ka?", english: "What do you recommend?" },
+            { category: "Restaurant", japanese: "これをください。", romaji: "Kore wo kudasai.", english: "I'll have this please. (pointing)" },
+            { category: "Restaurant", japanese: "お会計お願いします。", romaji: "Okaikei onegai shimasu.", english: "Check please." },
+            { category: "Restaurant", japanese: "別々に払えますか？", romaji: "Betsubetsu ni haraemasu ka?", english: "Can we pay separately?" },
+            { category: "Restaurant", japanese: "カードで払えますか？", romaji: "Kaado de haraemasu ka?", english: "Can I pay by card?" },
+            { category: "Restaurant", japanese: "現金だけですか？", romaji: "Genkin dake desu ka?", english: "Cash only?" },
+            { category: "Restaurant", japanese: "美味しかったです。", romaji: "Oishikatta desu.", english: "It was delicious." },
+            { category: "Restaurant", japanese: "ごちそうさまでした。", romaji: "Gochisousama deshita.", english: "Thank you for the meal. (said when finished)" },
+            { category: "Restaurant", japanese: "水をお願いします。", romaji: "Mizu wo onegai shimasu.", english: "Water please." },
+            { category: "Restaurant", japanese: "お箸をもう一膳お願いします。", romaji: "Ohashi wo mou ichizen onegai shimasu.", english: "Another pair of chopsticks please." },
+            { category: "Basic", japanese: "すみません。", romaji: "Sumimasen.", english: "Excuse me. / I'm sorry." },
+            { category: "Basic", japanese: "ありがとうございます。", romaji: "Arigatou gozaimasu.", english: "Thank you." },
+            { category: "Basic", japanese: "お願いします。", romaji: "Onegai shimasu.", english: "Please." },
+            { category: "Basic", japanese: "はい / いいえ", romaji: "Hai / Iie", english: "Yes / No" },
+            { category: "Basic", japanese: "大丈夫です。", romaji: "Daijoubu desu.", english: "It's okay. / I'm fine. / No thank you." },
+            { category: "Basic", japanese: "わかりました。", romaji: "Wakarimashita.", english: "I understand." },
+            { category: "Basic", japanese: "わかりません。", romaji: "Wakarimasen.", english: "I don't understand." },
+            { category: "Basic", japanese: "日本語が少しだけ話せます。", romaji: "Nihongo ga sukoshi dake hanasemasu.", english: "I can speak only a little Japanese." },
+            { category: "Basic", japanese: "英語を話せますか？", romaji: "Eigo wo hanasemasu ka?", english: "Do you speak English?" },
+            { category: "Basic", japanese: "もう一度お願いします。", romaji: "Mou ichido onegai shimasu.", english: "One more time please." },
+            { category: "Basic", japanese: "ゆっくり話してください。", romaji: "Yukkuri hanashite kudasai.", english: "Please speak slowly." },
+            { category: "Basic", japanese: "書いてもらえますか？", romaji: "Kaite moraemasu ka?", english: "Can you write it down?" },
+            { category: "Basic", japanese: "これは何ですか？", romaji: "Kore wa nan desu ka?", english: "What is this?" },
+            { category: "Directions", japanese: "＿＿はどこですか？", romaji: "___ wa doko desu ka?", english: "Where is ___?" },
+            { category: "Directions", japanese: "駅はどこですか？", romaji: "Eki wa doko desu ka?", english: "Where is the station?" },
+            { category: "Directions", japanese: "トイレはどこですか？", romaji: "Toire wa doko desu ka?", english: "Where is the toilet?" },
+            { category: "Directions", japanese: "コンビニはどこですか？", romaji: "Konbini wa doko desu ka?", english: "Where is the convenience store?" },
+            { category: "Directions", japanese: "ATMはどこですか？", romaji: "ATM wa doko desu ka?", english: "Where is the ATM?" },
+            { category: "Directions", japanese: "まっすぐ", romaji: "Massugu", english: "Straight ahead" },
+            { category: "Directions", japanese: "右 / 左", romaji: "Migi / Hidari", english: "Right / Left" },
+            { category: "Directions", japanese: "この近くに＿＿はありますか？", romaji: "Kono chikaku ni ___ wa arimasu ka?", english: "Is there a ___ nearby?" },
+            { category: "Directions", japanese: "歩いて何分ですか？", romaji: "Aruite nanpun desu ka?", english: "How many minutes on foot?" },
+            { category: "Directions", japanese: "地図を見せてもらえますか？", romaji: "Chizu wo misete moraemasu ka?", english: "Can you show me on a map?" },
+            { category: "Transport", japanese: "＿＿行きの切符を一枚ください。", romaji: "___ yuki no kippu wo ichimai kudasai.", english: "One ticket to ___ please." },
+            { category: "Transport", japanese: "片道 / 往復", romaji: "Katamichi / Oufuku", english: "One-way / Round-trip" },
+            { category: "Transport", japanese: "次の電車は何時ですか？", romaji: "Tsugi no densha wa nanji desu ka?", english: "What time is the next train?" },
+            { category: "Transport", japanese: "この電車は＿＿に止まりますか？", romaji: "Kono densha wa ___ ni tomarimasu ka?", english: "Does this train stop at ___?" },
+            { category: "Transport", japanese: "乗り換えは必要ですか？", romaji: "Norikae wa hitsuyou desu ka?", english: "Do I need to transfer?" },
+            { category: "Transport", japanese: "何番線ですか？", romaji: "Nanban-sen desu ka?", english: "Which platform?" },
+            { category: "Transport", japanese: "終電は何時ですか？", romaji: "Shuuden wa nanji desu ka?", english: "What time is the last train?" },
+            { category: "Transport", japanese: "ICカードにチャージしたいです。", romaji: "IC kaado ni chaaji shitai desu.", english: "I want to charge my IC card." },
+            { category: "Transport", japanese: "JRパスを使えますか？", romaji: "JR pasu wo tsukaemasu ka?", english: "Can I use the JR Pass?" },
+            { category: "Transport", japanese: "指定席をお願いします。", romaji: "Shiteiseki wo onegai shimasu.", english: "Reserved seat please." },
+            { category: "Transport", japanese: "自由席でいいです。", romaji: "Jiyuuseki de ii desu.", english: "Unreserved seat is fine." },
+            { category: "Accommodation", japanese: "チェックインお願いします。名前は＿＿です。", romaji: "Chekkuin onegai shimasu. Namae wa ___ desu.", english: "Check-in please. Name is ___." },
+            { category: "Accommodation", japanese: "チェックアウトお願いします。", romaji: "Chekkuauto onegai shimasu.", english: "Check-out please." },
+            { category: "Accommodation", japanese: "荷物を預かってもらえますか？", romaji: "Nimotsu wo azukatte moraemasu ka?", english: "Can you hold my luggage?" },
+            { category: "Accommodation", japanese: "Wi-Fiのパスワードは何ですか？", romaji: "Wi-Fi no pasuwaado wa nan desu ka?", english: "What's the Wi-Fi password?" },
+            { category: "Accommodation", japanese: "朝食は何時からですか？", romaji: "Choushoku wa nanji kara desu ka?", english: "What time is breakfast from?" },
+            { category: "Accommodation", japanese: "タオルをもう一枚お願いします。", romaji: "Taoru wo mou ichimai onegai shimasu.", english: "One more towel please." },
+            { category: "Accommodation", japanese: "部屋を変えてもらえますか？", romaji: "Heya wo kaete moraemasu ka?", english: "Can I change rooms?" },
+            { category: "Onsen", japanese: "タトゥーがありますが、入れますか？", romaji: "Tatuu ga arimasu ga, hairemasu ka?", english: "I have a tattoo, can I enter?" },
+            { category: "Onsen", japanese: "貸切風呂はありますか？", romaji: "Kashikiri buro wa arimasu ka?", english: "Do you have a private bath?" },
+            { category: "Onsen", japanese: "男湯 / 女湯", romaji: "Otoko-yu / Onna-yu", english: "Men's bath / Women's bath" },
+            { category: "Onsen", japanese: "混浴", romaji: "Konyoku", english: "Mixed bathing" },
+            { category: "Onsen", japanese: "露天風呂", romaji: "Rotenburo", english: "Outdoor bath" },
+            { category: "Onsen", japanese: "内湯", romaji: "Uchiyu", english: "Indoor bath" },
+            { category: "Onsen", japanese: "脱衣所", romaji: "Datsuijo", english: "Changing room" },
+            { category: "Onsen", japanese: "温度が高すぎます。", romaji: "Ondo ga takasugimasu.", english: "The temperature is too hot." },
+            { category: "Shopping", japanese: "これはいくらですか？", romaji: "Kore wa ikura desu ka?", english: "How much is this?" },
+            { category: "Shopping", japanese: "見ているだけです。", romaji: "Mite iru dake desu.", english: "Just looking." },
+            { category: "Shopping", japanese: "これをください。", romaji: "Kore wo kudasai.", english: "I'll take this." },
+            { category: "Shopping", japanese: "袋はいりません。", romaji: "Fukuro wa irimasen.", english: "I don't need a bag." },
+            { category: "Shopping", japanese: "試着してもいいですか？", romaji: "Shichaku shite mo ii desu ka?", english: "Can I try this on?" },
+            { category: "Shopping", japanese: "他の色はありますか？", romaji: "Hoka no iro wa arimasu ka?", english: "Do you have other colors?" },
+            { category: "Shopping", japanese: "免税できますか？", romaji: "Menzei dekimasu ka?", english: "Is tax-free available?" },
+            { category: "Shopping", japanese: "レシートをください。", romaji: "Reshiito wo kudasai.", english: "Receipt please." },
+            { category: "Numbers", japanese: "一、二、三、四、五", romaji: "Ichi, ni, san, yon, go", english: "1, 2, 3, 4, 5" },
+            { category: "Numbers", japanese: "六、七、八、九、十", romaji: "Roku, nana, hachi, kyuu, juu", english: "6, 7, 8, 9, 10" },
+            { category: "Numbers", japanese: "百、千、万", romaji: "Hyaku, sen, man", english: "100, 1000, 10000" },
+            { category: "Numbers", japanese: "一人 / 二人", romaji: "Hitori / Futari", english: "One person / Two people" },
+            { category: "Time", japanese: "今何時ですか？", romaji: "Ima nanji desu ka?", english: "What time is it now?" },
+            { category: "Time", japanese: "何時に開きますか？", romaji: "Nanji ni akimasu ka?", english: "What time does it open?" },
+            { category: "Time", japanese: "何時に閉まりますか？", romaji: "Nanji ni shimarimasu ka?", english: "What time does it close?" },
+            { category: "Time", japanese: "今日 / 明日 / 昨日", romaji: "Kyou / Ashita / Kinou", english: "Today / Tomorrow / Yesterday" },
+            { category: "Time", japanese: "午前 / 午後", romaji: "Gozen / Gogo", english: "AM / PM" },
+            { category: "Emergency", japanese: "助けてください！", romaji: "Tasukete kudasai!", english: "Help please!" },
+            { category: "Emergency", japanese: "警察を呼んでください。", romaji: "Keisatsu wo yonde kudasai.", english: "Please call the police." },
+            { category: "Emergency", japanese: "救急車を呼んでください。", romaji: "Kyuukyuusha wo yonde kudasai.", english: "Please call an ambulance." },
+            { category: "Emergency", japanese: "病院に行きたいです。", romaji: "Byouin ni ikitai desu.", english: "I want to go to a hospital." },
+            { category: "Emergency", japanese: "薬局はどこですか？", romaji: "Yakkyoku wa doko desu ka?", english: "Where is the pharmacy?" },
+            { category: "Emergency", japanese: "パスポートをなくしました。", romaji: "Pasupooto wo nakushimashita.", english: "I lost my passport." },
+            { category: "Emergency", japanese: "財布を盗まれました。", romaji: "Saifu wo nusumaremashita.", english: "My wallet was stolen." },
+            { category: "Emergency", japanese: "具合が悪いです。", romaji: "Guai ga warui desu.", english: "I feel sick." },
+            { category: "Emergency", japanese: "アレルギーがあります。", romaji: "Arerugii ga arimasu.", english: "I have an allergy." },
+            { category: "Emergency", japanese: "警察: 110 / 救急: 119", romaji: "Keisatsu: 110 / Kyuukyuu: 119", english: "Police: 110 / Ambulance: 119" },
+            { category: "Emergency", japanese: "ポーランド大使館に連絡したいです。", romaji: "Poorando taishikan ni renraku shitai desu.", english: "I want to contact the Polish embassy." },
+            { category: "Sightseeing", japanese: "写真を撮ってもいいですか？", romaji: "Shashin wo totte mo ii desu ka?", english: "May I take a photo?" },
+            { category: "Sightseeing", japanese: "写真を撮ってもらえますか？", romaji: "Shashin wo totte moraemasu ka?", english: "Could you take my photo?" },
+            { category: "Sightseeing", japanese: "入場料はいくらですか？", romaji: "Nyuujouryou wa ikura desu ka?", english: "How much is the entrance fee?" },
+            { category: "Sightseeing", japanese: "英語のパンフレットはありますか？", romaji: "Eigo no panfuretto wa arimasu ka?", english: "Is there an English pamphlet?" },
+            { category: "Sightseeing", japanese: "ロッカーはありますか？", romaji: "Rokkaa wa arimasu ka?", english: "Are there lockers?" },
+            { category: "Sightseeing", japanese: "御朱印をお願いします。", romaji: "Goshuin wo onegai shimasu.", english: "Temple/shrine stamp please." },
+            { category: "Ryokan", japanese: "夕食は何時ですか？", romaji: "Yuushoku wa nanji desu ka?", english: "What time is dinner?" },
+            { category: "Ryokan", japanese: "布団を敷いてください。", romaji: "Futon wo shiite kudasai.", english: "Please lay out the futon." },
+            { category: "Ryokan", japanese: "浴衣の着方を教えてください。", romaji: "Yukata no kikata wo oshiete kudasai.", english: "Please show me how to wear the yukata." },
+            { category: "Ryokan", japanese: "私はベジタリアンです。食事を変更できますか？", romaji: "Watashi wa bejitarian desu. Shokuji wo henkou dekimasu ka?", english: "I am vegetarian. Can the meal be changed?" }
+        ];
+
+        let state = {
+            expenses: [],
+            settings: { ...DEFAULT_SETTINGS },
+            phrases: [...DEFAULT_PHRASES],
+            favorites: [],
+            locationFilter: 'all',
+            lastLocation: 'Tokyo',
+            currentPhoto: null // Temporary photo for form
+        };
+
+        // ============================================
+        // Storage Functions
+        // ============================================
+        function loadData() {
+            try {
+                const expenses = localStorage.getItem(STORAGE_KEYS.expenses);
+                const settings = localStorage.getItem(STORAGE_KEYS.settings);
+                const phrases = localStorage.getItem(STORAGE_KEYS.phrases);
+                const favorites = localStorage.getItem(STORAGE_KEYS.favorites);
+                const lastLocation = localStorage.getItem(STORAGE_KEYS.lastLocation);
+
+                if (expenses) state.expenses = JSON.parse(expenses);
+                if (settings) state.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(settings) };
+                if (phrases) state.phrases = JSON.parse(phrases);
+                if (favorites) state.favorites = JSON.parse(favorites);
+                if (lastLocation) state.lastLocation = lastLocation;
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+            checkStorageUsage();
+        }
+
+        function saveFavorites() {
+            localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favorites));
+        }
+
+        function saveLastLocation(location) {
+            state.lastLocation = location;
+            localStorage.setItem(STORAGE_KEYS.lastLocation, location);
+        }
+
+        function saveExpenses() {
+            localStorage.setItem(STORAGE_KEYS.expenses, JSON.stringify(state.expenses));
+        }
+
+        function saveSettings() {
+            localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(state.settings));
+        }
+
+        function savePhrases() {
+            localStorage.setItem(STORAGE_KEYS.phrases, JSON.stringify(state.phrases));
+        }
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+        function formatNumber(num) {
+            return num.toLocaleString('en-US');
+        }
+
+        function jpyToPln(jpy) {
+            return jpy / state.settings.exchangeRate;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function getPhraseId(phrase) {
+            return `${phrase.japanese}-${phrase.romaji}`;
+        }
+
+        // ============================================
+        // Storage & Image Functions
+        // ============================================
+        function checkStorageUsage() {
+            let totalSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    totalSize += localStorage[key].length * 2; // UTF-16
+                }
+            }
+            const usedKB = Math.round(totalSize / 1024);
+            const storageEl = document.getElementById('storage-used');
+            if (storageEl) {
+                storageEl.textContent = usedKB > 1024 ? `${(usedKB / 1024).toFixed(1)} MB` : `${usedKB} KB`;
+            }
+
+            const warningEl = document.getElementById('storage-warning');
+            if (warningEl) {
+                if (totalSize > STORAGE_WARNING_THRESHOLD) {
+                    warningEl.classList.add('show');
+                } else {
+                    warningEl.classList.remove('show');
+                }
+            }
+            return totalSize;
+        }
+
+        function compressImage(file, maxSize = MAX_IMAGE_SIZE) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        // Scale down if needed
+                        const maxDim = 800;
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = (height / width) * maxDim;
+                                width = maxDim;
+                            } else {
+                                width = (width / height) * maxDim;
+                                height = maxDim;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Try different quality levels
+                        let quality = 0.7;
+                        let result = canvas.toDataURL('image/jpeg', quality);
+
+                        while (result.length > maxSize && quality > 0.1) {
+                            quality -= 0.1;
+                            result = canvas.toDataURL('image/jpeg', quality);
+                        }
+
+                        resolve(result);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ============================================
+        // Daily Budget Functions
+        // ============================================
+        function getTripDayInfo() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const startDate = new Date(TRIP_CONFIG.startDate);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(TRIP_CONFIG.endDate);
+            endDate.setHours(0, 0, 0, 0);
+
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const daysSinceStart = Math.floor((today - startDate) / msPerDay) + 1;
+
+            if (today < startDate) {
+                const daysUntil = Math.ceil((startDate - today) / msPerDay);
+                return { status: 'before', dayNumber: 0, daysElapsed: 0, daysUntil };
+            } else if (today > endDate) {
+                return { status: 'after', dayNumber: TRIP_CONFIG.totalDays, daysElapsed: TRIP_CONFIG.totalDays };
+            } else {
+                return { status: 'during', dayNumber: daysSinceStart, daysElapsed: daysSinceStart };
+            }
+        }
+
+        function updateDailyBudget() {
+            const tripInfo = getTripDayInfo();
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalPln = jpyToPln(totalJpy);
+
+            const tripDayEl = document.getElementById('trip-day');
+            const tripStatusEl = document.getElementById('trip-status');
+            const shouldSpentEl = document.getElementById('should-spent');
+            const actualSpentEl = document.getElementById('actual-spent');
+            const differenceEl = document.getElementById('daily-difference');
+
+            if (tripInfo.status === 'before') {
+                tripDayEl.textContent = `${tripInfo.daysUntil} days until trip`;
+                tripStatusEl.textContent = 'Before Trip';
+                tripStatusEl.className = 'trip-day-badge before';
+                shouldSpentEl.textContent = '0 PLN';
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                differenceEl.textContent = 'Trip hasn\'t started yet';
+                differenceEl.className = 'daily-difference under';
+            } else if (tripInfo.status === 'after') {
+                tripDayEl.textContent = 'Trip Complete!';
+                tripStatusEl.textContent = 'Finished';
+                tripStatusEl.className = 'trip-day-badge after';
+                const shouldHaveSpent = state.settings.budget;
+                shouldSpentEl.textContent = `${formatNumber(Math.round(shouldHaveSpent))} PLN`;
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                const diff = totalPln - shouldHaveSpent;
+                if (diff <= 0) {
+                    differenceEl.textContent = `Under budget by ${formatNumber(Math.abs(Math.round(diff)))} PLN`;
+                    differenceEl.className = 'daily-difference under';
+                } else {
+                    differenceEl.textContent = `Over budget by ${formatNumber(Math.round(diff))} PLN`;
+                    differenceEl.className = 'daily-difference over';
+                }
+            } else {
+                tripDayEl.textContent = `Day ${tripInfo.dayNumber} of ${TRIP_CONFIG.totalDays}`;
+                tripStatusEl.textContent = 'On Trip';
+                tripStatusEl.className = 'trip-day-badge';
+
+                const dailyTarget = state.settings.budget / TRIP_CONFIG.totalDays;
+                const shouldHaveSpent = dailyTarget * tripInfo.daysElapsed;
+
+                shouldSpentEl.textContent = `${formatNumber(Math.round(shouldHaveSpent))} PLN`;
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                actualSpentEl.className = totalPln <= shouldHaveSpent ? 'daily-stat-value under' : 'daily-stat-value over';
+
+                const diff = totalPln - shouldHaveSpent;
+                if (diff <= 0) {
+                    differenceEl.textContent = `${formatNumber(Math.abs(Math.round(diff)))} PLN under target`;
+                    differenceEl.className = 'daily-difference under';
+                } else {
+                    differenceEl.textContent = `${formatNumber(Math.round(diff))} PLN over target`;
+                    differenceEl.className = 'daily-difference over';
+                }
+            }
+        }
+
+        // ============================================
+        // Category Chart Functions
+        // ============================================
+        function getFilteredExpenses() {
+            if (state.locationFilter === 'all') {
+                return state.expenses;
+            }
+            return state.expenses.filter(e => e.location === state.locationFilter);
+        }
+
+        function updateCategoryChart() {
+            const chartContainer = document.getElementById('chart-bars');
+            const chartSection = document.getElementById('category-chart');
+            const filteredExpenses = getFilteredExpenses();
+
+            // Calculate totals by category
+            const categoryTotals = {};
+            Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = 0);
+
+            filteredExpenses.forEach(e => {
+                categoryTotals[e.category] += e.amount;
+            });
+
+            const totalJpy = Object.values(categoryTotals).reduce((a, b) => a + b, 0);
+
+            // Hide chart if no expenses
+            if (totalJpy === 0) {
+                chartSection.style.display = 'none';
+                return;
+            }
+            chartSection.style.display = 'block';
+
+            // Find max for scaling
+            const maxAmount = Math.max(...Object.values(categoryTotals));
+
+            let html = '';
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const amount = categoryTotals[key];
+                const pln = jpyToPln(amount);
+                const percentage = maxAmount > 0 ? (amount / maxAmount) * 100 : 0;
+
+                html += `
+                    <div class="chart-bar-row">
+                        <div class="chart-bar-label">
+                            <span>${cat.icon}</span>
+                            <span>${cat.label}</span>
+                        </div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar ${key}" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="chart-bar-value">${formatNumber(Math.round(pln))} PLN</div>
+                    </div>
+                `;
+            });
+
+            chartContainer.innerHTML = html;
+        }
+
+        // ============================================
+        // Tab Navigation
+        // ============================================
+        function setupTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const addBtn = document.getElementById('add-expense-btn');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.dataset.tab;
+
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+
+                    // Show/hide add button
+                    addBtn.style.display = tabId === 'expenses' ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // ============================================
+        // Expense Functions
+        // ============================================
+        function renderExpenses() {
+            const container = document.getElementById('expense-list');
+            const filteredExpenses = getFilteredExpenses();
+
+            if (filteredExpenses.length === 0) {
+                const message = state.locationFilter === 'all'
+                    ? 'No expenses yet.<br>Tap + to add one!'
+                    : `No expenses in ${state.locationFilter}`;
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💴</div>
+                        <div class="empty-state-text">${message}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group by date
+            const grouped = {};
+            filteredExpenses.forEach(expense => {
+                if (!grouped[expense.date]) grouped[expense.date] = [];
+                grouped[expense.date].push(expense);
+            });
+
+            // Sort dates descending
+            const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+
+            let html = '';
+            sortedDates.forEach(date => {
+                const dayExpenses = grouped[date];
+                const dayTotalJpy = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+                const dayTotalPln = jpyToPln(dayTotalJpy);
+
+                html += `
+                    <div class="day-group">
+                        <div class="day-header">
+                            <span class="day-date">${formatDate(date)}</span>
+                            <span class="day-total">¥${formatNumber(dayTotalJpy)} (${dayTotalPln.toFixed(2)} PLN)</span>
+                        </div>
+                `;
+
+                dayExpenses.forEach(expense => {
+                    const cat = CATEGORIES[expense.category];
+                    const pln = jpyToPln(expense.amount);
+                    const photoThumb = expense.photo
+                        ? `<img class="expense-photo-thumb" src="${expense.photo}" onclick="viewPhoto('${expense.id}')" alt="Receipt">`
+                        : '';
+                    const locationBadge = expense.location
+                        ? `<span class="expense-location">${expense.location}</span>`
+                        : '';
+
+                    html += `
+                        <div class="expense-item" data-id="${expense.id}">
+                            <div class="expense-info">
+                                <div class="expense-category">
+                                    <span class="category-icon ${cat.class}">${cat.icon}</span>
+                                    ${cat.label}${locationBadge}
+                                </div>
+                                ${expense.note ? `<div class="expense-note">${expense.note}</div>` : ''}
+                            </div>
+                            <div class="expense-amount">
+                                <div class="expense-jpy">¥${formatNumber(expense.amount)}</div>
+                                <div class="expense-pln">${pln.toFixed(2)} PLN</div>
+                            </div>
+                            ${photoThumb}
+                            <button class="expense-delete" onclick="deleteExpense('${expense.id}')">🗑️</button>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function viewPhoto(expenseId) {
+            const expense = state.expenses.find(e => e.id === expenseId);
+            if (expense && expense.photo) {
+                document.getElementById('photo-view-img').src = expense.photo;
+                document.getElementById('photo-view-modal').classList.add('active');
+            }
+        }
+
+        function updateBudgetSummary() {
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalPln = jpyToPln(totalJpy);
+            const remaining = state.settings.budget - totalPln;
+            const percentage = (totalPln / state.settings.budget) * 100;
+
+            document.getElementById('total-spent').textContent = formatNumber(Math.round(totalPln));
+            document.getElementById('total-budget').textContent = formatNumber(state.settings.budget);
+
+            const remainingEl = document.getElementById('remaining-budget');
+            remainingEl.textContent = `${formatNumber(Math.round(remaining))} PLN`;
+            remainingEl.className = `budget-value ${remaining >= 0 ? 'remaining' : 'over'}`;
+
+            const progressBar = document.getElementById('budget-progress-bar');
+            progressBar.style.width = `${Math.min(percentage, 100)}%`;
+            progressBar.className = 'budget-progress-bar';
+            if (percentage > 90) progressBar.classList.add('danger');
+            else if (percentage > 70) progressBar.classList.add('warning');
+
+            // Update additional components
+            updateDailyBudget();
+            updateCategoryChart();
+        }
+
+        function addExpense(expense) {
+            state.expenses.push(expense);
+            saveExpenses();
+            renderExpenses();
+            updateBudgetSummary();
+        }
+
+        function deleteExpense(id) {
+            showConfirm('Delete Expense', 'Are you sure you want to delete this expense?', () => {
+                state.expenses = state.expenses.filter(e => e.id !== id);
+                saveExpenses();
+                renderExpenses();
+                updateBudgetSummary();
+                showToast('Expense deleted');
+            });
+        }
+
+        // ============================================
+        // Modal Functions
+        // ============================================
+        function setupExpenseModal() {
+            const modal = document.getElementById('expense-modal');
+            const addBtn = document.getElementById('add-expense-btn');
+            const closeBtn = document.getElementById('close-modal');
+            const form = document.getElementById('expense-form');
+            const amountInput = document.getElementById('expense-amount');
+            const dateInput = document.getElementById('expense-date');
+            const locationInput = document.getElementById('expense-location');
+            const conversionEl = document.getElementById('amount-conversion');
+            const quickAmountBtns = document.querySelectorAll('.quick-amount-btn');
+
+            // Photo capture elements
+            const photoBtn = document.getElementById('photo-btn');
+            const photoInput = document.getElementById('photo-input');
+            const photoHint = document.getElementById('photo-hint');
+            const photoActions = document.getElementById('photo-actions');
+            const photoRemove = document.getElementById('photo-remove');
+
+            function resetForm() {
+                form.reset();
+                dateInput.value = new Date().toISOString().split('T')[0];
+                locationInput.value = state.lastLocation;
+                conversionEl.textContent = '';
+                state.currentPhoto = null;
+                photoBtn.innerHTML = '📷';
+                photoBtn.classList.remove('has-photo');
+                photoHint.textContent = 'Tap to capture receipt';
+                photoActions.style.display = 'none';
+            }
+
+            // Set defaults
+            dateInput.value = new Date().toISOString().split('T')[0];
+            locationInput.value = state.lastLocation;
+
+            addBtn.addEventListener('click', () => {
+                locationInput.value = state.lastLocation;
+                modal.classList.add('active');
+                amountInput.focus();
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                resetForm();
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    resetForm();
+                }
+            });
+
+            // Photo capture
+            photoBtn.addEventListener('click', () => {
+                if (!state.currentPhoto) {
+                    photoInput.click();
+                }
+            });
+
+            photoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    photoHint.textContent = 'Processing...';
+                    try {
+                        const compressed = await compressImage(file);
+                        state.currentPhoto = compressed;
+                        photoBtn.innerHTML = `<img src="${compressed}" alt="Receipt">`;
+                        photoBtn.classList.add('has-photo');
+                        photoHint.textContent = 'Photo captured';
+                        photoActions.style.display = 'flex';
+                    } catch (err) {
+                        showToast('Failed to process image');
+                        photoHint.textContent = 'Tap to capture receipt';
+                    }
+                }
+            });
+
+            photoRemove.addEventListener('click', () => {
+                state.currentPhoto = null;
+                photoBtn.innerHTML = '📷';
+                photoBtn.classList.remove('has-photo');
+                photoHint.textContent = 'Tap to capture receipt';
+                photoActions.style.display = 'none';
+                photoInput.value = '';
+            });
+
+            // Quick amount buttons
+            quickAmountBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const amount = parseInt(btn.dataset.amount);
+                    amountInput.value = amount;
+                    const pln = jpyToPln(amount);
+                    conversionEl.textContent = `≈ ${pln.toFixed(2)} PLN`;
+                    amountInput.focus();
+                });
+            });
+
+            amountInput.addEventListener('input', () => {
+                const jpy = parseFloat(amountInput.value) || 0;
+                const pln = jpyToPln(jpy);
+                conversionEl.textContent = jpy > 0 ? `≈ ${pln.toFixed(2)} PLN` : '';
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const location = locationInput.value;
+                const expense = {
+                    id: generateId(),
+                    amount: parseFloat(amountInput.value),
+                    category: document.getElementById('expense-category').value,
+                    location: location,
+                    date: dateInput.value,
+                    note: document.getElementById('expense-note').value.trim(),
+                    photo: state.currentPhoto
+                };
+
+                saveLastLocation(location);
+                addExpense(expense);
+                modal.classList.remove('active');
+                resetForm();
+                showToast('Expense added');
+                checkStorageUsage();
+            });
+        }
+
+        function setupPhotoViewModal() {
+            const modal = document.getElementById('photo-view-modal');
+            const closeBtn = document.getElementById('photo-view-close');
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        function setupLocationFilter() {
+            const filter = document.getElementById('location-filter');
+            filter.addEventListener('change', () => {
+                state.locationFilter = filter.value;
+                renderExpenses();
+                updateCategoryChart();
+            });
+        }
+
+        let confirmCallback = null;
+
+        function showConfirm(title, message, callback) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            confirmCallback = callback;
+            modal.classList.add('active');
+        }
+
+        function setupConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            const cancelBtn = document.getElementById('confirm-cancel');
+            const okBtn = document.getElementById('confirm-ok');
+
+            cancelBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                confirmCallback = null;
+            });
+
+            okBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                if (confirmCallback) {
+                    confirmCallback();
+                    confirmCallback = null;
+                }
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    confirmCallback = null;
+                }
+            });
+        }
+
+        // ============================================
+        // Phrase Functions
+        // ============================================
+        function toggleFavorite(phraseId, event) {
+            event.stopPropagation();
+            const idx = state.favorites.indexOf(phraseId);
+            if (idx === -1) {
+                state.favorites.push(phraseId);
+            } else {
+                state.favorites.splice(idx, 1);
+            }
+            saveFavorites();
+            renderPhrases(document.getElementById('phrase-search').value);
+        }
+
+        function renderPhrases(filter = '') {
+            const container = document.getElementById('phrase-list');
+            const filterLower = filter.toLowerCase();
+
+            // Filter phrases
+            const filteredPhrases = state.phrases.filter(phrase => {
+                if (!filter) return true;
+                return phrase.japanese.includes(filter) ||
+                    phrase.romaji.toLowerCase().includes(filterLower) ||
+                    phrase.english.toLowerCase().includes(filterLower);
+            });
+
+            // Separate favorites
+            const favorites = filteredPhrases.filter(p => state.favorites.includes(getPhraseId(p)));
+            const nonFavorites = filteredPhrases.filter(p => !state.favorites.includes(getPhraseId(p)));
+
+            if (filteredPhrases.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <div class="empty-state-text">No phrases found</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+
+            // Render favorites section first
+            if (favorites.length > 0) {
+                html += `
+                    <div class="phrase-category favorites-section">
+                        <div class="phrase-category-title">⭐ Favorites</div>
+                `;
+                favorites.forEach(phrase => {
+                    const phraseId = getPhraseId(phrase);
+                    html += renderPhraseItem(phrase, phraseId, true);
+                });
+                html += '</div>';
+            }
+
+            // Group non-favorites by category
+            const grouped = {};
+            nonFavorites.forEach(phrase => {
+                if (!grouped[phrase.category]) grouped[phrase.category] = [];
+                grouped[phrase.category].push(phrase);
+            });
+
+            Object.keys(grouped).sort().forEach(category => {
+                html += `
+                    <div class="phrase-category">
+                        <div class="phrase-category-title">${category}</div>
+                `;
+
+                grouped[category].forEach(phrase => {
+                    const phraseId = getPhraseId(phrase);
+                    const isFavorite = state.favorites.includes(phraseId);
+                    html += renderPhraseItem(phrase, phraseId, isFavorite);
+                });
+
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderPhraseItem(phrase, phraseId, isFavorite) {
+            const escapedId = phraseId.replace(/'/g, "\\'");
+            return `
+                <div class="phrase-item" onclick="this.classList.toggle('expanded')">
+                    <div class="phrase-item-header">
+                        <div class="phrase-japanese">${phrase.japanese}</div>
+                        <button class="phrase-favorite ${isFavorite ? 'active' : ''}"
+                                onclick="toggleFavorite('${escapedId}', event)">
+                            ${isFavorite ? '⭐' : '☆'}
+                        </button>
+                    </div>
+                    <div class="phrase-details">
+                        <div class="phrase-romaji">${phrase.romaji}</div>
+                        <div class="phrase-english">${phrase.english}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupPhraseSearch() {
+            const searchInput = document.getElementById('phrase-search');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    renderPhrases(searchInput.value);
+                }, 150);
+            });
+        }
+
+        // ============================================
+        // Settings Functions
+        // ============================================
+        function setupSettings() {
+            const rateInput = document.getElementById('exchange-rate');
+            const budgetInput = document.getElementById('budget-input');
+            const exportBtn = document.getElementById('export-btn');
+            const notionBtn = document.getElementById('notion-export-btn');
+            const clearBtn = document.getElementById('clear-btn');
+
+            // Load current values
+            rateInput.value = state.settings.exchangeRate;
+            budgetInput.value = state.settings.budget;
+
+            rateInput.addEventListener('change', () => {
+                state.settings.exchangeRate = parseFloat(rateInput.value) || DEFAULT_SETTINGS.exchangeRate;
+                saveSettings();
+                renderExpenses();
+                updateBudgetSummary();
+                updateCalculatorRate();
+                showToast('Exchange rate updated');
+            });
+
+            budgetInput.addEventListener('change', () => {
+                state.settings.budget = parseFloat(budgetInput.value) || DEFAULT_SETTINGS.budget;
+                saveSettings();
+                updateBudgetSummary();
+                showToast('Budget updated');
+            });
+
+            exportBtn.addEventListener('click', exportToCSV);
+            notionBtn.addEventListener('click', exportToNotion);
+            clearBtn.addEventListener('click', () => {
+                showConfirm('Clear All Data', 'This will delete all expenses and photos. This cannot be undone.', () => {
+                    state.expenses = [];
+                    saveExpenses();
+                    renderExpenses();
+                    updateBudgetSummary();
+                    checkStorageUsage();
+                    showToast('All data cleared');
+                });
+            });
+        }
+
+        function setupCalculator() {
+            const jpyInput = document.getElementById('calc-jpy');
+            const plnInput = document.getElementById('calc-pln');
+            const swapBtn = document.getElementById('calc-swap');
+
+            updateCalculatorRate();
+
+            jpyInput.addEventListener('input', () => {
+                const jpy = parseFloat(jpyInput.value) || 0;
+                const pln = jpyToPln(jpy);
+                plnInput.value = jpy > 0 ? pln.toFixed(2) : '';
+            });
+
+            plnInput.addEventListener('input', () => {
+                const pln = parseFloat(plnInput.value) || 0;
+                const jpy = pln * state.settings.exchangeRate;
+                jpyInput.value = pln > 0 ? Math.round(jpy) : '';
+            });
+
+            swapBtn.addEventListener('click', () => {
+                const jpyVal = jpyInput.value;
+                const plnVal = plnInput.value;
+                jpyInput.value = plnVal ? Math.round(parseFloat(plnVal) * state.settings.exchangeRate) : '';
+                plnInput.value = jpyVal ? jpyToPln(parseFloat(jpyVal)).toFixed(2) : '';
+            });
+        }
+
+        function updateCalculatorRate() {
+            const rateEl = document.getElementById('calc-rate');
+            if (rateEl) {
+                rateEl.textContent = `Rate: 1 PLN = ${state.settings.exchangeRate} JPY`;
+            }
+        }
+
+        function exportToNotion() {
+            if (state.expenses.length === 0) {
+                showToast('No expenses to export');
+                return;
+            }
+
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalPln = jpyToPln(totalJpy);
+
+            // Category breakdown
+            const categoryTotals = {};
+            Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = 0);
+            state.expenses.forEach(e => categoryTotals[e.category] += e.amount);
+
+            // Location breakdown
+            const locationTotals = {};
+            state.expenses.forEach(e => {
+                const loc = e.location || 'Unknown';
+                if (!locationTotals[loc]) locationTotals[loc] = 0;
+                locationTotals[loc] += e.amount;
+            });
+
+            // Daily breakdown
+            const dailyTotals = {};
+            state.expenses.forEach(e => {
+                if (!dailyTotals[e.date]) dailyTotals[e.date] = 0;
+                dailyTotals[e.date] += e.amount;
+            });
+
+            let markdown = `# Japan Trip Expenses Summary\n\n`;
+            markdown += `**Trip Dates:** ${TRIP_CONFIG.startDate} to ${TRIP_CONFIG.endDate}\n`;
+            markdown += `**Budget:** ${formatNumber(state.settings.budget)} PLN\n`;
+            markdown += `**Exchange Rate:** 1 PLN = ${state.settings.exchangeRate} JPY\n\n`;
+
+            markdown += `## Totals\n`;
+            markdown += `- **Total Spent:** ¥${formatNumber(totalJpy)} (${formatNumber(Math.round(totalPln))} PLN)\n`;
+            markdown += `- **Remaining:** ${formatNumber(Math.round(state.settings.budget - totalPln))} PLN\n\n`;
+
+            markdown += `## By Category\n`;
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const amount = categoryTotals[key];
+                const pln = jpyToPln(amount);
+                if (amount > 0) {
+                    markdown += `- ${cat.icon} **${cat.label}:** ¥${formatNumber(amount)} (${formatNumber(Math.round(pln))} PLN)\n`;
+                }
+            });
+
+            markdown += `\n## By Location\n`;
+            Object.entries(locationTotals)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([loc, amount]) => {
+                    const pln = jpyToPln(amount);
+                    markdown += `- **${loc}:** ¥${formatNumber(amount)} (${formatNumber(Math.round(pln))} PLN)\n`;
+                });
+
+            markdown += `\n## Daily Spending\n`;
+            Object.keys(dailyTotals)
+                .sort((a, b) => new Date(a) - new Date(b))
+                .forEach(date => {
+                    const amount = dailyTotals[date];
+                    const pln = jpyToPln(amount);
+                    markdown += `- **${formatDate(date)}:** ¥${formatNumber(amount)} (${formatNumber(Math.round(pln))} PLN)\n`;
+                });
+
+            markdown += `\n---\n_Generated by Japan Companion_`;
+
+            navigator.clipboard.writeText(markdown).then(() => {
+                showToast('Copied to clipboard! Paste in Notion.');
+            }).catch(() => {
+                showToast('Failed to copy');
+            });
+        }
+
+        function exportToCSV() {
+            if (state.expenses.length === 0) {
+                showToast('No expenses to export');
+                return;
+            }
+
+            const headers = ['Date', 'Location', 'Category', 'Amount (JPY)', 'Amount (PLN)', 'Note'];
+            const rows = state.expenses.map(e => [
+                e.date,
+                e.location || 'Unknown',
+                CATEGORIES[e.category].label,
+                e.amount,
+                jpyToPln(e.amount).toFixed(2),
+                `"${(e.note || '').replace(/"/g, '""')}"`
+            ]);
+
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `japan-expenses-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showToast('Expenses exported');
+        }
+
+        // ============================================
+        // Initialize
+        // ============================================
+        function init() {
+            loadData();
+            setupTabs();
+            setupExpenseModal();
+            setupConfirmModal();
+            setupPhotoViewModal();
+            setupLocationFilter();
+            setupCalculator();
+            setupPhraseSearch();
+            setupSettings();
+            renderExpenses();
+            renderPhrases();
+            updateBudgetSummary();
+
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log('Service Worker registered'))
+                    .catch(err => console.error('SW registration failed:', err));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
