@@ -1453,12 +1453,12 @@
             gap: var(--space-sm);
         }
 
-        .phrase-japanese {
-            font-family: 'Zen Kaku Gothic New', sans-serif;
-            font-size: 1.15rem;
+        .phrase-english-main {
+            font-size: 1rem;
             font-weight: 500;
             line-height: 1.4;
             flex: 1;
+            color: var(--text-primary);
         }
 
         .phrase-favorite-btn {
@@ -1491,16 +1491,19 @@
             animation: slideDown var(--duration-fast) var(--ease-out-expo);
         }
 
+        .phrase-japanese {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            line-height: 1.5;
+        }
+
         .phrase-romaji {
             font-size: 0.9rem;
             color: var(--sakura-400);
-            margin-bottom: var(--space-xs);
             font-style: italic;
-        }
-
-        .phrase-english {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
         }
 
         /* ============================================
@@ -2772,7 +2775,7 @@
         <div class="container">
             <div class="search-box">
                 <div class="search-input-wrapper">
-                    <input type="text" class="search-input" id="phrase-search" placeholder="Search phrases...">
+                    <input type="text" class="search-input" id="phrase-search" placeholder="Search in English... e.g. 'thank you'">
                 </div>
             </div>
             <div id="phrase-list"></div>
@@ -4532,15 +4535,15 @@
             return `
                 <div class="phrase-item" data-phrase-id="${escapedId}">
                     <div class="phrase-header">
-                        <div class="phrase-japanese">${escapedJapanese}</div>
+                        <div class="phrase-english-main">${escapedEnglish}</div>
                         <button class="phrase-favorite-btn ${isFavorite ? 'active' : ''}"
                                 data-action="toggle-favorite" data-phrase-id="${escapedId}">
                             ${isFavorite ? '⭐' : '☆'}
                         </button>
                     </div>
                     <div class="phrase-details">
+                        <div class="phrase-japanese">${escapedJapanese}</div>
                         <div class="phrase-romaji">${escapedRomaji}</div>
-                        <div class="phrase-english">${escapedEnglish}</div>
                         <div class="phrase-actions">
                             <button class="phrase-action-btn" data-action="speak" data-text="${escapedJapanese}">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

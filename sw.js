@@ -1,4 +1,4 @@
-const CACHE_NAME = 'japan-companion-v8';
+const CACHE_NAME = 'japan-companion-v9';
 const ASSETS = [
   './',
   './index.html',
