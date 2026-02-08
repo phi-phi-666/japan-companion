@@ -817,18 +817,30 @@
         }
 
         .expense-photo-thumb {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: var(--radius-sm);
             object-fit: cover;
             flex-shrink: 0;
             cursor: pointer;
+            background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform var(--duration-fast);
+            transition: transform var(--duration-fast), background var(--duration-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
         }
 
         .expense-photo-thumb:hover {
             transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .gallery-loading, .gallery-empty {
+            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--text-tertiary);
         }
 
         .expense-delete {
@@ -2501,6 +2513,67 @@
             color: var(--ai-400);
             margin-left: var(--space-xs);
         }
+
+        /* Recurring Toggle in Form */
+        .recurring-toggle-group {
+            padding: var(--space-md);
+            background: rgba(74, 124, 155, 0.08);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(74, 124, 155, 0.2);
+        }
+
+        .recurring-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            cursor: pointer;
+        }
+
+        .recurring-toggle input {
+            display: none;
+        }
+
+        .recurring-toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--sumi-600);
+            border-radius: var(--radius-full);
+            transition: background var(--duration-fast);
+            flex-shrink: 0;
+        }
+
+        .recurring-toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .recurring-toggle input:checked + .recurring-toggle-switch {
+            background: var(--ai-400);
+        }
+
+        .recurring-toggle input:checked + .recurring-toggle-switch::after {
+            transform: translateX(20px);
+        }
+
+        .recurring-toggle-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .recurring-hint {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-top: var(--space-sm);
+            margin-left: 60px;
+        }
     </style>
 </head>
 <body>
@@ -3006,6 +3079,14 @@
                     <label class="form-label">Note (optional)</label>
                     <textarea class="form-textarea" id="expense-note" placeholder="What was this for?"></textarea>
                 </div>
+                <div class="form-group recurring-toggle-group">
+                    <label class="recurring-toggle">
+                        <input type="checkbox" id="expense-recurring">
+                        <span class="recurring-toggle-switch"></span>
+                        <span class="recurring-toggle-label">🔄 Repeat daily until trip ends</span>
+                    </label>
+                    <div class="recurring-hint">Auto-creates this expense for remaining trip days</div>
+                </div>
                 <div class="form-group">
                     <label class="form-label">Receipt Photo (optional)</label>
                     <div class="photo-capture">
@@ -3091,6 +3172,106 @@
             totalDays: 24,
             dailyBudget: 40000 / 24
         };
+
+        // ============================================
+        // IndexedDB for Photos
+        // ============================================
+        const DB_NAME = 'JapanCompanionDB';
+        const DB_VERSION = 1;
+        const PHOTO_STORE = 'photos';
+        let db = null;
+
+        function openDatabase() {
+            return new Promise((resolve, reject) => {
+                if (db) {
+                    resolve(db);
+                    return;
+                }
+
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    const database = event.target.result;
+                    if (!database.objectStoreNames.contains(PHOTO_STORE)) {
+                        database.createObjectStore(PHOTO_STORE, { keyPath: 'expenseId' });
+                    }
+                };
+            });
+        }
+
+        async function savePhoto(expenseId, photoData) {
+            const database = await openDatabase();
+            return new Promise((resolve, reject) => {
+                const transaction = database.transaction([PHOTO_STORE], 'readwrite');
+                const store = transaction.objectStore(PHOTO_STORE);
+                const request = store.put({ expenseId, photo: photoData, timestamp: Date.now() });
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function getPhoto(expenseId) {
+            const database = await openDatabase();
+            return new Promise((resolve, reject) => {
+                const transaction = database.transaction([PHOTO_STORE], 'readonly');
+                const store = transaction.objectStore(PHOTO_STORE);
+                const request = store.get(expenseId);
+                request.onsuccess = () => resolve(request.result?.photo || null);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function deletePhoto(expenseId) {
+            const database = await openDatabase();
+            return new Promise((resolve, reject) => {
+                const transaction = database.transaction([PHOTO_STORE], 'readwrite');
+                const store = transaction.objectStore(PHOTO_STORE);
+                const request = store.delete(expenseId);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        async function getAllPhotos() {
+            const database = await openDatabase();
+            return new Promise((resolve, reject) => {
+                const transaction = database.transaction([PHOTO_STORE], 'readonly');
+                const store = transaction.objectStore(PHOTO_STORE);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        // Migrate existing photos from localStorage to IndexedDB
+        async function migratePhotosToIndexedDB() {
+            try {
+                await openDatabase();
+                let migrated = 0;
+
+                for (const expense of state.expenses) {
+                    if (expense.photo && expense.photo.startsWith('data:')) {
+                        await savePhoto(expense.id, expense.photo);
+                        expense.hasPhoto = true;
+                        delete expense.photo;
+                        migrated++;
+                    }
+                }
+
+                if (migrated > 0) {
+                    saveExpenses();
+                    console.log(`Migrated ${migrated} photos to IndexedDB`);
+                }
+            } catch (e) {
+                console.error('Photo migration failed:', e);
+            }
+        }
 
         const CATEGORIES = {
             food: { icon: '🍜', label: 'Food' },
@@ -3560,8 +3741,8 @@
             const container = document.getElementById('expense-list');
             const filteredExpenses = getFilteredExpenses();
 
-            // Update photo count for gallery
-            const photoCount = state.expenses.filter(e => e.photo).length;
+            // Update photo count for gallery (supports both old and new format)
+            const photoCount = state.expenses.filter(e => e.hasPhoto || e.photo).length;
             const photoCountEl = document.getElementById('photo-count');
             if (photoCountEl) photoCountEl.textContent = photoCount;
 
@@ -3607,8 +3788,10 @@
                 dayExpenses.forEach(expense => {
                     const cat = CATEGORIES[expense.category] || CATEGORIES.misc;
                     const pln = expenseJpyToPln(expense);
-                    const photoThumb = expense.photo
-                        ? `<img class="expense-photo-thumb" data-action="view-photo" data-id="${expense.id}" src="${expense.photo}" alt="Receipt">`
+                    // Support both old (inline photo) and new (hasPhoto flag) format
+                    const hasPhoto = expense.hasPhoto || expense.photo;
+                    const photoThumb = hasPhoto
+                        ? `<div class="expense-photo-thumb" data-action="view-photo" data-id="${expense.id}">📷</div>`
                         : '';
                     const locationBadge = expense.location
                         ? `<span class="expense-location-badge">${escapeHtml(expense.location)}</span>`
@@ -3716,11 +3899,34 @@
             });
         }
 
-        function viewPhoto(expenseId) {
+        async function viewPhoto(expenseId) {
             const expense = state.expenses.find(e => e.id === expenseId);
-            if (expense && expense.photo) {
-                document.getElementById('photo-view-img').src = expense.photo;
-                document.getElementById('photo-view-modal').classList.add('active');
+            if (!expense) return;
+
+            const modal = document.getElementById('photo-view-modal');
+            const img = document.getElementById('photo-view-img');
+
+            // Try IndexedDB first, then fall back to inline photo (migration support)
+            let photoData = null;
+
+            if (expense.hasPhoto) {
+                try {
+                    photoData = await getPhoto(expenseId);
+                } catch (e) {
+                    console.error('Failed to load photo from IndexedDB:', e);
+                }
+            }
+
+            // Fall back to inline photo for old format
+            if (!photoData && expense.photo) {
+                photoData = expense.photo;
+            }
+
+            if (photoData) {
+                img.src = photoData;
+                modal.classList.add('active');
+            } else {
+                showToast('Photo not found');
             }
         }
 
@@ -3763,12 +3969,19 @@
             vibrate(10);
         }
 
-        function deleteExpense(id) {
+        async function deleteExpense(id) {
             const expense = state.expenses.find(e => e.id === id);
             if (!expense) return;
 
-            // Store for undo
+            // Store for undo (including photo data if exists)
             state.deletedExpense = { ...expense };
+            if (expense.hasPhoto) {
+                try {
+                    state.deletedExpense.photoBackup = await getPhoto(id);
+                } catch (e) {
+                    console.error('Failed to backup photo:', e);
+                }
+            }
             const deletedIndex = state.expenses.findIndex(e => e.id === id);
 
             state.expenses = state.expenses.filter(e => e.id !== id);
@@ -3778,9 +3991,24 @@
             updateBudgetSummary();
             vibrate(15);
 
-            showToast('Expense deleted', () => {
+            // Delete photo from IndexedDB (but keep backup for undo)
+            if (expense.hasPhoto) {
+                deletePhoto(id).catch(e => console.error('Failed to delete photo:', e));
+            }
+
+            showToast('Expense deleted', async () => {
                 // Undo callback
                 if (state.deletedExpense) {
+                    // Restore photo if we have backup
+                    if (state.deletedExpense.photoBackup) {
+                        try {
+                            await savePhoto(state.deletedExpense.id, state.deletedExpense.photoBackup);
+                            delete state.deletedExpense.photoBackup;
+                        } catch (e) {
+                            console.error('Failed to restore photo:', e);
+                        }
+                    }
+
                     state.expenses.splice(deletedIndex, 0, state.deletedExpense);
                     state.deletedExpense = null;
                     invalidateFilterCache();
@@ -3850,13 +4078,47 @@
 
             if (!galleryBtn) return;
 
-            galleryBtn.addEventListener('click', () => {
-                const photosWithData = state.expenses.filter(e => e.photo).map(e => ({
-                    id: e.id,
-                    photo: e.photo,
-                    date: e.date,
-                    category: e.category
-                }));
+            galleryBtn.addEventListener('click', async () => {
+                // Get expenses with photos (both old and new format)
+                const expensesWithPhotos = state.expenses.filter(e => e.hasPhoto || e.photo);
+
+                if (expensesWithPhotos.length === 0) {
+                    galleryGrid.innerHTML = '<div class="gallery-empty">No receipts yet</div>';
+                    galleryModal.classList.add('active');
+                    return;
+                }
+
+                // Show loading state
+                galleryGrid.innerHTML = '<div class="gallery-loading">Loading photos...</div>';
+                galleryModal.classList.add('active');
+
+                // Load photos from IndexedDB
+                const photosWithData = [];
+                for (const expense of expensesWithPhotos) {
+                    let photoData = null;
+
+                    if (expense.hasPhoto) {
+                        try {
+                            photoData = await getPhoto(expense.id);
+                        } catch (e) {
+                            console.error('Failed to load photo:', e);
+                        }
+                    }
+
+                    // Fall back to inline photo
+                    if (!photoData && expense.photo) {
+                        photoData = expense.photo;
+                    }
+
+                    if (photoData) {
+                        photosWithData.push({
+                            id: expense.id,
+                            photo: photoData,
+                            date: expense.date,
+                            category: expense.category
+                        });
+                    }
+                }
 
                 galleryGrid.innerHTML = photosWithData.map(p => `
                     <div class="gallery-item" data-id="${p.id}">
@@ -3871,8 +4133,6 @@
                         viewPhoto(item.dataset.id);
                     });
                 });
-
-                galleryModal.classList.add('active');
             });
 
             galleryClose.addEventListener('click', () => {
@@ -3916,6 +4176,7 @@
                 photoBtn.classList.remove('has-photo');
                 photoHint.textContent = 'Tap to capture receipt';
                 photoActions.classList.add('hidden');
+                document.getElementById('expense-recurring').checked = false;
             }
 
             dateInput.value = new Date().toISOString().split('T')[0];
@@ -3992,24 +4253,78 @@
                 e.preventDefault();
 
                 const location = locationInput.value;
-                const expense = {
-                    id: generateId(),
-                    amount: parseFloat(amountInput.value),
-                    category: document.getElementById('expense-category').value,
-                    location: location,
-                    date: dateInput.value,
-                    note: document.getElementById('expense-note').value.trim(),
-                    photo: state.currentPhoto,
-                    exchangeRate: state.settings.exchangeRate
-                };
+                const isRecurring = document.getElementById('expense-recurring').checked;
+                const startDate = dateInput.value;
+                const amount = parseFloat(amountInput.value);
+                const category = document.getElementById('expense-category').value;
+                const note = document.getElementById('expense-note').value.trim();
 
-                saveLastLocation(location);
-                addExpense(expense);
+                if (isRecurring) {
+                    // Create expenses for each remaining day of the trip
+                    const expenses = createRecurringExpenses({
+                        amount,
+                        category,
+                        location,
+                        note,
+                        startDate,
+                        exchangeRate: state.settings.exchangeRate
+                    });
+
+                    expenses.forEach(exp => addExpense(exp));
+                    showToast(`Added ${expenses.length} recurring expenses ✨`);
+                } else {
+                    // Single expense
+                    const expenseId = generateId();
+                    const expense = {
+                        id: expenseId,
+                        amount,
+                        category,
+                        location,
+                        date: startDate,
+                        note,
+                        hasPhoto: !!state.currentPhoto,
+                        exchangeRate: state.settings.exchangeRate
+                    };
+
+                    // Save photo to IndexedDB if present
+                    if (state.currentPhoto) {
+                        savePhoto(expenseId, state.currentPhoto).catch(e => {
+                            console.error('Failed to save photo:', e);
+                        });
+                    }
+
+                    saveLastLocation(location);
+                    addExpense(expense);
+                    showToast('Expense added ✨');
+                }
+
                 modal.classList.remove('active');
                 resetForm();
-                showToast('Expense added ✨');
                 checkStorageUsage();
             });
+        }
+
+        function createRecurringExpenses({ amount, category, location, note, startDate, exchangeRate }) {
+            const expenses = [];
+            const start = new Date(startDate);
+            const end = new Date(TRIP_CONFIG.endDate);
+
+            // Create an expense for each day from start to trip end
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                const dateStr = d.toISOString().split('T')[0];
+                expenses.push({
+                    id: generateId(),
+                    amount,
+                    category,
+                    location,
+                    date: dateStr,
+                    note: note ? `${note} (recurring)` : '(recurring)',
+                    recurring: true,
+                    exchangeRate
+                });
+            }
+
+            return expenses;
         }
 
         function setupPhotoViewModal() {
@@ -4854,6 +5169,7 @@
             }
 
             loadData();
+            migratePhotosToIndexedDB(); // Migrate old inline photos to IndexedDB
             setupTabs();
             setupExpenseModal();
             setupConfirmModal();
