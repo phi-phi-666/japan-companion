@@ -1,0 +1,4151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1625">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Japan Companion</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Fonts: Zen Kaku Gothic for Japanese feel, Plus Jakarta Sans for modern body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ============================================
+           CSS Custom Properties — Japanese Color Palette
+           ============================================ */
+        :root {
+            /* Sumi (Ink) - Deep backgrounds */
+            --sumi-900: #0d0b12;
+            --sumi-800: #1a1625;
+            --sumi-700: #252131;
+            --sumi-600: #322d40;
+
+            /* Kinari (Unbleached silk) - Warm light tones */
+            --kinari-100: #faf8f5;
+            --kinari-200: #f5f1eb;
+            --kinari-300: #e8e2d9;
+
+            /* Sakura (Cherry blossom) - Pink accents */
+            --sakura-100: #fff0f3;
+            --sakura-200: #ffd6e0;
+            --sakura-300: #ffb3c6;
+            --sakura-400: #ff8fab;
+            --sakura-500: #e05780;
+
+            /* Ai (Indigo) - Blue accents */
+            --ai-100: #e8f4fc;
+            --ai-200: #b8d4e8;
+            --ai-300: #6b9cc3;
+            --ai-400: #4a7c9b;
+            --ai-500: #2d5a7b;
+            --ai-600: #1e3a5f;
+
+            /* Shu (Vermillion) - Red accents */
+            --shu-400: #e63946;
+            --shu-500: #c1121f;
+            --shu-600: #9b1b1b;
+
+            /* Matcha - Green accents */
+            --matcha-300: #a8d5ba;
+            --matcha-400: #7bc47f;
+            --matcha-500: #52a356;
+
+            /* Kitsune (Fox) - Amber/Gold accents */
+            --kitsune-300: #ffd166;
+            --kitsune-400: #f4a926;
+            --kitsune-500: #e07b00;
+
+            /* Fuji (Wisteria) - Purple accents */
+            --fuji-300: #c9b8d9;
+            --fuji-400: #a78bba;
+            --fuji-500: #7b5b9a;
+
+            /* Semantic colors */
+            --bg-primary: var(--sumi-900);
+            --bg-secondary: var(--sumi-800);
+            --bg-elevated: var(--sumi-700);
+            --bg-card: rgba(37, 33, 49, 0.7);
+            --bg-glass: rgba(26, 22, 37, 0.85);
+
+            --text-primary: var(--kinari-100);
+            --text-secondary: rgba(250, 248, 245, 0.65);
+            --text-tertiary: rgba(250, 248, 245, 0.4);
+
+            --accent-primary: var(--sakura-400);
+            --accent-secondary: var(--ai-400);
+            --success: var(--matcha-400);
+            --warning: var(--kitsune-400);
+            --danger: var(--shu-400);
+
+            /* Category colors */
+            --cat-food: var(--kitsune-400);
+            --cat-transport: var(--ai-400);
+            --cat-accommodation: var(--fuji-400);
+            --cat-activities: var(--matcha-400);
+            --cat-misc: var(--kinari-300);
+
+            /* Spacing scale */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 16px;
+            --space-lg: 24px;
+            --space-xl: 32px;
+            --space-2xl: 48px;
+
+            /* Border radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --radius-full: 9999px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.35);
+            --shadow-glow: 0 0 30px rgba(255, 143, 171, 0.15);
+
+            /* Transitions */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --duration-fast: 150ms;
+            --duration-normal: 300ms;
+            --duration-slow: 500ms;
+        }
+
+        /* Light Theme */
+        [data-theme="light"] {
+            --bg-primary: var(--kinari-100);
+            --bg-secondary: var(--kinari-200);
+            --bg-elevated: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-glass: rgba(255, 255, 255, 0.9);
+
+            --text-primary: var(--sumi-800);
+            --text-secondary: rgba(26, 22, 37, 0.65);
+            --text-tertiary: rgba(26, 22, 37, 0.4);
+
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
+            --shadow-glow: 0 0 30px rgba(224, 87, 128, 0.1);
+        }
+
+        [data-theme="light"] body::before {
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(255, 143, 171, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(74, 124, 155, 0.08) 0%, transparent 50%);
+        }
+
+        [data-theme="light"] body::after {
+            opacity: 0.03;
+        }
+
+        /* ============================================
+           Base Styles & Reset
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-bottom: 100px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle ink wash texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 0%, rgba(255, 143, 171, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(74, 124, 155, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle noise texture */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            opacity: 0.015;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ============================================
+           Typography
+           ============================================ */
+        .font-display {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+        }
+
+        .font-serif {
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        /* ============================================
+           Animations
+           ============================================ */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 143, 171, 0.2); }
+            50% { box-shadow: 0 0 35px rgba(255, 143, 171, 0.35); }
+        }
+
+        .animate-in {
+            animation: slideUp var(--duration-slow) var(--ease-out-expo) forwards;
+        }
+
+        .stagger-1 { animation-delay: 50ms; }
+        .stagger-2 { animation-delay: 100ms; }
+        .stagger-3 { animation-delay: 150ms; }
+        .stagger-4 { animation-delay: 200ms; }
+        .stagger-5 { animation-delay: 250ms; }
+
+        /* ============================================
+           Header
+           ============================================ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: var(--space-md) var(--space-lg);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .header-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--sakura-400), var(--sakura-500));
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+        }
+
+        .header-date {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* ============================================
+           Main Container
+           ============================================ */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* ============================================
+           Budget Summary Card
+           ============================================ */
+        .budget-card {
+            position: relative;
+            margin: var(--space-lg) 0;
+            padding: var(--space-lg);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+        }
+
+        /* Decorative element - subtle asanoha pattern hint */
+        .budget-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--sakura-400) 0%, transparent 70%);
+            opacity: 0.08;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .budget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-lg);
+        }
+
+        .budget-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-xs);
+        }
+
+        .budget-amount {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--kinari-100), var(--sakura-300));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .budget-amount.over {
+            background: linear-gradient(135deg, var(--shu-400), var(--kitsune-400));
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .budget-currency {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-left: var(--space-xs);
+        }
+
+        .budget-progress-container {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            margin-bottom: var(--space-md);
+        }
+
+        .budget-progress-bar {
+            height: 100%;
+            border-radius: var(--radius-full);
+            background: linear-gradient(90deg, var(--matcha-400), var(--matcha-300));
+            transition: width var(--duration-slow) var(--ease-out-expo),
+                        background var(--duration-normal);
+            position: relative;
+        }
+
+        .budget-progress-bar::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        .budget-progress-bar.warning {
+            background: linear-gradient(90deg, var(--kitsune-400), var(--kitsune-300));
+        }
+
+        .budget-progress-bar.danger {
+            background: linear-gradient(90deg, var(--shu-400), var(--sakura-400));
+        }
+
+        .budget-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .budget-stat {
+            color: var(--text-secondary);
+        }
+
+        .budget-stat strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ============================================
+           Daily Budget Indicator
+           ============================================ */
+        .daily-card {
+            margin-bottom: var(--space-lg);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .daily-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .trip-day {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .trip-badge {
+            padding: var(--space-xs) var(--space-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: var(--radius-full);
+            background: linear-gradient(135deg, var(--sakura-400), var(--sakura-500));
+            color: white;
+        }
+
+        .trip-badge.before {
+            background: var(--sumi-600);
+            color: var(--text-secondary);
+        }
+
+        .trip-badge.after {
+            background: var(--ai-500);
+        }
+
+        .daily-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-sm);
+        }
+
+        .daily-stat-box {
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .daily-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-xs);
+        }
+
+        .daily-stat-value {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .daily-stat-value.under { color: var(--matcha-400); }
+        .daily-stat-value.over { color: var(--shu-400); }
+
+        .daily-difference {
+            margin-top: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .daily-difference.under {
+            background: rgba(123, 196, 127, 0.12);
+            color: var(--matcha-400);
+            border: 1px solid rgba(123, 196, 127, 0.2);
+        }
+
+        .daily-difference.over {
+            background: rgba(230, 57, 70, 0.12);
+            color: var(--shu-400);
+            border: 1px solid rgba(230, 57, 70, 0.2);
+        }
+
+        /* ============================================
+           Category Chart
+           ============================================ */
+        .chart-card {
+            margin-bottom: var(--space-lg);
+            padding: var(--space-lg);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .chart-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .chart-title::before {
+            content: '';
+            width: 3px;
+            height: 12px;
+            background: var(--sakura-400);
+            border-radius: 2px;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+            padding: var(--space-sm) 0;
+        }
+
+        .chart-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .chart-icon.food { background: rgba(244, 169, 38, 0.15); }
+        .chart-icon.transport { background: rgba(74, 124, 155, 0.15); }
+        .chart-icon.accommodation { background: rgba(167, 139, 186, 0.15); }
+        .chart-icon.activities { background: rgba(123, 196, 127, 0.15); }
+        .chart-icon.misc { background: rgba(232, 226, 217, 0.15); }
+
+        .chart-label {
+            width: 80px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .chart-bar-container {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            height: 100%;
+            border-radius: var(--radius-full);
+            transition: width var(--duration-slow) var(--ease-out-expo);
+        }
+
+        .chart-bar.food { background: linear-gradient(90deg, var(--kitsune-400), var(--kitsune-300)); }
+        .chart-bar.transport { background: linear-gradient(90deg, var(--ai-400), var(--ai-300)); }
+        .chart-bar.accommodation { background: linear-gradient(90deg, var(--fuji-400), var(--fuji-300)); }
+        .chart-bar.activities { background: linear-gradient(90deg, var(--matcha-400), var(--matcha-300)); }
+        .chart-bar.misc { background: linear-gradient(90deg, var(--kinari-300), var(--kinari-200)); }
+
+        .chart-value {
+            width: 70px;
+            text-align: right;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        /* ============================================
+           Location Filter
+           ============================================ */
+        .filter-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: var(--space-md);
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23faf8f5' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            transition: border-color var(--duration-fast);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--sakura-400);
+        }
+
+        /* ============================================
+           Storage Warning
+           ============================================ */
+        .storage-warning {
+            display: none;
+            margin-bottom: var(--space-lg);
+            padding: var(--space-md);
+            background: rgba(244, 169, 38, 0.1);
+            border: 1px solid rgba(244, 169, 38, 0.25);
+            border-radius: var(--radius-md);
+            color: var(--kitsune-400);
+            font-size: 0.85rem;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .storage-warning.show {
+            display: flex;
+        }
+
+        /* ============================================
+           Expense List
+           ============================================ */
+        .expense-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .day-group {
+            margin-bottom: var(--space-xl);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .day-date {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .day-total {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .expense-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: transform var(--duration-fast) var(--ease-out-expo),
+                        border-color var(--duration-fast);
+        }
+
+        .expense-item:active {
+            transform: scale(0.98);
+        }
+
+        .expense-item:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .expense-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .expense-icon.food { background: rgba(244, 169, 38, 0.12); }
+        .expense-icon.transport { background: rgba(74, 124, 155, 0.12); }
+        .expense-icon.accommodation { background: rgba(167, 139, 186, 0.12); }
+        .expense-icon.activities { background: rgba(123, 196, 127, 0.12); }
+        .expense-icon.misc { background: rgba(232, 226, 217, 0.12); }
+
+        .expense-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .expense-title {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .expense-location-badge {
+            font-size: 0.65rem;
+            font-weight: 500;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+        }
+
+        .expense-note {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .expense-amount-col {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .expense-amount-jpy {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .expense-amount-pln {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .expense-photo-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            object-fit: cover;
+            flex-shrink: 0;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform var(--duration-fast);
+        }
+
+        .expense-photo-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        .expense-delete {
+            padding: var(--space-sm);
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: color var(--duration-fast), background var(--duration-fast);
+            flex-shrink: 0;
+        }
+
+        .expense-delete:hover {
+            color: var(--shu-400);
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-2xl) var(--space-lg);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .empty-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           Tab Navigation
+           ============================================ */
+        .tab-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 100;
+        }
+
+        .tab-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: var(--space-sm) var(--space-xs);
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 0.65rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color var(--duration-fast);
+            position: relative;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 24px;
+            height: 2px;
+            background: var(--sakura-400);
+            border-radius: 2px;
+            transition: transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .tab-btn.active {
+            color: var(--sakura-400);
+        }
+
+        .tab-btn.active::before {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        .tab-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 1.5;
+        }
+
+        /* ============================================
+           Floating Action Button
+           ============================================ */
+        .fab {
+            position: fixed;
+            bottom: 85px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--sakura-400), var(--sakura-500));
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--duration-fast) var(--ease-out-back),
+                        box-shadow var(--duration-fast);
+        }
+
+        .fab:hover {
+            transform: scale(1.05);
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        .fab svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5;
+        }
+
+        /* ============================================
+           Tab Content
+           ============================================ */
+        .tab-content {
+            display: none;
+            opacity: 0;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn var(--duration-normal) var(--ease-out-expo) forwards;
+        }
+
+        /* ============================================
+           Modal
+           ============================================ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 11, 18, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn var(--duration-fast) forwards;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: var(--sumi-800);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            padding: var(--space-lg);
+            animation: slideUp var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 50%;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            transition: background var(--duration-fast);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ============================================
+           Form Elements
+           ============================================ */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color var(--duration-fast), background var(--duration-fast);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--sakura-400);
+            background: rgba(255, 143, 171, 0.05);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23faf8f5' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            cursor: pointer;
+        }
+
+        .amount-wrapper {
+            position: relative;
+        }
+
+        .amount-wrapper .form-input {
+            padding-left: 44px;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .amount-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .amount-conversion {
+            margin-top: var(--space-sm);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        /* Quick Amount Buttons */
+        .quick-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .quick-btn {
+            flex: 1;
+            min-width: calc(33.333% - 6px);
+            padding: var(--space-sm) var(--space-xs);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            cursor: pointer;
+            text-align: center;
+            transition: all var(--duration-fast);
+        }
+
+        .quick-btn:active {
+            background: var(--sakura-400);
+            border-color: var(--sakura-400);
+            transform: scale(0.96);
+        }
+
+        .quick-btn-amount {
+            display: block;
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .quick-btn-label {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        /* Photo Capture */
+        .photo-capture {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .photo-btn {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all var(--duration-fast);
+            overflow: hidden;
+        }
+
+        .photo-btn:hover {
+            border-color: var(--sakura-400);
+            color: var(--sakura-400);
+        }
+
+        .photo-btn.has-photo {
+            border: none;
+            padding: 0;
+        }
+
+        .photo-btn.has-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-hint {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        .photo-remove {
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--shu-500);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            width: 100%;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--sakura-400), var(--sakura-500));
+            border: none;
+            border-radius: var(--radius-md);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: transform var(--duration-fast), box-shadow var(--duration-fast);
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background var(--duration-fast);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-danger {
+            background: var(--shu-600);
+            color: white;
+        }
+
+        /* ============================================
+           Confirm Dialog
+           ============================================ */
+        .confirm-dialog {
+            background: var(--sumi-700);
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            max-width: 320px;
+            margin: auto;
+            animation: scaleIn var(--duration-normal) var(--ease-out-back);
+        }
+
+        .confirm-dialog h3 {
+            font-size: 1.1rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .confirm-dialog p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-lg);
+            line-height: 1.5;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .confirm-buttons button {
+            flex: 1;
+        }
+
+        /* ============================================
+           Photo View Modal
+           ============================================ */
+        .photo-view-modal {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-view-content {
+            max-width: 95vw;
+            max-height: 85vh;
+        }
+
+        .photo-view-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .photo-view-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* ============================================
+           Toast
+           ============================================ */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: var(--space-md) var(--space-lg);
+            background: var(--sumi-600);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            opacity: 0;
+            pointer-events: none;
+            transition: all var(--duration-normal) var(--ease-out-expo);
+            z-index: 300;
+            box-shadow: var(--shadow-md);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* ============================================
+           Phrase Bank Tab
+           ============================================ */
+        .search-box {
+            position: sticky;
+            top: 60px;
+            z-index: 50;
+            padding: var(--space-md) 0;
+            background: var(--bg-primary);
+        }
+
+        .search-input-wrapper {
+            position: relative;
+        }
+
+        .search-input-wrapper::before {
+            content: '🔍';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.5;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--space-md) var(--space-md) var(--space-md) 44px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--sakura-400);
+        }
+
+        .phrase-section {
+            margin-bottom: var(--space-xl);
+        }
+
+        .phrase-category-title {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .favorites-section .phrase-category-title {
+            color: var(--kitsune-400);
+        }
+
+        .phrase-item {
+            padding: var(--space-md);
+            margin-bottom: var(--space-sm);
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: border-color var(--duration-fast);
+        }
+
+        .phrase-item:active {
+            border-color: var(--sakura-400);
+        }
+
+        .phrase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--space-sm);
+        }
+
+        .phrase-japanese {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 500;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .phrase-favorite-btn {
+            padding: var(--space-xs);
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            opacity: 0.3;
+            transition: opacity var(--duration-fast), transform var(--duration-fast);
+        }
+
+        .phrase-favorite-btn.active {
+            opacity: 1;
+        }
+
+        .phrase-favorite-btn:active {
+            transform: scale(1.2);
+        }
+
+        .phrase-details {
+            display: none;
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .phrase-item.expanded .phrase-details {
+            display: block;
+            animation: slideDown var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .phrase-romaji {
+            font-size: 0.9rem;
+            color: var(--sakura-400);
+            margin-bottom: var(--space-xs);
+            font-style: italic;
+        }
+
+        .phrase-english {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           Calculator Tab
+           ============================================ */
+        .calculator-section {
+            padding: var(--space-xl) 0;
+        }
+
+        .calculator-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: var(--space-xl);
+            text-align: center;
+        }
+
+        .calculator-title {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+
+        .calc-row {
+            margin-bottom: var(--space-md);
+        }
+
+        .calc-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .calc-flag {
+            font-size: 1.25rem;
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: var(--space-lg);
+            background: rgba(255, 255, 255, 0.04);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            transition: border-color var(--duration-fast);
+        }
+
+        .calc-input:focus {
+            outline: none;
+            border-color: var(--sakura-400);
+        }
+
+        .calc-swap {
+            display: flex;
+            justify-content: center;
+            margin: var(--space-lg) 0;
+        }
+
+        .swap-btn {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+
+        .swap-btn:hover {
+            background: var(--sakura-400);
+            border-color: var(--sakura-400);
+            color: white;
+        }
+
+        .calc-rate {
+            margin-top: var(--space-lg);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        /* ============================================
+           Settings Tab
+           ============================================ */
+        .settings-section {
+            padding: var(--space-lg) 0;
+        }
+
+        .settings-group {
+            margin-bottom: var(--space-lg);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            overflow: hidden;
+        }
+
+        .settings-group-title {
+            padding: var(--space-md);
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .settings-item input {
+            width: 100px;
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            text-align: right;
+            font-family: inherit;
+        }
+
+        .settings-item input:focus {
+            outline: none;
+            border-color: var(--sakura-400);
+        }
+
+        .settings-btn {
+            width: 100%;
+            padding: var(--space-md);
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            transition: background var(--duration-fast);
+        }
+
+        .settings-btn:last-child {
+            border-bottom: none;
+        }
+
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .settings-btn.danger {
+            color: var(--shu-400);
+        }
+
+        .settings-value {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .rate-input-group {
+            display: flex;
+            gap: var(--space-xs);
+            align-items: center;
+        }
+
+        .rate-input-group input {
+            flex: 1;
+        }
+
+        .fetch-rate-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--duration-fast);
+        }
+
+        .fetch-rate-btn:hover {
+            background: var(--sakura-400);
+            color: white;
+        }
+
+        .fetch-rate-btn:active {
+            transform: scale(0.95);
+        }
+
+        .fetch-rate-btn.loading .fetch-icon {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rate-info {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            margin-top: var(--space-xs);
+            text-align: right;
+        }
+
+        .rate-info.success {
+            color: var(--matcha-400);
+        }
+
+        .rate-info.error {
+            color: var(--shu-400);
+        }
+
+        /* ============================================
+           Utility classes
+           ============================================ */
+        .hidden {
+            display: none !important;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* ============================================
+           Offline Indicator
+           ============================================ */
+        .offline-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--shu-500);
+            color: white;
+            text-align: center;
+            padding: var(--space-sm);
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .offline-indicator.show {
+            transform: translateY(0);
+        }
+
+        body.offline .header {
+            top: 32px;
+        }
+
+        /* ============================================
+           Toast with Undo Action
+           ============================================ */
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .toast-message {
+            flex: 1;
+        }
+
+        .toast-action {
+            background: none;
+            border: none;
+            color: var(--sakura-400);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            transition: background var(--duration-fast);
+        }
+
+        .toast-action:hover {
+            background: rgba(255, 143, 171, 0.1);
+        }
+
+        .toast.show {
+            pointer-events: auto;
+        }
+
+        /* ============================================
+           Swipe to Delete
+           ============================================ */
+        .expense-item {
+            position: relative;
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+
+        .expense-item-content {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            position: relative;
+            z-index: 1;
+            background: var(--bg-card);
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .expense-item.swiping .expense-item-content {
+            transition: none;
+        }
+
+        .expense-swipe-action {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--shu-500);
+            color: white;
+            font-size: 20px;
+        }
+
+        /* ============================================
+           Pull to Refresh
+           ============================================ */
+        .pull-indicator {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-60px);
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            z-index: 90;
+            opacity: 0;
+            transition: transform var(--duration-fast), opacity var(--duration-fast);
+        }
+
+        .pull-indicator.pulling {
+            opacity: 1;
+        }
+
+        .pull-indicator.refreshing {
+            transform: translateX(-50%) translateY(20px);
+            opacity: 1;
+        }
+
+        .pull-indicator svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--sakura-400);
+            transition: transform var(--duration-fast);
+        }
+
+        .pull-indicator.refreshing svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* ============================================
+           Statistics Dashboard
+           ============================================ */
+        .stats-card {
+            margin-bottom: var(--space-lg);
+            padding: var(--space-lg);
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .stats-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .stats-title::before {
+            content: '';
+            width: 3px;
+            height: 12px;
+            background: var(--ai-400);
+            border-radius: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: var(--space-md);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-md);
+        }
+
+        .stat-value {
+            font-family: 'Zen Kaku Gothic New', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: var(--space-xs);
+        }
+
+        /* ============================================
+           Photo Gallery
+           ============================================ */
+        .gallery-btn {
+            width: 100%;
+            padding: var(--space-md);
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            transition: border-color var(--duration-fast);
+        }
+
+        .gallery-btn:hover {
+            border-color: var(--sakura-400);
+        }
+
+        .gallery-modal .modal {
+            max-height: 95vh;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--duration-fast);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-date {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: var(--space-xs);
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            font-size: 0.65rem;
+            color: white;
+            text-align: center;
+        }
+
+        /* ============================================
+           Expense Templates
+           ============================================ */
+        .templates-section {
+            margin-bottom: var(--space-lg);
+        }
+
+        .templates-title {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .templates-scroll {
+            display: flex;
+            gap: var(--space-sm);
+            overflow-x: auto;
+            padding-bottom: var(--space-sm);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .templates-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .template-chip {
+            flex-shrink: 0;
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-full);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all var(--duration-fast);
+        }
+
+        .template-chip:hover {
+            border-color: var(--sakura-400);
+            background: rgba(255, 143, 171, 0.1);
+        }
+
+        .template-chip-icon {
+            margin-right: var(--space-xs);
+        }
+
+        /* ============================================
+           Theme Toggle
+           ============================================ */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .theme-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: var(--sumi-600);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: background var(--duration-fast);
+        }
+
+        .theme-switch.active {
+            background: var(--sakura-400);
+        }
+
+        .theme-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform var(--duration-fast) var(--ease-out-expo);
+        }
+
+        .theme-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        /* ============================================
+           Phrase Actions (TTS & Copy)
+           ============================================ */
+        .phrase-actions {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .phrase-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: var(--space-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+
+        .phrase-action-btn:hover {
+            background: var(--sakura-400);
+            border-color: var(--sakura-400);
+            color: white;
+        }
+
+        .phrase-action-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ============================================
+           Recurring Expense Badge
+           ============================================ */
+        .recurring-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 2px 6px;
+            background: rgba(74, 124, 155, 0.15);
+            border-radius: var(--radius-sm);
+            font-size: 0.6rem;
+            color: var(--ai-400);
+            margin-left: var(--space-xs);
+        }
+    </style>
+</head>
+<body>
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" id="offline-indicator">
+        📡 You're offline — data is saved locally
+    </div>
+
+    <!-- Pull to Refresh Indicator -->
+    <div class="pull-indicator" id="pull-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6"/>
+            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>
+                <span class="header-icon">⛩️</span>
+                Japan Companion
+            </h1>
+            <span class="header-date font-serif" id="header-date">令和八年</span>
+        </div>
+    </header>
+
+    <!-- Expenses Tab -->
+    <div id="expenses-tab" class="tab-content active">
+        <div class="container">
+            <!-- Budget Summary -->
+            <div class="budget-card animate-in stagger-1">
+                <div class="budget-header">
+                    <div>
+                        <div class="budget-label">Remaining Budget</div>
+                        <div class="budget-amount" id="remaining-budget">
+                            40,000<span class="budget-currency">PLN</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="budget-progress-container">
+                    <div class="budget-progress-bar" id="budget-progress-bar" style="width: 0%"></div>
+                </div>
+                <div class="budget-stats">
+                    <div class="budget-stat">
+                        Spent: <strong id="total-spent">0</strong> PLN
+                    </div>
+                    <div class="budget-stat">
+                        Budget: <strong id="total-budget">40,000</strong> PLN
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Budget Indicator -->
+            <div class="daily-card animate-in stagger-2" id="daily-budget">
+                <div class="daily-header">
+                    <span class="trip-day font-display" id="trip-day">Day 1 of 24</span>
+                    <span class="trip-badge" id="trip-status">On Trip</span>
+                </div>
+                <div class="daily-stats">
+                    <div class="daily-stat-box">
+                        <div class="daily-stat-label">Should have spent</div>
+                        <div class="daily-stat-value" id="should-spent">0 PLN</div>
+                    </div>
+                    <div class="daily-stat-box">
+                        <div class="daily-stat-label">Actually spent</div>
+                        <div class="daily-stat-value" id="actual-spent">0 PLN</div>
+                    </div>
+                </div>
+                <div class="daily-difference under" id="daily-difference">On track! ✨</div>
+            </div>
+
+            <!-- Statistics Dashboard -->
+            <div class="stats-card animate-in stagger-3" id="stats-card">
+                <div class="stats-title">Trip Statistics</div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-daily-avg">¥0</div>
+                        <div class="stat-label">Daily Average</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-expense-count">0</div>
+                        <div class="stat-label">Total Expenses</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-biggest-day">—</div>
+                        <div class="stat-label">Biggest Day</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="stat-top-category">—</div>
+                        <div class="stat-label">Top Category</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Chart -->
+            <div class="chart-card animate-in stagger-4" id="category-chart">
+                <div class="chart-title">Spending by Category</div>
+                <div id="chart-bars"></div>
+            </div>
+
+            <!-- Photo Gallery Button -->
+            <button class="gallery-btn animate-in stagger-5" id="gallery-btn">
+                🖼️ View Receipt Gallery (<span id="photo-count">0</span> photos)
+            </button>
+
+            <!-- Location Filter -->
+            <div class="filter-section animate-in stagger-4">
+                <select class="filter-select" id="location-filter">
+                    <option value="all">📍 All Locations</option>
+                    <option value="Nagoya">🏯 Nagoya</option>
+                    <option value="Kyoto">⛩️ Kyoto</option>
+                    <option value="Nara">🦌 Nara</option>
+                    <option value="Osaka">🏙️ Osaka</option>
+                    <option value="Hiroshima">☮️ Hiroshima</option>
+                    <option value="Takayama">🏔️ Takayama</option>
+                    <option value="Tokyo">🗼 Tokyo</option>
+                    <option value="Other">📌 Other</option>
+                </select>
+            </div>
+
+            <!-- Storage Warning -->
+            <div class="storage-warning" id="storage-warning">
+                <span>⚠️</span>
+                <span>Storage nearly full. Export and clear old receipts.</span>
+            </div>
+
+            <!-- Expense List -->
+            <div class="expense-section" id="expense-list">
+                <div class="empty-state">
+                    <div class="empty-icon">💴</div>
+                    <div class="empty-text">No expenses yet.<br>Tap + to add one!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAB -->
+        <button class="fab" id="add-expense-btn" aria-label="Add expense">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 5v14M5 12h14"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Phrases Tab -->
+    <div id="phrases-tab" class="tab-content">
+        <div class="container">
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <input type="text" class="search-input" id="phrase-search" placeholder="Search phrases...">
+                </div>
+            </div>
+            <div id="phrase-list"></div>
+        </div>
+    </div>
+
+    <!-- Calculator Tab -->
+    <div id="calculator-tab" class="tab-content">
+        <div class="container">
+            <div class="calculator-section">
+                <div class="calculator-card">
+                    <div class="calculator-title">💱 Currency Calculator</div>
+                    <div class="calc-row">
+                        <div class="calc-label">
+                            <span class="calc-flag">🇯🇵</span> Japanese Yen
+                        </div>
+                        <input type="number" class="calc-input" id="calc-jpy" placeholder="0" inputmode="decimal">
+                    </div>
+                    <div class="calc-swap">
+                        <button class="swap-btn" id="calc-swap">⇅</button>
+                    </div>
+                    <div class="calc-row">
+                        <div class="calc-label">
+                            <span class="calc-flag">🇵🇱</span> Polish Zloty
+                        </div>
+                        <input type="number" class="calc-input" id="calc-pln" placeholder="0" inputmode="decimal">
+                    </div>
+                    <div class="calc-rate" id="calc-rate">1 PLN = 43.3 JPY</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settings-tab" class="tab-content">
+        <div class="container">
+            <div class="settings-section">
+                <div class="settings-group">
+                    <div class="settings-group-title">Currency & Budget</div>
+                    <div class="settings-item">
+                        <label>Exchange Rate (JPY per 1 PLN)</label>
+                        <div class="rate-input-group">
+                            <input type="number" id="exchange-rate" step="0.1" value="43.3">
+                            <button class="fetch-rate-btn" id="fetch-rate-btn" title="Fetch current rate">
+                                <span class="fetch-icon">↻</span>
+                            </button>
+                        </div>
+                        <div class="rate-info" id="rate-info"></div>
+                    </div>
+                    <div class="settings-item">
+                        <label>Total Budget (PLN)</label>
+                        <input type="number" id="budget-input" step="100" value="40000">
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">Export</div>
+                    <button class="settings-btn" id="export-btn">
+                        📥 Export to CSV
+                    </button>
+                    <button class="settings-btn" id="notion-export-btn">
+                        📋 Copy Notion Summary
+                    </button>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">Data</div>
+                    <button class="settings-btn danger" id="clear-btn">
+                        🗑️ Clear All Data
+                    </button>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">Storage</div>
+                    <div class="settings-item">
+                        <label>Used</label>
+                        <span class="settings-value" id="storage-used">0 KB</span>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">Appearance</div>
+                    <div class="theme-toggle">
+                        <label>Light Theme</label>
+                        <div class="theme-switch" id="theme-switch"></div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <div class="settings-group-title">About</div>
+                    <div class="settings-item">
+                        <label>Version</label>
+                        <span class="settings-value">2.1.0</span>
+                    </div>
+                    <div class="settings-item">
+                        <label>Trip Duration</label>
+                        <span class="settings-value">May 12 – Jun 5, 2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="expenses" aria-label="Expenses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            <span>Expenses</span>
+        </button>
+        <button class="tab-btn" data-tab="phrases" aria-label="Phrases">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Phrases</span>
+        </button>
+        <button class="tab-btn" data-tab="calculator" aria-label="Calculator">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="4" y="2" width="16" height="20" rx="2"/>
+                <path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h8"/>
+            </svg>
+            <span>Calc</span>
+        </button>
+        <button class="tab-btn" data-tab="settings" aria-label="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Settings</span>
+        </button>
+    </nav>
+
+    <!-- Add Expense Modal -->
+    <div class="modal-overlay" id="expense-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="font-display">Add Expense</h2>
+                <button class="modal-close" id="close-modal">×</button>
+            </div>
+            <form id="expense-form">
+                <div class="form-group">
+                    <label class="form-label">Quick Amount</label>
+                    <div class="quick-amounts" id="quick-amounts">
+                        <button type="button" class="quick-btn" data-amount="200">
+                            <span class="quick-btn-amount">¥200</span>
+                            <span class="quick-btn-label">Vending</span>
+                        </button>
+                        <button type="button" class="quick-btn" data-amount="500">
+                            <span class="quick-btn-amount">¥500</span>
+                            <span class="quick-btn-label">Konbini</span>
+                        </button>
+                        <button type="button" class="quick-btn" data-amount="1000">
+                            <span class="quick-btn-amount">¥1,000</span>
+                            <span class="quick-btn-label">Cheap meal</span>
+                        </button>
+                        <button type="button" class="quick-btn" data-amount="2000">
+                            <span class="quick-btn-amount">¥2,000</span>
+                            <span class="quick-btn-label">Restaurant</span>
+                        </button>
+                        <button type="button" class="quick-btn" data-amount="5000">
+                            <span class="quick-btn-amount">¥5,000</span>
+                            <span class="quick-btn-label">Nice dinner</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <div class="amount-wrapper">
+                        <span class="amount-prefix">¥</span>
+                        <input type="number" class="form-input" id="expense-amount" placeholder="0" required inputmode="numeric">
+                    </div>
+                    <div class="amount-conversion" id="amount-conversion"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="expense-category" required>
+                        <option value="food">🍜 Food</option>
+                        <option value="transport">🚃 Transport</option>
+                        <option value="accommodation">🏨 Accommodation</option>
+                        <option value="activities">🎌 Activities</option>
+                        <option value="misc">📦 Misc</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <select class="form-select" id="expense-location" required>
+                        <option value="Nagoya">Nagoya</option>
+                        <option value="Kyoto">Kyoto</option>
+                        <option value="Nara">Nara</option>
+                        <option value="Osaka">Osaka</option>
+                        <option value="Hiroshima">Hiroshima</option>
+                        <option value="Takayama">Takayama</option>
+                        <option value="Tokyo">Tokyo</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="expense-date" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Note (optional)</label>
+                    <textarea class="form-textarea" id="expense-note" placeholder="What was this for?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Receipt Photo (optional)</label>
+                    <div class="photo-capture">
+                        <button type="button" class="photo-btn" id="photo-btn">📷</button>
+                        <input type="file" accept="image/*" capture="environment" class="hidden" id="photo-input">
+                        <div>
+                            <div class="photo-hint" id="photo-hint">Tap to capture receipt</div>
+                            <div id="photo-actions" class="hidden">
+                                <button type="button" class="photo-remove" id="photo-remove">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Add Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="confirm-dialog">
+            <h3 id="confirm-title">Confirm</h3>
+            <p id="confirm-message">Are you sure?</p>
+            <div class="confirm-buttons">
+                <button class="btn-secondary" id="confirm-cancel">Cancel</button>
+                <button class="btn-primary btn-danger" id="confirm-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo View Modal -->
+    <div class="modal-overlay photo-view-modal" id="photo-view-modal">
+        <button class="photo-view-close" id="photo-view-close">×</button>
+        <div class="photo-view-content">
+            <img id="photo-view-img" src="" alt="Receipt">
+        </div>
+    </div>
+
+    <!-- Photo Gallery Modal -->
+    <div class="modal-overlay gallery-modal" id="gallery-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="font-display">Receipt Gallery</h2>
+                <button class="modal-close" id="gallery-close">×</button>
+            </div>
+            <div class="gallery-grid" id="gallery-grid"></div>
+        </div>
+    </div>
+
+    <!-- Toast with Undo -->
+    <div class="toast" id="toast">
+        <span class="toast-message" id="toast-message"></span>
+        <button class="toast-action hidden" id="toast-action">Undo</button>
+    </div>
+
+    <script>
+        // ============================================
+        // Data & State
+        // ============================================
+        const STORAGE_KEYS = {
+            expenses: 'japan_expenses',
+            settings: 'japan_settings',
+            phrases: 'japan_phrases',
+            favorites: 'japan_favorites',
+            lastLocation: 'japan_last_location'
+        };
+
+        const DEFAULT_SETTINGS = {
+            exchangeRate: 43.3,
+            budget: 40000
+        };
+
+        const LOCATIONS = ['Nagoya', 'Kyoto', 'Nara', 'Osaka', 'Hiroshima', 'Takayama', 'Tokyo', 'Other'];
+
+        const MAX_IMAGE_SIZE = 200 * 1024;
+        const STORAGE_WARNING_THRESHOLD = 4 * 1024 * 1024;
+
+        const TRIP_CONFIG = {
+            startDate: '2026-05-12',
+            endDate: '2026-06-05',
+            totalDays: 24,
+            dailyBudget: 40000 / 24
+        };
+
+        const CATEGORIES = {
+            food: { icon: '🍜', label: 'Food' },
+            transport: { icon: '🚃', label: 'Transport' },
+            accommodation: { icon: '🏨', label: 'Accommodation' },
+            activities: { icon: '🎌', label: 'Activities' },
+            misc: { icon: '📦', label: 'Misc' }
+        };
+
+        const DEFAULT_PHRASES = [
+            { category: "Vegetarian", japanese: "私はベジタリアンです。肉と魚が食べられません。", romaji: "Watashi wa bejitarian desu. Niku to sakana ga taberaremasen.", english: "I am vegetarian. I cannot eat meat or fish." },
+            { category: "Vegetarian", japanese: "鰹出汁の代わりに昆布出汁をお願いできますか？", romaji: "Katsuo dashi no kawari ni kombu dashi wo onegai dekimasu ka?", english: "Instead of bonito dashi, can I have kelp dashi?" },
+            { category: "Vegetarian", japanese: "この料理に肉・魚・鰹節は入っていますか？", romaji: "Kono ryouri ni niku, sakana, katsuobushi wa haitte imasu ka?", english: "Does this dish contain meat, fish, or bonito flakes?" },
+            { category: "Vegetarian", japanese: "肉なしでお願いできますか？", romaji: "Niku nashi de onegai dekimasu ka?", english: "Can I have this without meat?" },
+            { category: "Vegetarian", japanese: "野菜だけの料理はありますか？", romaji: "Yasai dake no ryouri wa arimasu ka?", english: "Do you have any vegetable-only dishes?" },
+            { category: "Vegetarian", japanese: "卵と乳製品は大丈夫です。", romaji: "Tamago to nyuuseihin wa daijoubu desu.", english: "Eggs and dairy are okay." },
+            { category: "Vegetarian", japanese: "ベジタリアンメニューはありますか？", romaji: "Bejitarian menyuu wa arimasu ka?", english: "Do you have a vegetarian menu?" },
+            { category: "Vegetarian", japanese: "豆腐料理はありますか？", romaji: "Toufu ryouri wa arimasu ka?", english: "Do you have tofu dishes?" },
+            { category: "Vegetarian", japanese: "精進料理はありますか？", romaji: "Shoujin ryouri wa arimasu ka?", english: "Do you have Buddhist vegetarian cuisine?" },
+            { category: "Restaurant", japanese: "二人です。", romaji: "Futari desu.", english: "Two people." },
+            { category: "Restaurant", japanese: "予約していません。", romaji: "Yoyaku shite imasen.", english: "I don't have a reservation." },
+            { category: "Restaurant", japanese: "メニューをお願いします。", romaji: "Menyuu wo onegai shimasu.", english: "Menu please." },
+            { category: "Restaurant", japanese: "おすすめは何ですか？", romaji: "Osusume wa nan desu ka?", english: "What do you recommend?" },
+            { category: "Restaurant", japanese: "これをください。", romaji: "Kore wo kudasai.", english: "I'll have this please." },
+            { category: "Restaurant", japanese: "お会計お願いします。", romaji: "Okaikei onegai shimasu.", english: "Check please." },
+            { category: "Restaurant", japanese: "カードで払えますか？", romaji: "Kaado de haraemasu ka?", english: "Can I pay by card?" },
+            { category: "Restaurant", japanese: "美味しかったです。", romaji: "Oishikatta desu.", english: "It was delicious." },
+            { category: "Restaurant", japanese: "ごちそうさまでした。", romaji: "Gochisousama deshita.", english: "Thank you for the meal." },
+            { category: "Basic", japanese: "すみません。", romaji: "Sumimasen.", english: "Excuse me. / I'm sorry." },
+            { category: "Basic", japanese: "ありがとうございます。", romaji: "Arigatou gozaimasu.", english: "Thank you." },
+            { category: "Basic", japanese: "お願いします。", romaji: "Onegai shimasu.", english: "Please." },
+            { category: "Basic", japanese: "はい / いいえ", romaji: "Hai / Iie", english: "Yes / No" },
+            { category: "Basic", japanese: "大丈夫です。", romaji: "Daijoubu desu.", english: "It's okay. / I'm fine." },
+            { category: "Basic", japanese: "わかりました。", romaji: "Wakarimashita.", english: "I understand." },
+            { category: "Basic", japanese: "わかりません。", romaji: "Wakarimasen.", english: "I don't understand." },
+            { category: "Basic", japanese: "英語を話せますか？", romaji: "Eigo wo hanasemasu ka?", english: "Do you speak English?" },
+            { category: "Directions", japanese: "駅はどこですか？", romaji: "Eki wa doko desu ka?", english: "Where is the station?" },
+            { category: "Directions", japanese: "トイレはどこですか？", romaji: "Toire wa doko desu ka?", english: "Where is the toilet?" },
+            { category: "Directions", japanese: "コンビニはどこですか？", romaji: "Konbini wa doko desu ka?", english: "Where is the convenience store?" },
+            { category: "Directions", japanese: "まっすぐ", romaji: "Massugu", english: "Straight ahead" },
+            { category: "Directions", japanese: "右 / 左", romaji: "Migi / Hidari", english: "Right / Left" },
+            { category: "Transport", japanese: "＿＿行きの切符を一枚ください。", romaji: "___ yuki no kippu wo ichimai kudasai.", english: "One ticket to ___ please." },
+            { category: "Transport", japanese: "次の電車は何時ですか？", romaji: "Tsugi no densha wa nanji desu ka?", english: "What time is the next train?" },
+            { category: "Transport", japanese: "この電車は＿＿に止まりますか？", romaji: "Kono densha wa ___ ni tomarimasu ka?", english: "Does this train stop at ___?" },
+            { category: "Transport", japanese: "終電は何時ですか？", romaji: "Shuuden wa nanji desu ka?", english: "What time is the last train?" },
+            { category: "Transport", japanese: "ICカードにチャージしたいです。", romaji: "IC kaado ni chaaji shitai desu.", english: "I want to charge my IC card." },
+            { category: "Accommodation", japanese: "チェックインお願いします。", romaji: "Chekkuin onegai shimasu.", english: "Check-in please." },
+            { category: "Accommodation", japanese: "Wi-Fiのパスワードは何ですか？", romaji: "Wi-Fi no pasuwaado wa nan desu ka?", english: "What's the Wi-Fi password?" },
+            { category: "Onsen", japanese: "タトゥーがありますが、入れますか？", romaji: "Tatuu ga arimasu ga, hairemasu ka?", english: "I have a tattoo, can I enter?" },
+            { category: "Onsen", japanese: "貸切風呂はありますか？", romaji: "Kashikiri buro wa arimasu ka?", english: "Do you have a private bath?" },
+            { category: "Shopping", japanese: "これはいくらですか？", romaji: "Kore wa ikura desu ka?", english: "How much is this?" },
+            { category: "Shopping", japanese: "免税できますか？", romaji: "Menzei dekimasu ka?", english: "Is tax-free available?" },
+            { category: "Emergency", japanese: "助けてください！", romaji: "Tasukete kudasai!", english: "Help please!" },
+            { category: "Emergency", japanese: "病院に行きたいです。", romaji: "Byouin ni ikitai desu.", english: "I want to go to a hospital." },
+            { category: "Emergency", japanese: "警察: 110 / 救急: 119", romaji: "Keisatsu: 110 / Kyuukyuu: 119", english: "Police: 110 / Ambulance: 119" },
+            { category: "Sightseeing", japanese: "写真を撮ってもいいですか？", romaji: "Shashin wo totte mo ii desu ka?", english: "May I take a photo?" },
+            { category: "Sightseeing", japanese: "御朱印をお願いします。", romaji: "Goshuin wo onegai shimasu.", english: "Temple/shrine stamp please." }
+        ];
+
+        // Expense templates for quick entry
+        const EXPENSE_TEMPLATES = [
+            { icon: '☕', label: 'Coffee', amount: 400, category: 'food' },
+            { icon: '🍱', label: 'Bento', amount: 600, category: 'food' },
+            { icon: '🍜', label: 'Ramen', amount: 900, category: 'food' },
+            { icon: '🚃', label: 'Train', amount: 200, category: 'transport' },
+            { icon: '🚌', label: 'Bus', amount: 230, category: 'transport' },
+            { icon: '⛩️', label: 'Temple', amount: 500, category: 'activities' },
+            { icon: '🏯', label: 'Castle', amount: 600, category: 'activities' },
+            { icon: '🧴', label: 'Konbini', amount: 350, category: 'misc' }
+        ];
+
+        let state = {
+            expenses: [],
+            settings: { ...DEFAULT_SETTINGS, theme: 'dark' },
+            phrases: [...DEFAULT_PHRASES],
+            favorites: [],
+            locationFilter: 'all',
+            lastLocation: 'Tokyo',
+            currentPhoto: null,
+            deletedExpense: null, // For undo functionality
+            filteredExpensesCache: null, // Memoization cache
+            filterCacheKey: null
+        };
+
+        // ============================================
+        // Storage Functions
+        // ============================================
+        function loadData() {
+            try {
+                const expenses = localStorage.getItem(STORAGE_KEYS.expenses);
+                const settings = localStorage.getItem(STORAGE_KEYS.settings);
+                const phrases = localStorage.getItem(STORAGE_KEYS.phrases);
+                const favorites = localStorage.getItem(STORAGE_KEYS.favorites);
+                const lastLocation = localStorage.getItem(STORAGE_KEYS.lastLocation);
+
+                if (expenses) state.expenses = JSON.parse(expenses);
+                if (settings) state.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(settings) };
+                if (phrases) state.phrases = JSON.parse(phrases);
+                if (favorites) state.favorites = JSON.parse(favorites);
+                if (lastLocation) state.lastLocation = lastLocation;
+            } catch (e) {
+                console.error('Error loading data:', e);
+            }
+            checkStorageUsage();
+        }
+
+        function saveFavorites() {
+            localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(state.favorites));
+        }
+
+        function saveLastLocation(location) {
+            state.lastLocation = location;
+            localStorage.setItem(STORAGE_KEYS.lastLocation, location);
+        }
+
+        function saveExpenses() {
+            localStorage.setItem(STORAGE_KEYS.expenses, JSON.stringify(state.expenses));
+        }
+
+        function saveSettings() {
+            localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(state.settings));
+        }
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+        function formatNumber(num) {
+            return num.toLocaleString('en-US');
+        }
+
+        function jpyToPln(jpy) {
+            return jpy / state.settings.exchangeRate;
+        }
+
+        // Convert JPY to PLN using expense-specific rate (for historical accuracy)
+        function expenseJpyToPln(expense) {
+            const rate = expense.exchangeRate || state.settings.exchangeRate;
+            return expense.amount / rate;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // XSS prevention - escape HTML entities
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Haptic feedback
+        function vibrate(pattern = 10) {
+            if ('vibrate' in navigator) {
+                navigator.vibrate(pattern);
+            }
+        }
+
+        // Toast with optional undo action
+        let toastTimeout = null;
+        function showToast(message, undoCallback = null) {
+            clearTimeout(toastTimeout);
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const actionEl = document.getElementById('toast-action');
+
+            msgEl.textContent = message;
+
+            if (undoCallback) {
+                actionEl.classList.remove('hidden');
+                actionEl.onclick = () => {
+                    undoCallback();
+                    toast.classList.remove('show');
+                    vibrate(5);
+                };
+            } else {
+                actionEl.classList.add('hidden');
+            }
+
+            toast.classList.add('show');
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+                state.deletedExpense = null; // Clear undo state
+            }, 4000);
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function getPhraseId(phrase) {
+            return `${phrase.japanese}-${phrase.romaji}`;
+        }
+
+        // Input validation
+        function validateExpenseAmount(amount) {
+            const num = parseFloat(amount);
+            if (isNaN(num) || num <= 0 || num > 10000000) {
+                return { valid: false, error: 'Amount must be between 1 and 10,000,000' };
+            }
+            return { valid: true, value: num };
+        }
+
+        function validateCategory(category) {
+            return Object.keys(CATEGORIES).includes(category);
+        }
+
+        // ============================================
+        // Storage & Image Functions
+        // ============================================
+        function checkStorageUsage() {
+            let totalSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    totalSize += localStorage[key].length * 2;
+                }
+            }
+            const usedKB = Math.round(totalSize / 1024);
+            const storageEl = document.getElementById('storage-used');
+            if (storageEl) {
+                storageEl.textContent = usedKB > 1024 ? `${(usedKB / 1024).toFixed(1)} MB` : `${usedKB} KB`;
+            }
+
+            const warningEl = document.getElementById('storage-warning');
+            if (warningEl) {
+                if (totalSize > STORAGE_WARNING_THRESHOLD) {
+                    warningEl.classList.add('show');
+                } else {
+                    warningEl.classList.remove('show');
+                }
+            }
+            return totalSize;
+        }
+
+        function compressImage(file, maxSize = MAX_IMAGE_SIZE) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        const maxDim = 800;
+                        if (width > maxDim || height > maxDim) {
+                            if (width > height) {
+                                height = (height / width) * maxDim;
+                                width = maxDim;
+                            } else {
+                                width = (width / height) * maxDim;
+                                height = maxDim;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        let quality = 0.7;
+                        let result = canvas.toDataURL('image/jpeg', quality);
+
+                        while (result.length > maxSize && quality > 0.1) {
+                            quality -= 0.1;
+                            result = canvas.toDataURL('image/jpeg', quality);
+                        }
+
+                        resolve(result);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ============================================
+        // Daily Budget Functions
+        // ============================================
+        function getTripDayInfo() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const startDate = new Date(TRIP_CONFIG.startDate);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(TRIP_CONFIG.endDate);
+            endDate.setHours(0, 0, 0, 0);
+
+            const msPerDay = 24 * 60 * 60 * 1000;
+            const daysSinceStart = Math.floor((today - startDate) / msPerDay) + 1;
+
+            if (today < startDate) {
+                const daysUntil = Math.ceil((startDate - today) / msPerDay);
+                return { status: 'before', dayNumber: 0, daysElapsed: 0, daysUntil };
+            } else if (today > endDate) {
+                return { status: 'after', dayNumber: TRIP_CONFIG.totalDays, daysElapsed: TRIP_CONFIG.totalDays };
+            } else {
+                return { status: 'during', dayNumber: daysSinceStart, daysElapsed: daysSinceStart };
+            }
+        }
+
+        function updateDailyBudget() {
+            const tripInfo = getTripDayInfo();
+            // Use expense-specific rates for accurate PLN total
+            const totalPln = state.expenses.reduce((sum, e) => sum + expenseJpyToPln(e), 0);
+
+            const tripDayEl = document.getElementById('trip-day');
+            const tripStatusEl = document.getElementById('trip-status');
+            const shouldSpentEl = document.getElementById('should-spent');
+            const actualSpentEl = document.getElementById('actual-spent');
+            const differenceEl = document.getElementById('daily-difference');
+
+            if (tripInfo.status === 'before') {
+                tripDayEl.textContent = `${tripInfo.daysUntil} days until trip`;
+                tripStatusEl.textContent = 'Before Trip';
+                tripStatusEl.className = 'trip-badge before';
+                shouldSpentEl.textContent = '0 PLN';
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                differenceEl.textContent = 'Trip hasn\'t started yet ✨';
+                differenceEl.className = 'daily-difference under';
+            } else if (tripInfo.status === 'after') {
+                tripDayEl.textContent = 'Trip Complete!';
+                tripStatusEl.textContent = 'Finished';
+                tripStatusEl.className = 'trip-badge after';
+                const shouldHaveSpent = state.settings.budget;
+                shouldSpentEl.textContent = `${formatNumber(Math.round(shouldHaveSpent))} PLN`;
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                const diff = totalPln - shouldHaveSpent;
+                if (diff <= 0) {
+                    differenceEl.textContent = `Under budget by ${formatNumber(Math.abs(Math.round(diff)))} PLN 🎉`;
+                    differenceEl.className = 'daily-difference under';
+                } else {
+                    differenceEl.textContent = `Over budget by ${formatNumber(Math.round(diff))} PLN`;
+                    differenceEl.className = 'daily-difference over';
+                }
+            } else {
+                tripDayEl.textContent = `Day ${tripInfo.dayNumber} of ${TRIP_CONFIG.totalDays}`;
+                tripStatusEl.textContent = 'On Trip';
+                tripStatusEl.className = 'trip-badge';
+
+                const dailyTarget = state.settings.budget / TRIP_CONFIG.totalDays;
+                const shouldHaveSpent = dailyTarget * tripInfo.daysElapsed;
+
+                shouldSpentEl.textContent = `${formatNumber(Math.round(shouldHaveSpent))} PLN`;
+                actualSpentEl.textContent = `${formatNumber(Math.round(totalPln))} PLN`;
+                actualSpentEl.className = totalPln <= shouldHaveSpent ? 'daily-stat-value under' : 'daily-stat-value over';
+
+                const diff = totalPln - shouldHaveSpent;
+                if (diff <= 0) {
+                    differenceEl.textContent = `${formatNumber(Math.abs(Math.round(diff)))} PLN under target ✨`;
+                    differenceEl.className = 'daily-difference under';
+                } else {
+                    differenceEl.textContent = `${formatNumber(Math.round(diff))} PLN over target`;
+                    differenceEl.className = 'daily-difference over';
+                }
+            }
+        }
+
+        // ============================================
+        // Category Chart Functions
+        // ============================================
+        // Memoized filtered expenses
+        function getFilteredExpenses() {
+            const cacheKey = `${state.locationFilter}-${state.expenses.length}-${JSON.stringify(state.expenses.map(e => e.id))}`;
+
+            if (state.filterCacheKey === cacheKey && state.filteredExpensesCache) {
+                return state.filteredExpensesCache;
+            }
+
+            let result;
+            if (state.locationFilter === 'all') {
+                result = state.expenses;
+            } else {
+                result = state.expenses.filter(e => e.location === state.locationFilter);
+            }
+
+            state.filterCacheKey = cacheKey;
+            state.filteredExpensesCache = result;
+            return result;
+        }
+
+        function invalidateFilterCache() {
+            state.filterCacheKey = null;
+            state.filteredExpensesCache = null;
+        }
+
+        function updateCategoryChart() {
+            const chartContainer = document.getElementById('chart-bars');
+            const chartSection = document.getElementById('category-chart');
+            const filteredExpenses = getFilteredExpenses();
+
+            // Track PLN totals using expense-specific rates
+            const categoryTotals = {};
+            Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = 0);
+
+            filteredExpenses.forEach(e => {
+                categoryTotals[e.category] += expenseJpyToPln(e);
+            });
+
+            const totalPln = Object.values(categoryTotals).reduce((a, b) => a + b, 0);
+
+            if (totalPln === 0) {
+                chartSection.style.display = 'none';
+                return;
+            }
+            chartSection.style.display = 'block';
+
+            const maxAmount = Math.max(...Object.values(categoryTotals));
+
+            let html = '';
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const pln = categoryTotals[key];
+                const percentage = maxAmount > 0 ? (pln / maxAmount) * 100 : 0;
+
+                html += `
+                    <div class="chart-row">
+                        <div class="chart-icon ${key}">${cat.icon}</div>
+                        <span class="chart-label">${cat.label}</span>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar ${key}" style="width: ${percentage}%"></div>
+                        </div>
+                        <span class="chart-value">${formatNumber(Math.round(pln))} PLN</span>
+                    </div>
+                `;
+            });
+
+            chartContainer.innerHTML = html;
+        }
+
+        // ============================================
+        // Tab Navigation
+        // ============================================
+        function setupTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const addBtn = document.getElementById('add-expense-btn');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.dataset.tab;
+
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+
+                    addBtn.style.display = tabId === 'expenses' ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // ============================================
+        // Expense Functions
+        // ============================================
+        function renderExpenses() {
+            const container = document.getElementById('expense-list');
+            const filteredExpenses = getFilteredExpenses();
+
+            // Update photo count for gallery
+            const photoCount = state.expenses.filter(e => e.photo).length;
+            const photoCountEl = document.getElementById('photo-count');
+            if (photoCountEl) photoCountEl.textContent = photoCount;
+
+            // Hide gallery button if no photos
+            const galleryBtn = document.getElementById('gallery-btn');
+            if (galleryBtn) galleryBtn.style.display = photoCount > 0 ? 'flex' : 'none';
+
+            if (filteredExpenses.length === 0) {
+                const message = state.locationFilter === 'all'
+                    ? 'No expenses yet.<br>Tap + to add one!'
+                    : `No expenses in ${escapeHtml(state.locationFilter)}`;
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">💴</div>
+                        <div class="empty-text">${message}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const grouped = {};
+            filteredExpenses.forEach(expense => {
+                if (!grouped[expense.date]) grouped[expense.date] = [];
+                grouped[expense.date].push(expense);
+            });
+
+            const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+
+            let html = '';
+            sortedDates.forEach(date => {
+                const dayExpenses = grouped[date];
+                const dayTotalJpy = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
+                const dayTotalPln = jpyToPln(dayTotalJpy);
+
+                html += `
+                    <div class="day-group">
+                        <div class="day-header">
+                            <span class="day-date font-display">${formatDate(date)}</span>
+                            <span class="day-total">¥${formatNumber(dayTotalJpy)} (${dayTotalPln.toFixed(0)} PLN)</span>
+                        </div>
+                `;
+
+                dayExpenses.forEach(expense => {
+                    const cat = CATEGORIES[expense.category] || CATEGORIES.misc;
+                    const pln = expenseJpyToPln(expense);
+                    const photoThumb = expense.photo
+                        ? `<img class="expense-photo-thumb" data-action="view-photo" data-id="${expense.id}" src="${expense.photo}" alt="Receipt">`
+                        : '';
+                    const locationBadge = expense.location
+                        ? `<span class="expense-location-badge">${escapeHtml(expense.location)}</span>`
+                        : '';
+                    const recurringBadge = expense.recurring
+                        ? `<span class="recurring-badge">🔄 Daily</span>`
+                        : '';
+
+                    html += `
+                        <div class="expense-item" data-id="${expense.id}">
+                            <div class="expense-swipe-action">🗑️</div>
+                            <div class="expense-item-content">
+                                <div class="expense-icon ${expense.category}">${cat.icon}</div>
+                                <div class="expense-details">
+                                    <div class="expense-title">
+                                        ${escapeHtml(cat.label)}
+                                        ${locationBadge}
+                                        ${recurringBadge}
+                                    </div>
+                                    ${expense.note ? `<div class="expense-note">${escapeHtml(expense.note)}</div>` : ''}
+                                </div>
+                                <div class="expense-amount-col">
+                                    <div class="expense-amount-jpy">¥${formatNumber(expense.amount)}</div>
+                                    <div class="expense-amount-pln">${pln.toFixed(2)} PLN</div>
+                                </div>
+                                ${photoThumb}
+                                <button class="expense-delete" data-action="delete" data-id="${expense.id}">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+
+            // Setup swipe to delete for touch devices
+            setupSwipeToDelete();
+        }
+
+        // Event delegation for expense list
+        function setupExpenseListEvents() {
+            const container = document.getElementById('expense-list');
+            container.addEventListener('click', (e) => {
+                const target = e.target.closest('[data-action]');
+                if (!target) return;
+
+                const action = target.dataset.action;
+                const id = target.dataset.id;
+
+                if (action === 'delete') {
+                    e.stopPropagation();
+                    deleteExpense(id);
+                } else if (action === 'view-photo') {
+                    e.stopPropagation();
+                    viewPhoto(id);
+                }
+            });
+        }
+
+        // Swipe to delete functionality
+        function setupSwipeToDelete() {
+            const items = document.querySelectorAll('.expense-item');
+            items.forEach(item => {
+                let startX = 0;
+                let currentX = 0;
+                let isDragging = false;
+
+                item.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                    isDragging = true;
+                    item.classList.add('swiping');
+                }, { passive: true });
+
+                item.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    currentX = e.touches[0].clientX;
+                    const diff = startX - currentX;
+                    const content = item.querySelector('.expense-item-content');
+
+                    if (diff > 0 && diff < 100) {
+                        content.style.transform = `translateX(-${diff}px)`;
+                    }
+                }, { passive: true });
+
+                item.addEventListener('touchend', () => {
+                    isDragging = false;
+                    item.classList.remove('swiping');
+                    const content = item.querySelector('.expense-item-content');
+                    const diff = startX - currentX;
+
+                    if (diff > 60) {
+                        // Trigger delete
+                        const id = item.dataset.id;
+                        vibrate(20);
+                        deleteExpense(id);
+                    }
+                    content.style.transform = '';
+                });
+            });
+        }
+
+        function viewPhoto(expenseId) {
+            const expense = state.expenses.find(e => e.id === expenseId);
+            if (expense && expense.photo) {
+                document.getElementById('photo-view-img').src = expense.photo;
+                document.getElementById('photo-view-modal').classList.add('active');
+            }
+        }
+
+        function updateBudgetSummary() {
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            // Use each expense's own exchange rate for accurate PLN total
+            const totalPln = state.expenses.reduce((sum, e) => sum + expenseJpyToPln(e), 0);
+            const remaining = state.settings.budget - totalPln;
+            const percentage = (totalPln / state.settings.budget) * 100;
+
+            document.getElementById('total-spent').textContent = formatNumber(Math.round(totalPln));
+            document.getElementById('total-budget').textContent = formatNumber(state.settings.budget);
+
+            const remainingEl = document.getElementById('remaining-budget');
+            remainingEl.innerHTML = `${formatNumber(Math.round(remaining))}<span class="budget-currency">PLN</span>`;
+            remainingEl.className = `budget-amount ${remaining >= 0 ? '' : 'over'}`;
+
+            const progressBar = document.getElementById('budget-progress-bar');
+            progressBar.style.width = `${Math.min(percentage, 100)}%`;
+            progressBar.className = 'budget-progress-bar';
+            if (percentage > 90) progressBar.classList.add('danger');
+            else if (percentage > 70) progressBar.classList.add('warning');
+
+            updateDailyBudget();
+            updateCategoryChart();
+            updateStatistics();
+        }
+
+        function addExpense(expense) {
+            // Validate before adding
+            if (!validateCategory(expense.category)) {
+                expense.category = 'misc';
+            }
+
+            state.expenses.push(expense);
+            invalidateFilterCache();
+            saveExpenses();
+            renderExpenses();
+            updateBudgetSummary();
+            vibrate(10);
+        }
+
+        function deleteExpense(id) {
+            const expense = state.expenses.find(e => e.id === id);
+            if (!expense) return;
+
+            // Store for undo
+            state.deletedExpense = { ...expense };
+            const deletedIndex = state.expenses.findIndex(e => e.id === id);
+
+            state.expenses = state.expenses.filter(e => e.id !== id);
+            invalidateFilterCache();
+            saveExpenses();
+            renderExpenses();
+            updateBudgetSummary();
+            vibrate(15);
+
+            showToast('Expense deleted', () => {
+                // Undo callback
+                if (state.deletedExpense) {
+                    state.expenses.splice(deletedIndex, 0, state.deletedExpense);
+                    state.deletedExpense = null;
+                    invalidateFilterCache();
+                    saveExpenses();
+                    renderExpenses();
+                    updateBudgetSummary();
+                    showToast('Expense restored ✨');
+                }
+            });
+        }
+
+        // ============================================
+        // Statistics Functions
+        // ============================================
+        function updateStatistics() {
+            const expenses = state.expenses;
+            const statsCard = document.getElementById('stats-card');
+
+            if (expenses.length === 0) {
+                if (statsCard) statsCard.style.display = 'none';
+                return;
+            }
+            if (statsCard) statsCard.style.display = 'block';
+
+            // Daily average
+            const uniqueDays = [...new Set(expenses.map(e => e.date))].length;
+            const totalJpy = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const dailyAvg = uniqueDays > 0 ? Math.round(totalJpy / uniqueDays) : 0;
+            document.getElementById('stat-daily-avg').textContent = `¥${formatNumber(dailyAvg)}`;
+
+            // Expense count
+            document.getElementById('stat-expense-count').textContent = expenses.length;
+
+            // Biggest spending day
+            const dailyTotals = {};
+            expenses.forEach(e => {
+                if (!dailyTotals[e.date]) dailyTotals[e.date] = 0;
+                dailyTotals[e.date] += e.amount;
+            });
+            const biggestDay = Object.entries(dailyTotals).sort((a, b) => b[1] - a[1])[0];
+            if (biggestDay) {
+                const date = new Date(biggestDay[0]);
+                document.getElementById('stat-biggest-day').textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+
+            // Top category
+            const categoryTotals = {};
+            expenses.forEach(e => {
+                if (!categoryTotals[e.category]) categoryTotals[e.category] = 0;
+                categoryTotals[e.category] += e.amount;
+            });
+            const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0];
+            if (topCategory) {
+                const cat = CATEGORIES[topCategory[0]];
+                document.getElementById('stat-top-category').textContent = cat ? cat.icon : '—';
+            }
+        }
+
+        // ============================================
+        // Photo Gallery Functions
+        // ============================================
+        function setupPhotoGallery() {
+            const galleryBtn = document.getElementById('gallery-btn');
+            const galleryModal = document.getElementById('gallery-modal');
+            const galleryClose = document.getElementById('gallery-close');
+            const galleryGrid = document.getElementById('gallery-grid');
+
+            if (!galleryBtn) return;
+
+            galleryBtn.addEventListener('click', () => {
+                const photosWithData = state.expenses.filter(e => e.photo).map(e => ({
+                    id: e.id,
+                    photo: e.photo,
+                    date: e.date,
+                    category: e.category
+                }));
+
+                galleryGrid.innerHTML = photosWithData.map(p => `
+                    <div class="gallery-item" data-id="${p.id}">
+                        <img src="${p.photo}" alt="Receipt">
+                        <div class="gallery-item-date">${formatDate(p.date)}</div>
+                    </div>
+                `).join('');
+
+                // Add click handlers
+                galleryGrid.querySelectorAll('.gallery-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        viewPhoto(item.dataset.id);
+                    });
+                });
+
+                galleryModal.classList.add('active');
+            });
+
+            galleryClose.addEventListener('click', () => {
+                galleryModal.classList.remove('active');
+            });
+
+            galleryModal.addEventListener('click', (e) => {
+                if (e.target === galleryModal) {
+                    galleryModal.classList.remove('active');
+                }
+            });
+        }
+
+        // ============================================
+        // Modal Functions
+        // ============================================
+        function setupExpenseModal() {
+            const modal = document.getElementById('expense-modal');
+            const addBtn = document.getElementById('add-expense-btn');
+            const closeBtn = document.getElementById('close-modal');
+            const form = document.getElementById('expense-form');
+            const amountInput = document.getElementById('expense-amount');
+            const dateInput = document.getElementById('expense-date');
+            const locationInput = document.getElementById('expense-location');
+            const conversionEl = document.getElementById('amount-conversion');
+            const quickAmountBtns = document.querySelectorAll('.quick-btn');
+
+            const photoBtn = document.getElementById('photo-btn');
+            const photoInput = document.getElementById('photo-input');
+            const photoHint = document.getElementById('photo-hint');
+            const photoActions = document.getElementById('photo-actions');
+            const photoRemove = document.getElementById('photo-remove');
+
+            function resetForm() {
+                form.reset();
+                dateInput.value = new Date().toISOString().split('T')[0];
+                locationInput.value = state.lastLocation;
+                conversionEl.textContent = '';
+                state.currentPhoto = null;
+                photoBtn.innerHTML = '📷';
+                photoBtn.classList.remove('has-photo');
+                photoHint.textContent = 'Tap to capture receipt';
+                photoActions.classList.add('hidden');
+            }
+
+            dateInput.value = new Date().toISOString().split('T')[0];
+            locationInput.value = state.lastLocation;
+
+            addBtn.addEventListener('click', () => {
+                locationInput.value = state.lastLocation;
+                modal.classList.add('active');
+                setTimeout(() => amountInput.focus(), 300);
+            });
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                resetForm();
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    resetForm();
+                }
+            });
+
+            photoBtn.addEventListener('click', () => {
+                if (!state.currentPhoto) {
+                    photoInput.click();
+                }
+            });
+
+            photoInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    photoHint.textContent = 'Processing...';
+                    try {
+                        const compressed = await compressImage(file);
+                        state.currentPhoto = compressed;
+                        photoBtn.innerHTML = `<img src="${compressed}" alt="Receipt">`;
+                        photoBtn.classList.add('has-photo');
+                        photoHint.textContent = 'Photo captured';
+                        photoActions.classList.remove('hidden');
+                    } catch (err) {
+                        showToast('Failed to process image');
+                        photoHint.textContent = 'Tap to capture receipt';
+                    }
+                }
+            });
+
+            photoRemove.addEventListener('click', () => {
+                state.currentPhoto = null;
+                photoBtn.innerHTML = '📷';
+                photoBtn.classList.remove('has-photo');
+                photoHint.textContent = 'Tap to capture receipt';
+                photoActions.classList.add('hidden');
+                photoInput.value = '';
+            });
+
+            quickAmountBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const amount = parseInt(btn.dataset.amount);
+                    amountInput.value = amount;
+                    const pln = jpyToPln(amount);
+                    conversionEl.textContent = `≈ ${pln.toFixed(2)} PLN`;
+                    amountInput.focus();
+                });
+            });
+
+            amountInput.addEventListener('input', () => {
+                const jpy = parseFloat(amountInput.value) || 0;
+                const pln = jpyToPln(jpy);
+                conversionEl.textContent = jpy > 0 ? `≈ ${pln.toFixed(2)} PLN` : '';
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const location = locationInput.value;
+                const expense = {
+                    id: generateId(),
+                    amount: parseFloat(amountInput.value),
+                    category: document.getElementById('expense-category').value,
+                    location: location,
+                    date: dateInput.value,
+                    note: document.getElementById('expense-note').value.trim(),
+                    photo: state.currentPhoto,
+                    exchangeRate: state.settings.exchangeRate
+                };
+
+                saveLastLocation(location);
+                addExpense(expense);
+                modal.classList.remove('active');
+                resetForm();
+                showToast('Expense added ✨');
+                checkStorageUsage();
+            });
+        }
+
+        function setupPhotoViewModal() {
+            const modal = document.getElementById('photo-view-modal');
+            const closeBtn = document.getElementById('photo-view-close');
+
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        function setupLocationFilter() {
+            const filter = document.getElementById('location-filter');
+            filter.addEventListener('change', () => {
+                state.locationFilter = filter.value;
+                renderExpenses();
+                updateCategoryChart();
+            });
+        }
+
+        let confirmCallback = null;
+
+        function showConfirm(title, message, callback) {
+            const modal = document.getElementById('confirm-modal');
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-message').textContent = message;
+            confirmCallback = callback;
+            modal.classList.add('active');
+        }
+
+        function setupConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            const cancelBtn = document.getElementById('confirm-cancel');
+            const okBtn = document.getElementById('confirm-ok');
+
+            cancelBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                confirmCallback = null;
+            });
+
+            okBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+                if (confirmCallback) {
+                    confirmCallback();
+                    confirmCallback = null;
+                }
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    confirmCallback = null;
+                }
+            });
+        }
+
+        // ============================================
+        // Phrase Functions
+        // ============================================
+        function toggleFavorite(phraseId, event) {
+            event.stopPropagation();
+            const idx = state.favorites.indexOf(phraseId);
+            if (idx === -1) {
+                state.favorites.push(phraseId);
+            } else {
+                state.favorites.splice(idx, 1);
+            }
+            saveFavorites();
+            renderPhrases(document.getElementById('phrase-search').value);
+        }
+
+        function renderPhrases(filter = '') {
+            const container = document.getElementById('phrase-list');
+            const filterLower = filter.toLowerCase();
+
+            const filteredPhrases = state.phrases.filter(phrase => {
+                if (!filter) return true;
+                return phrase.japanese.includes(filter) ||
+                    phrase.romaji.toLowerCase().includes(filterLower) ||
+                    phrase.english.toLowerCase().includes(filterLower);
+            });
+
+            const favorites = filteredPhrases.filter(p => state.favorites.includes(getPhraseId(p)));
+            const nonFavorites = filteredPhrases.filter(p => !state.favorites.includes(getPhraseId(p)));
+
+            if (filteredPhrases.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🔍</div>
+                        <div class="empty-text">No phrases found</div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+
+            if (favorites.length > 0) {
+                html += `
+                    <div class="phrase-section favorites-section">
+                        <div class="phrase-category-title">⭐ Favorites</div>
+                `;
+                favorites.forEach(phrase => {
+                    html += renderPhraseItem(phrase, getPhraseId(phrase), true);
+                });
+                html += '</div>';
+            }
+
+            const grouped = {};
+            nonFavorites.forEach(phrase => {
+                if (!grouped[phrase.category]) grouped[phrase.category] = [];
+                grouped[phrase.category].push(phrase);
+            });
+
+            Object.keys(grouped).sort().forEach(category => {
+                html += `
+                    <div class="phrase-section">
+                        <div class="phrase-category-title">${category}</div>
+                `;
+
+                grouped[category].forEach(phrase => {
+                    html += renderPhraseItem(phrase, getPhraseId(phrase), false);
+                });
+
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderPhraseItem(phrase, phraseId, isFavorite) {
+            const escapedId = phraseId.replace(/'/g, "\\'");
+            const escapedJapanese = escapeHtml(phrase.japanese);
+            const escapedRomaji = escapeHtml(phrase.romaji);
+            const escapedEnglish = escapeHtml(phrase.english);
+
+            return `
+                <div class="phrase-item" data-phrase-id="${escapedId}">
+                    <div class="phrase-header">
+                        <div class="phrase-japanese">${escapedJapanese}</div>
+                        <button class="phrase-favorite-btn ${isFavorite ? 'active' : ''}"
+                                data-action="toggle-favorite" data-phrase-id="${escapedId}">
+                            ${isFavorite ? '⭐' : '☆'}
+                        </button>
+                    </div>
+                    <div class="phrase-details">
+                        <div class="phrase-romaji">${escapedRomaji}</div>
+                        <div class="phrase-english">${escapedEnglish}</div>
+                        <div class="phrase-actions">
+                            <button class="phrase-action-btn" data-action="speak" data-text="${escapedJapanese}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                    <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+                                </svg>
+                                Speak
+                            </button>
+                            <button class="phrase-action-btn" data-action="copy" data-text="${escapedJapanese}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Text-to-speech function
+        function speakJapanese(text) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                speechSynthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.8;
+
+                // Try to find a Japanese voice
+                const voices = speechSynthesis.getVoices();
+                const japaneseVoice = voices.find(v => v.lang.startsWith('ja'));
+                if (japaneseVoice) {
+                    utterance.voice = japaneseVoice;
+                }
+
+                speechSynthesis.speak(utterance);
+                vibrate(5);
+            } else {
+                showToast('Speech not supported');
+            }
+        }
+
+        // Copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                vibrate(5);
+                showToast('Copied to clipboard ✨');
+            }).catch(() => {
+                showToast('Failed to copy');
+            });
+        }
+
+        // Setup phrase list event delegation
+        function setupPhraseListEvents() {
+            const container = document.getElementById('phrase-list');
+
+            container.addEventListener('click', (e) => {
+                const target = e.target.closest('[data-action]');
+                const phraseItem = e.target.closest('.phrase-item');
+
+                if (target) {
+                    e.stopPropagation();
+                    const action = target.dataset.action;
+
+                    if (action === 'toggle-favorite') {
+                        const phraseId = target.dataset.phraseId;
+                        toggleFavoriteById(phraseId);
+                    } else if (action === 'speak') {
+                        speakJapanese(target.dataset.text);
+                    } else if (action === 'copy') {
+                        copyToClipboard(target.dataset.text);
+                    }
+                } else if (phraseItem) {
+                    phraseItem.classList.toggle('expanded');
+                }
+            });
+        }
+
+        function toggleFavoriteById(phraseId) {
+            const idx = state.favorites.indexOf(phraseId);
+            if (idx === -1) {
+                state.favorites.push(phraseId);
+                vibrate(5);
+            } else {
+                state.favorites.splice(idx, 1);
+            }
+            saveFavorites();
+            renderPhrases(document.getElementById('phrase-search').value);
+        }
+
+        function setupPhraseSearch() {
+            const searchInput = document.getElementById('phrase-search');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    renderPhrases(searchInput.value);
+                }, 150);
+            });
+        }
+
+        // ============================================
+        // Exchange Rate API
+        // ============================================
+        async function fetchExchangeRate() {
+            const btn = document.getElementById('fetch-rate-btn');
+            const rateInput = document.getElementById('exchange-rate');
+            const rateInfo = document.getElementById('rate-info');
+
+            btn.classList.add('loading');
+            rateInfo.textContent = 'Fetching...';
+            rateInfo.className = 'rate-info';
+
+            try {
+                // Using frankfurter.app - free, no API key required
+                const response = await fetch('https://api.frankfurter.app/latest?from=PLN&to=JPY');
+
+                if (!response.ok) {
+                    throw new Error('API request failed');
+                }
+
+                const data = await response.json();
+                const rate = data.rates.JPY;
+
+                if (rate) {
+                    rateInput.value = rate.toFixed(2);
+                    state.settings.exchangeRate = rate;
+                    saveSettings();
+                    renderExpenses();
+                    updateBudgetSummary();
+                    updateCalculatorRate();
+
+                    const date = new Date(data.date).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'short'
+                    });
+                    rateInfo.textContent = `Updated: ${date} • 1 PLN = ¥${rate.toFixed(2)}`;
+                    rateInfo.className = 'rate-info success';
+                    vibrate(5);
+                    showToast('Exchange rate updated ✨');
+                }
+            } catch (error) {
+                console.error('Failed to fetch exchange rate:', error);
+                rateInfo.textContent = 'Failed to fetch rate. Check connection.';
+                rateInfo.className = 'rate-info error';
+                vibrate([50, 30, 50]);
+            } finally {
+                btn.classList.remove('loading');
+            }
+        }
+
+        // ============================================
+        // Settings Functions
+        // ============================================
+        function setupSettings() {
+            const rateInput = document.getElementById('exchange-rate');
+            const budgetInput = document.getElementById('budget-input');
+            const fetchRateBtn = document.getElementById('fetch-rate-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const notionBtn = document.getElementById('notion-export-btn');
+            const clearBtn = document.getElementById('clear-btn');
+
+            rateInput.value = state.settings.exchangeRate;
+            budgetInput.value = state.settings.budget;
+
+            rateInput.addEventListener('change', () => {
+                state.settings.exchangeRate = parseFloat(rateInput.value) || DEFAULT_SETTINGS.exchangeRate;
+                saveSettings();
+                renderExpenses();
+                updateBudgetSummary();
+                updateCalculatorRate();
+                showToast('Exchange rate updated');
+            });
+
+            fetchRateBtn.addEventListener('click', fetchExchangeRate);
+
+            budgetInput.addEventListener('change', () => {
+                state.settings.budget = parseFloat(budgetInput.value) || DEFAULT_SETTINGS.budget;
+                saveSettings();
+                updateBudgetSummary();
+                showToast('Budget updated');
+            });
+
+            exportBtn.addEventListener('click', exportToCSV);
+            notionBtn.addEventListener('click', exportToNotion);
+            clearBtn.addEventListener('click', () => {
+                showConfirm('Clear All Data', 'This will delete all expenses and photos. This cannot be undone.', () => {
+                    state.expenses = [];
+                    saveExpenses();
+                    renderExpenses();
+                    updateBudgetSummary();
+                    checkStorageUsage();
+                    showToast('All data cleared');
+                });
+            });
+        }
+
+        function setupCalculator() {
+            const jpyInput = document.getElementById('calc-jpy');
+            const plnInput = document.getElementById('calc-pln');
+            const swapBtn = document.getElementById('calc-swap');
+
+            updateCalculatorRate();
+
+            jpyInput.addEventListener('input', () => {
+                const jpy = parseFloat(jpyInput.value) || 0;
+                const pln = jpyToPln(jpy);
+                plnInput.value = jpy > 0 ? pln.toFixed(2) : '';
+            });
+
+            plnInput.addEventListener('input', () => {
+                const pln = parseFloat(plnInput.value) || 0;
+                const jpy = pln * state.settings.exchangeRate;
+                jpyInput.value = pln > 0 ? Math.round(jpy) : '';
+            });
+
+            swapBtn.addEventListener('click', () => {
+                const jpyVal = jpyInput.value;
+                const plnVal = plnInput.value;
+                jpyInput.value = plnVal ? Math.round(parseFloat(plnVal) * state.settings.exchangeRate) : '';
+                plnInput.value = jpyVal ? jpyToPln(parseFloat(jpyVal)).toFixed(2) : '';
+            });
+        }
+
+        function updateCalculatorRate() {
+            const rateEl = document.getElementById('calc-rate');
+            if (rateEl) {
+                rateEl.textContent = `1 PLN = ${state.settings.exchangeRate} JPY`;
+            }
+        }
+
+        function exportToNotion() {
+            if (state.expenses.length === 0) {
+                showToast('No expenses to export');
+                return;
+            }
+
+            const totalJpy = state.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalPln = state.expenses.reduce((sum, e) => sum + expenseJpyToPln(e), 0);
+
+            // Track both JPY and PLN totals per category
+            const categoryTotals = {};
+            Object.keys(CATEGORIES).forEach(cat => categoryTotals[cat] = { jpy: 0, pln: 0 });
+            state.expenses.forEach(e => {
+                categoryTotals[e.category].jpy += e.amount;
+                categoryTotals[e.category].pln += expenseJpyToPln(e);
+            });
+
+            // Track both JPY and PLN totals per location
+            const locationTotals = {};
+            state.expenses.forEach(e => {
+                const loc = e.location || 'Unknown';
+                if (!locationTotals[loc]) locationTotals[loc] = { jpy: 0, pln: 0 };
+                locationTotals[loc].jpy += e.amount;
+                locationTotals[loc].pln += expenseJpyToPln(e);
+            });
+
+            let markdown = `# 🗾 Japan Trip Expenses Summary\n\n`;
+            markdown += `**Trip Dates:** ${TRIP_CONFIG.startDate} to ${TRIP_CONFIG.endDate}\n`;
+            markdown += `**Budget:** ${formatNumber(state.settings.budget)} PLN\n`;
+            markdown += `**Current Rate:** 1 PLN = ${state.settings.exchangeRate} JPY\n\n`;
+
+            markdown += `## 💰 Totals\n`;
+            markdown += `- **Total Spent:** ¥${formatNumber(totalJpy)} (${formatNumber(Math.round(totalPln))} PLN)\n`;
+            markdown += `- **Remaining:** ${formatNumber(Math.round(state.settings.budget - totalPln))} PLN\n\n`;
+
+            markdown += `## 📊 By Category\n`;
+            Object.entries(CATEGORIES).forEach(([key, cat]) => {
+                const totals = categoryTotals[key];
+                if (totals.jpy > 0) {
+                    markdown += `- ${cat.icon} **${cat.label}:** ¥${formatNumber(totals.jpy)} (${formatNumber(Math.round(totals.pln))} PLN)\n`;
+                }
+            });
+
+            markdown += `\n## 📍 By Location\n`;
+            Object.entries(locationTotals)
+                .sort((a, b) => b[1].pln - a[1].pln)
+                .forEach(([loc, totals]) => {
+                    markdown += `- **${loc}:** ¥${formatNumber(totals.jpy)} (${formatNumber(Math.round(totals.pln))} PLN)\n`;
+                });
+
+            markdown += `\n---\n_Generated by Japan Companion ⛩️_`;
+
+            navigator.clipboard.writeText(markdown).then(() => {
+                showToast('Copied to clipboard! ✨');
+            }).catch(() => {
+                showToast('Failed to copy');
+            });
+        }
+
+        function exportToCSV() {
+            if (state.expenses.length === 0) {
+                showToast('No expenses to export');
+                return;
+            }
+
+            const headers = ['Date', 'Location', 'Category', 'Amount (JPY)', 'Amount (PLN)', 'Rate', 'Note'];
+            const rows = state.expenses.map(e => [
+                e.date,
+                e.location || 'Unknown',
+                CATEGORIES[e.category].label,
+                e.amount,
+                expenseJpyToPln(e).toFixed(2),
+                e.exchangeRate || state.settings.exchangeRate,
+                `"${(e.note || '').replace(/"/g, '""')}"`
+            ]);
+
+            const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `japan-expenses-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+
+            URL.revokeObjectURL(url);
+            showToast('Expenses exported ✨');
+        }
+
+        // ============================================
+        // Offline Detection
+        // ============================================
+        function setupOfflineDetection() {
+            const indicator = document.getElementById('offline-indicator');
+
+            function updateOnlineStatus() {
+                if (navigator.onLine) {
+                    indicator.classList.remove('show');
+                } else {
+                    indicator.classList.add('show');
+                    vibrate([100, 50, 100]);
+                }
+            }
+
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            updateOnlineStatus();
+        }
+
+        // ============================================
+        // Pull to Refresh
+        // ============================================
+        function setupPullToRefresh() {
+            const indicator = document.getElementById('pull-indicator');
+            let startY = 0;
+            let pulling = false;
+            const threshold = 80;
+
+            document.addEventListener('touchstart', (e) => {
+                if (window.scrollY === 0) {
+                    startY = e.touches[0].clientY;
+                    pulling = true;
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!pulling) return;
+
+                const currentY = e.touches[0].clientY;
+                const diff = currentY - startY;
+
+                if (diff > 0 && window.scrollY === 0) {
+                    const progress = Math.min(diff / threshold, 1);
+                    indicator.style.transform = `translateX(-50%) translateY(${Math.min(diff * 0.5, 50)}px)`;
+                    indicator.style.opacity = progress;
+
+                    if (diff > threshold) {
+                        indicator.classList.add('pulling');
+                    } else {
+                        indicator.classList.remove('pulling');
+                    }
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', () => {
+                if (!pulling) return;
+
+                const wasPulling = indicator.classList.contains('pulling');
+
+                if (wasPulling) {
+                    indicator.classList.remove('pulling');
+                    indicator.classList.add('refreshing');
+                    vibrate(15);
+
+                    // Simulate refresh
+                    setTimeout(() => {
+                        renderExpenses();
+                        updateBudgetSummary();
+                        updateStatistics();
+                        showToast('Refreshed ✨');
+
+                        indicator.classList.remove('refreshing');
+                        indicator.style.transform = 'translateX(-50%) translateY(-100%)';
+                        indicator.style.opacity = '0';
+                    }, 800);
+                } else {
+                    indicator.style.transform = 'translateX(-50%) translateY(-100%)';
+                    indicator.style.opacity = '0';
+                }
+
+                pulling = false;
+            });
+        }
+
+        // ============================================
+        // Theme Toggle
+        // ============================================
+        function setupThemeToggle() {
+            const themeSwitch = document.getElementById('theme-switch');
+            if (!themeSwitch) return;
+
+            // Load saved theme preference
+            const savedTheme = localStorage.getItem('japan-companion-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'light') {
+                themeSwitch.classList.add('active');
+            }
+
+            themeSwitch.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('japan-companion-theme', newTheme);
+                themeSwitch.classList.toggle('active');
+                vibrate(5);
+
+                showToast(newTheme === 'light' ? 'Light theme enabled ☀️' : 'Dark theme enabled 🌙');
+            });
+        }
+
+        // ============================================
+        // Initialize
+        // ============================================
+        function init() {
+            // Update header date
+            const headerDate = document.getElementById('header-date');
+            if (headerDate) {
+                const now = new Date();
+                const jpDate = now.toLocaleDateString('ja-JP-u-ca-japanese', { era: 'long', year: 'numeric' });
+                headerDate.textContent = jpDate;
+            }
+
+            loadData();
+            setupTabs();
+            setupExpenseModal();
+            setupConfirmModal();
+            setupPhotoViewModal();
+            setupLocationFilter();
+            setupCalculator();
+            setupPhraseSearch();
+            setupSettings();
+            setupExpenseListEvents();
+            setupPhraseListEvents();
+            setupPhotoGallery();
+            setupOfflineDetection();
+            setupPullToRefresh();
+            setupThemeToggle();
+            renderExpenses();
+            renderPhrases();
+            updateBudgetSummary();
+            updateStatistics();
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(() => console.log('Service Worker registered'))
+                    .catch(err => console.error('SW registration failed:', err));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
