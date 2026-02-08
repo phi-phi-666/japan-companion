@@ -1,9 +1,15 @@
-const CACHE_NAME = 'japan-companion-v3';
+const CACHE_NAME = 'japan-companion-v4';
 const ASSETS = [
   './',
   './index.html',
+  './index-v2.html',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './favicon/favicon.ico',
+  './favicon/favicon-96x96.png',
+  './favicon/apple-touch-icon.png',
+  './favicon/web-app-manifest-192x192.png',
+  './favicon/web-app-manifest-512x512.png'
 ];
 
 // Install event - cache assets
