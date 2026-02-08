@@ -2086,6 +2086,55 @@
             color: var(--sakura-400);
         }
 
+        .import-section {
+            margin-top: var(--space-lg);
+        }
+
+        .import-divider {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+            color: var(--text-tertiary);
+            font-size: 0.8rem;
+        }
+
+        .import-divider::before,
+        .import-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .import-btn {
+            width: 100%;
+            padding: var(--space-md);
+            background: var(--bg-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--duration-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+
+        .import-btn:hover {
+            background: var(--sumi-600);
+            border-color: var(--ai-400);
+        }
+
+        .import-hint {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-align: center;
+            margin-top: var(--space-sm);
+        }
+
         /* ============================================
            Utility classes
            ============================================ */
@@ -2957,6 +3006,19 @@
                 <button class="add-plan-btn" id="add-plan-btn">
                     + Add to today's plan
                 </button>
+
+                <div class="import-section">
+                    <div class="import-divider">
+                        <span>or</span>
+                    </div>
+                    <button class="import-btn" id="import-md-btn">
+                        📄 Import from Markdown
+                    </button>
+                    <input type="file" accept=".md,.txt" class="hidden" id="import-file-input">
+                    <div class="import-hint">
+                        Supports Notion export format
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -5009,7 +5071,186 @@
                 showAddPlanPrompt();
             });
 
+            // Import from Markdown
+            const importBtn = document.getElementById('import-md-btn');
+            const importInput = document.getElementById('import-file-input');
+
+            importBtn.addEventListener('click', () => {
+                importInput.click();
+            });
+
+            importInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const markdown = event.target.result;
+                        importItineraryFromMarkdown(markdown);
+                    };
+                    reader.readAsText(file);
+                }
+                importInput.value = ''; // Reset for next import
+            });
+
             renderPlanDay();
+        }
+
+        function importItineraryFromMarkdown(markdown) {
+            const lines = markdown.split('\n');
+            const newPlans = [];
+            let currentDate = null;
+            let currentLocation = null;
+
+            // Date patterns to match various formats
+            const datePatterns = [
+                // "# Day 1 - May 12" or "## Day 1 - May 12, 2026"
+                /^#+\s*Day\s*\d+\s*[-–—]\s*(\w+\s+\d+(?:,?\s*\d{4})?)/i,
+                // "# May 12" or "## May 12, 2026"
+                /^#+\s*(\w+\s+\d+(?:,?\s*\d{4})?)/i,
+                // "# 2026-05-12" or "## 12/05/2026"
+                /^#+\s*(\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/\d{4})/i,
+                // "# Tuesday, May 12"
+                /^#+\s*\w+,?\s*(\w+\s+\d+(?:,?\s*\d{4})?)/i
+            ];
+
+            // Time + activity pattern: "- 09:00 Activity name" or "* 14:30 - Activity"
+            const activityPattern = /^[-*]\s*(\d{1,2}:\d{2})?\s*[-–—]?\s*(.+)/;
+
+            // Location/address pattern (indented under activity)
+            const addressPattern = /^\s{2,}[-*]?\s*(?:Address|Location|住所)?:?\s*(.+)/i;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                // Try to match a date header
+                for (const pattern of datePatterns) {
+                    const dateMatch = line.match(pattern);
+                    if (dateMatch) {
+                        const parsedDate = parseFlexibleDate(dateMatch[1]);
+                        if (parsedDate) {
+                            currentDate = parsedDate;
+                            // Check if location is in the header (e.g., "# Day 1 - May 12 - Tokyo")
+                            const locationMatch = line.match(/[-–—]\s*(\w+)\s*$/);
+                            if (locationMatch && !locationMatch[1].match(/\d/)) {
+                                currentLocation = locationMatch[1];
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                // Try to match an activity
+                if (currentDate && line.match(/^[-*]/)) {
+                    const activityMatch = line.match(activityPattern);
+                    if (activityMatch) {
+                        const time = activityMatch[1] || '';
+                        const name = activityMatch[2].trim();
+
+                        if (name && name.length > 0) {
+                            // Detect type from keywords
+                            let type = 'activity';
+                            const nameLower = name.toLowerCase();
+                            if (nameLower.includes('train') || nameLower.includes('bus') || nameLower.includes('flight') ||
+                                nameLower.includes('shinkansen') || nameLower.includes('jr') || nameLower.includes('metro') ||
+                                nameLower.includes('arrive') || nameLower.includes('depart')) {
+                                type = 'transport';
+                            } else if (nameLower.includes('lunch') || nameLower.includes('dinner') || nameLower.includes('breakfast') ||
+                                       nameLower.includes('ramen') || nameLower.includes('sushi') || nameLower.includes('restaurant') ||
+                                       nameLower.includes('cafe') || nameLower.includes('eat')) {
+                                type = 'food';
+                            } else if (nameLower.includes('hotel') || nameLower.includes('check in') || nameLower.includes('check-in') ||
+                                       nameLower.includes('ryokan') || nameLower.includes('hostel') || nameLower.includes('airbnb')) {
+                                type = 'hotel';
+                            }
+
+                            const plan = {
+                                id: generateId(),
+                                date: currentDate,
+                                name: name,
+                                time: time,
+                                type: type,
+                                address: ''
+                            };
+
+                            // Check next line for address
+                            if (i + 1 < lines.length) {
+                                const nextLine = lines[i + 1];
+                                const addrMatch = nextLine.match(addressPattern);
+                                if (addrMatch) {
+                                    plan.address = addrMatch[1].trim();
+                                    i++; // Skip the address line
+                                }
+                            }
+
+                            newPlans.push(plan);
+                        }
+                    }
+                }
+            }
+
+            if (newPlans.length === 0) {
+                showToast('No itinerary items found in file');
+                return;
+            }
+
+            // Ask user whether to replace or merge
+            const existingCount = state.itinerary.length;
+            if (existingCount > 0) {
+                const replace = confirm(`Found ${newPlans.length} items.\n\nYou have ${existingCount} existing items.\n\nOK = Replace all\nCancel = Add to existing`);
+                if (replace) {
+                    state.itinerary = newPlans;
+                } else {
+                    state.itinerary = [...state.itinerary, ...newPlans];
+                }
+            } else {
+                state.itinerary = newPlans;
+            }
+
+            saveItinerary();
+            renderPlanDay();
+            vibrate(10);
+            showToast(`Imported ${newPlans.length} items ✨`);
+        }
+
+        function parseFlexibleDate(dateStr) {
+            // Handle various date formats
+            const str = dateStr.trim();
+
+            // Try ISO format first: 2026-05-12
+            if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+                return str;
+            }
+
+            // Try to parse "May 12" or "May 12, 2026"
+            const year = TRIP_CONFIG.startDate.split('-')[0];
+            const months = {
+                'jan': '01', 'january': '01',
+                'feb': '02', 'february': '02',
+                'mar': '03', 'march': '03',
+                'apr': '04', 'april': '04',
+                'may': '05',
+                'jun': '06', 'june': '06',
+                'jul': '07', 'july': '07',
+                'aug': '08', 'august': '08',
+                'sep': '09', 'september': '09',
+                'oct': '10', 'october': '10',
+                'nov': '11', 'november': '11',
+                'dec': '12', 'december': '12'
+            };
+
+            const monthDayMatch = str.match(/(\w+)\s+(\d{1,2})(?:,?\s*(\d{4}))?/i);
+            if (monthDayMatch) {
+                const monthName = monthDayMatch[1].toLowerCase();
+                const day = monthDayMatch[2].padStart(2, '0');
+                const matchedYear = monthDayMatch[3] || year;
+                const month = months[monthName];
+
+                if (month) {
+                    return `${matchedYear}-${month}-${day}`;
+                }
+            }
+
+            return null;
         }
 
         function navigatePlanDate(direction) {
